@@ -1,0 +1,56 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Sfumatura per l'anello esterno: da Teal Scuro a Rosa Salmone -->
+    <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F4C5C" />
+      <stop offset="100%" stop-color="#E0A39A" />
+    </linearGradient>
+    
+    <!-- Stili e Colori -->
+    <style>
+      /* Contorno principale (Teal Scuro) */
+      .stroke-dark { stroke: #155A70; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      /* Riempimento Accento (Rosa Salmone) */
+      .fill-accent { fill: #ECA599; }
+      /* Riempimento Scuro (per la punta della freccia) */
+      .fill-dark { fill: #155A70; }
+    </style>
+  </defs>
+
+  <!-- Anello Esterno Sfumato (Spessore 5) -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="url(#ringGradient)" stroke-width="5" />
+
+  <!-- Gruppo Icona Interna (Centrata) -->
+  <g transform="translate(50, 50)" style="transform-origin: center;">
+    
+    <!-- Riempimenti Accento Interni (Rosa Salmone) -->
+    <g transform="translate(0, 2)">
+      <!-- Riempimento Pagine: Sinistra (simulando profondità) -->
+      <rect x="-17" y="-10" width="10" height="28" class="fill-accent"/>
+      <!-- Riempimento Pagine: Destra (simulando profondità) -->
+      <rect x="7" y="-10" width="10" height="28" class="fill-accent"/>
+      
+      <!-- Barra Orizzontale Accento (dietro il libro) -->
+      <rect x="-24" y="-5" width="48" height="10" rx="1" class="fill-accent" transform="translate(0, 0)"/>
+    </g>
+
+
+    <!-- Contorno Principale (Teal Scuro) -->
+    <g transform="translate(0, 0)">
+      
+      <!-- Contorno Documento (Sfondo carta) -->
+      <path d="M -25 -22 L 25 -22 L 25 25 L -25 25 Z" class="stroke-dark"/>
+      
+      <!-- Contorno Libro Aperto (Pagine/Copertine) -->
+      <path d="M -20 30 V -12 L -5 -12 V 30" class="stroke-dark"/>
+      <path d="M 20 30 V -12 L 5 -12 V 30" class="stroke-dark"/>
+      
+      <!-- Percorso Freccia (Crescita) -->
+      <path d="M -25 28 C 0 10, 30 10, 40 -15" class="stroke-dark" stroke-width="3.5"/>
+      
+      <!-- Punta della Freccia (Riempimento scuro) -->
+      <polygon points="40, -15 34, -18 36, -10" class="fill-dark"/>
+      
+    </g>
+  </g>
+</svg>

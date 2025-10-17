@@ -1,25 +1,56 @@
 package com.example.InfoTirocini.Model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.List;
 
 @Entity
 @Table(name = "competenza")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Competenza {
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idcompetenze")
     private Integer id;
-    
-    @Column(nullable = false)
+
     private String nome;
-    
-    @Column(name = "tipo_competenza", nullable = false)
-    private String tipoCompetenza;
+    private String tipoCompetenza; // "Tecnica", "Soft Skill", "Linguaggio", etc.
+
+    @ManyToMany(mappedBy = "competenze")
+    @JsonIgnoreProperties("competenze")
+    private List<Candidatura> candidature;
+
+    // Costruttori
+    public Competenza() {}
+
+    // Getter e Setter
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getTipoCompetenza() {
+        return tipoCompetenza;
+    }
+
+    public void setTipoCompetenza(String tipoCompetenza) {
+        this.tipoCompetenza = tipoCompetenza;
+    }
+
+    public List<Candidatura> getCandidature() {
+        return candidature;
+    }
+
+    public void setCandidature(List<Candidatura> candidature) {
+        this.candidature = candidature;
+    }
 }

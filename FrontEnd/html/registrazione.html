@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info Tirocini - Registrazione</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #0f4c5c;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+          h2 {
+            color: #0f4c5c;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        label {
+            display: block;
+            color: #0f4c5c;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: #0f4c5c;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #0f4c5c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: #1a6b7f;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .link a {
+            color: #e9b8a6;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
+
+        .checkbox-group {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-group input {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: normal;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <img class="logo" src="logo2.png" alt="Logo">
+        
+        <h1>Info Tirocini</h1>
+        <h2>Registrazione</h2>
+
+        <!-- REGISTRAZIONE -->
+       
+<form th:action="@{/registrazione}" method="POST">
+    <label>Nome completo</label>
+      <input id="nome" type="text" th:field="*{nome}" placeholder="Nome completo" required>
+    
+    <label>Email</label>
+    <input id="email" type="email" th:field="*{email}" placeholder="Email" required>
+    
+    <label>Password</label>
+     <input id="password" type="password" th:field="*{password}" placeholder="Password" required>
+    
+     <label for="confermaPassword">Conferma Password</label>
+    <input id="confermaPassword" type="password" th:field="*{confermaPassword}" placeholder="Ripeti password" required>
+
+    
+    
+    <div class="checkbox-group">
+        <input type="checkbox" name="termini" id="termini" required>
+        <label for="termini">Accetto i termini e le condizioni</label>
+    </div>
+    
+    <button type="submit">Registrati</button>
+</form>
+
+<div class="link">
+    Hai già un account? <a th:href="@{/nomeproxpag}">Accedi qui</a>
+</div>
+</body>
+</html>

@@ -1,16 +1,38 @@
 package com.example.InfoTirocini.dto;
 
-import lombok.Data;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 
-@Data
 public class LoginDTO {
     
-    @Email(message = "Email non valida")
     @NotBlank(message = "Email obbligatoria")
+    @Email(message = "Formato email non valido")
     private String mail;
     
     @NotBlank(message = "Password obbligatoria")
     private String password;
+    
+    // Costruttori
+    public LoginDTO() {}
+    
+    public LoginDTO(String mail, String password) {
+        this.mail = mail;
+        this.password = password;
+    }
+    
+    // Getter e Setter
+    public String getMail() {
+        return mail;
+    }
+    
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+    
+    public String getPassword() {
+        return password;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

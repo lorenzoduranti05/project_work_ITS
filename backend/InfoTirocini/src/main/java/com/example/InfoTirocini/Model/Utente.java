@@ -20,23 +20,21 @@ public class Utente {
     @Column(name = "idutente")
     private Integer id;
     
-    @Column(nullable = false)
+    @Column(nullable = false) //la colonna nel database non può contenere valori NULL.
     private String nome;
     
     @Column(nullable = false)
     private String cognome;
     
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true) //ogni valore in questa colonna debba essere unico.
     private String mail;
     
     @Column(nullable = false)
-    @JsonIgnore 
     private String password;
     
     @Column(nullable = false)
     private String ruolo = "USER";
     
     @OneToMany(mappedBy = "utente")
-    @JsonIgnore
     private List<Candidatura> candidature = new ArrayList<>();
 }

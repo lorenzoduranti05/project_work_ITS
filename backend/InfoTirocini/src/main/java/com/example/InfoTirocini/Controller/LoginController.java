@@ -19,18 +19,17 @@ public class LoginController {
     
     @GetMapping("/accesso")
     public String mostraPaginaAccesso(Model model) {
-        // Aggiunge un DTO vuoto al modello se non è già presente (utile per il primo caricamento)
         if (!model.containsAttribute("loginDTO")) {
             model.addAttribute("loginDTO", new LoginDTO());
         }
-        return "accesso"; // Ritorna il nome del file accesso.html
+        return "accesso";
     }
 
     @PostMapping("/accesso")
     public String processaLogin(@ModelAttribute("loginDTO") LoginDTO loginDTO, Model model) {
         try {
             utenteService.login(loginDTO);
-            return "redirect:/home"; // Successo -> redirect
+            return "redirect:/home";
 
         } catch (RuntimeException ex) {
             String errorMessage;
@@ -41,13 +40,9 @@ public class LoginController {
             } else {
                 errorMessage = "Errore durante il login.";
             }
-            
-            // PUNTI CHIAVE:
-            // 1. Aggiungiamo la variabile "error" al modello.
+
             model.addAttribute("error", errorMessage);
-            model.addAttribute("loginDTO", loginDTO); // Mantiene l'email nel form
-            
-            // 2. Ricarichiamo la stessa pagina per mostrare l'errore.
+            model.addAttribute("loginDTO", loginDTO); 
             return "accesso"; 
         }
     }

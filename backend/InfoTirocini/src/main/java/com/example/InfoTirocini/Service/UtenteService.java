@@ -14,7 +14,6 @@ public class UtenteService {
     @Autowired
     private UtenteRepository utenteRepository;
 
-    // Registrazione nuovo utente
     public RispostaLoginDTO registraUtente(RegistrazioneDTO dto) {
         if (utenteRepository.existsByMail(dto.getMail())) {
             throw new RuntimeException("Email già registrata");
@@ -22,10 +21,9 @@ public class UtenteService {
 
         Utente nuovoUtente = new Utente();
 
-        // Divide il nome completo in nome e cognome
         String nomeCompleto = dto.getNome();
         String nome = nomeCompleto;
-        String cognome = ""; // Valore di default
+        String cognome = "";
 
         int primoSpazio = nomeCompleto.trim().indexOf(" ");
         if (primoSpazio != -1) {
@@ -36,12 +34,11 @@ public class UtenteService {
         nuovoUtente.setNome(nome);
         nuovoUtente.setCognome(cognome);
         nuovoUtente.setMail(dto.getMail());
-        nuovoUtente.setPassword(dto.getPassword()); // Password in chiaro
+        nuovoUtente.setPassword(dto.getPassword());
         nuovoUtente.setRuolo("USER");
 
         Utente salvato = utenteRepository.save(nuovoUtente);
 
-        // Prepara la risposta (DTO) da restituire
         RispostaLoginDTO risposta = new RispostaLoginDTO();
         risposta.setId(salvato.getId());
         risposta.setNome(salvato.getNome());
@@ -53,7 +50,6 @@ public class UtenteService {
         return risposta;
     }
 
-    // Login utente
     public RispostaLoginDTO login(LoginDTO dto) {
         Utente utente = utenteRepository.findByMail(dto.getMail());
 
@@ -76,7 +72,6 @@ public class UtenteService {
         return risposta;
     }
 
-    // Ottieni profilo utente
     public ProfiloDTO getProfilo(Integer id) {
         Utente utente = utenteRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Utente non trovato"));
@@ -90,7 +85,6 @@ public class UtenteService {
         return profilo;
     }
 
-    // Aggiorna profilo utente
     public ProfiloDTO aggiornaProfilo(Integer id, ProfiloDTO dto) {
         Utente utente = utenteRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Utente non trovato"));
@@ -116,7 +110,6 @@ public class UtenteService {
         return getProfilo(id);
     }
 
-    // Elimina account
     public void eliminaAccount(Integer id) {
         if (!utenteRepository.existsById(id)) {
             throw new RuntimeException("Utente non trovato");
@@ -124,12 +117,10 @@ public class UtenteService {
         utenteRepository.deleteById(id);
     }
 
-    // Trova tutti gli utenti
     public List<Utente> trovaTuttiGliUtenti() {
         return utenteRepository.findAll();
     }
 
-    // Cambia ruolo utente
     public Utente cambiaRuolo(Integer id, String nuovoRuolo) {
         Utente utente = utenteRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Utente non trovato"));

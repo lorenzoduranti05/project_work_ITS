@@ -12,7 +12,7 @@ public class Competenza {
     private Integer id;
 
     private String nome;
-    private String tipoCompetenza; // "Tecnica", "Soft Skill", "Linguaggio", etc.
+    private String tipoCompetenza;
 
     @ManyToMany(mappedBy = "competenze")
     @JsonIgnoreProperties("competenze")

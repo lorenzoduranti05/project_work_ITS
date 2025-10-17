@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 public class RegistrazioneDTO {
 
     @NotBlank(message = "Nome obbligatorio")
-    private String nome; // Campo per "Nome completo"
+    private String nome;
 
     @NotBlank(message = "Email obbligatoria")
     @Email(message = "Formato email non valido")

@@ -2,7 +2,10 @@ package com.example.InfoTirocini.Model;
 
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "candidatura")
@@ -20,6 +23,15 @@ public class Candidatura {
     @JoinColumn(name = "lavoro_id")
     @JsonBackReference("lavoro-candidature")
     private Lavoro lavoro;
+    
+    @ManyToMany
+    @JoinTable(
+        name = "candidatura_competenza",
+        joinColumns = @JoinColumn(name = "candidatura_id"),
+        inverseJoinColumns = @JoinColumn(name = "competenza_id")
+    )
+    @JsonIgnoreProperties("candidature")
+    private List<Competenza> competenze;
     
     private LocalDateTime dataCandidatura;
     private String stato;
@@ -66,5 +78,13 @@ public class Candidatura {
     
     public void setStato(String stato) {
         this.stato = stato;
+    }
+    
+    public List<Competenza> getCompetenze() {
+        return competenze;
+    }
+
+    public void setCompetenze(List<Competenza> competenze) {
+        this.competenze = competenze;
     }
 }

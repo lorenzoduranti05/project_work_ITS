@@ -15,9 +15,9 @@ public class Competenza {
     private String tipoCompetenza; // "Tecnica", "Soft Skill", "Linguaggio", etc.
     
     // Lavori che richiedono questa competenza
-    @ManyToMany(mappedBy = "competenzeRichieste")
-    @JsonIgnoreProperties({"competenzeRichieste", "candidature", "azienda"})
-    private List<Lavoro> lavori;
+    @ManyToMany(mappedBy = "competenze")
+    @JsonIgnoreProperties("competenze")
+    private List<Candidatura> candidature;
     
     // Costruttori
     public Competenza() {}
@@ -47,11 +47,11 @@ public class Competenza {
         this.tipoCompetenza = tipoCompetenza;
     }
     
-    public List<Lavoro> getLavori() {
-        return lavori;
+    public List<Candidatura> getCandidature() {
+        return candidature;
     }
-    
-    public void setLavori(List<Lavoro> lavori) {
-        this.lavori = lavori;
+
+    public void setCandidature(List<Candidatura> candidature) {
+        this.candidature = candidature;
     }
 }

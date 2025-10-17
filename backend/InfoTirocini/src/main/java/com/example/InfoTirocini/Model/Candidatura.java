@@ -1,34 +1,70 @@
 package com.example.InfoTirocini.Model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "candidatura")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Candidatura {
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idcandidatura")
     private Integer id;
     
     @ManyToOne
-    @JoinColumn(name = "utente_id", nullable = false)
+    @JoinColumn(name = "utente_id")
+    @JsonBackReference("utente-candidature")
     private Utente utente;
     
     @ManyToOne
-    @JoinColumn(name = "lavoro_id", nullable = false)
+    @JoinColumn(name = "lavoro_id")
+    @JsonBackReference("lavoro-candidature")
     private Lavoro lavoro;
     
-    @Column(name = "data_candidatura")
-    private LocalDateTime dataCandidatura = LocalDateTime.now();
+    private LocalDateTime dataCandidatura;
+    private String stato;
     
-    @Column(nullable = false)
-    private String stato = "IN_ATTESA";
+    // Costruttori
+    public Candidatura() {}
+    
+    // Getter e Setter
+    public Integer getId() {
+        return id;
+    }
+    
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    
+    public Utente getUtente() {
+        return utente;
+    }
+    
+    public void setUtente(Utente utente) {
+        this.utente = utente;
+    }
+    
+    public Lavoro getLavoro() {
+        return lavoro;
+    }
+    
+    public void setLavoro(Lavoro lavoro) {
+        this.lavoro = lavoro;
+    }
+    
+    public LocalDateTime getDataCandidatura() {
+        return dataCandidatura;
+    }
+    
+    public void setDataCandidatura(LocalDateTime dataCandidatura) {
+        this.dataCandidatura = dataCandidatura;
+    }
+    
+    public String getStato() {
+        return stato;
+    }
+    
+    public void setStato(String stato) {
+        this.stato = stato;
+    }
 }

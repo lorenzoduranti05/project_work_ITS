@@ -141,6 +141,9 @@
                 <p th:text="${error}"></p>
             </div>
 
+            <div th:if="${success}" class="alert alert-success">
+                <p th:text="${success}"></p>
+            </div>
             <div th:if="${param.logout}" class="alert alert-success">
                 Logout effettuato con successo.
             </div>

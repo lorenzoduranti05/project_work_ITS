@@ -81,18 +81,4 @@ public class CompetenzaService {
         }
         competenzaRepository.deleteById(id);
     }
-    
-    // Trova lavori che richiedono questa competenza
-    public List<Lavoro> trovaLavoriPerCompetenza(Integer competenzaId) {
-        Competenza competenza = competenzaRepository.findById(competenzaId)
-            .orElseThrow(() -> new RuntimeException("Competenza non trovata"));
-        return competenza.getLavori();
-    }
-    
-    // Ottieni competenze richieste per un lavoro
-    public List<Competenza> getCompetenzePerLavoro(Integer lavoroId) {
-        Lavoro lavoro = lavoroRepository.findById(lavoroId)
-            .orElseThrow(() -> new RuntimeException("Lavoro non trovato"));
-        return lavoro.getCompetenzeRichieste();
-    }
 }

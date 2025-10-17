@@ -28,8 +28,6 @@ public class Lavoro {
     @JsonManagedReference("lavoro-candidature")
     private List<Candidatura> candidature;
 
-    // La relazione con Competenza è stata rimossa
-
     // Costruttori
     public Lavoro() {}
 

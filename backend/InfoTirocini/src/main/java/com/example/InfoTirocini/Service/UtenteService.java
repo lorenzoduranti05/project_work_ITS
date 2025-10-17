@@ -6,6 +6,7 @@ import com.example.InfoTirocini.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UtenteService {
@@ -13,11 +14,14 @@ public class UtenteService {
     @Autowired
     private UtenteRepository utenteRepository;
     
-    // Registrazione nuovo utente (sempre come USER)
+    // Registrazione nuovo utente
     public RispostaLoginDTO registraUtente(RegistrazioneDTO dto) {
         // Controlla se email già esistente
-        if (utenteRepository.existsByMail(dto.getMail())) {
-            throw new RuntimeException("Email già registrata!");
+        List<Utente> utenti = utenteRepository.findAll();
+        for (Utente u : utenti) {
+            if (u.getMail().equals(dto.getMail())) {
+                throw new RuntimeException("Email già registrata");
+            }
         }
         
         // Crea nuovo utente
@@ -25,102 +29,120 @@ public class UtenteService {
         nuovoUtente.setNome(dto.getNome());
         nuovoUtente.setCognome(dto.getCognome());
         nuovoUtente.setMail(dto.getMail());
-        nuovoUtente.setPassword(dto.getPassword()); // In produzione, criptare!
-        nuovoUtente.setRuolo("USER"); // Sempre USER per chi si registra
+        nuovoUtente.setPassword(dto.getPassword());
+        nuovoUtente.setRuolo("USER");
         
-        // Salva nel database
         Utente salvato = utenteRepository.save(nuovoUtente);
         
-        // Restituisci risposta DTO
-        return new RispostaLoginDTO(
-            salvato.getId(),
-            salvato.getNome(),
-            salvato.getCognome(),
-            salvato.getMail(),
-            salvato.getRuolo(),
-            "Registrazione completata con successo!"
-        );
+        // Prepara risposta
+        RispostaLoginDTO risposta = new RispostaLoginDTO();
+        risposta.setId(salvato.getId());
+        risposta.setNome(salvato.getNome());
+        risposta.setCognome(salvato.getCognome());
+        risposta.setMail(salvato.getMail());
+        risposta.setRuolo(salvato.getRuolo());
+        risposta.setMessaggio("Registrazione completata con successo");
+        
+        return risposta;
     }
     
     // Login utente
     public RispostaLoginDTO login(LoginDTO dto) {
-        // Cerca utente per email
-        Utente utente = utenteRepository.findByMail(dto.getMail());
+        List<Utente> utenti = utenteRepository.findAll();
+        Utente utente = null;
         
-        if (utente == null) {
-            throw new RuntimeException("Email non trovata!");
-        }
-        
-        // Verifica password
-        if (!utente.getPassword().equals(dto.getPassword())) {
-            throw new RuntimeException("Password errata!");
-        }
-        
-        // Login riuscito - restituisci dati utente
-        return new RispostaLoginDTO(
-            utente.getId(),
-            utente.getNome(),
-            utente.getCognome(),
-            utente.getMail(),
-            utente.getRuolo(), // USER o ADMIN dal database
-            "Login effettuato con successo!"
-        );
-    }
-    
-    // Trova utente per ID
-    public Utente trovaPerID(Integer id) {
-        return utenteRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Utente con ID " + id + " non trovato!"));
-    }
-    
-    // Trova utente per email
-    public Utente trovaPerEmail(String email) {
-        Utente utente = utenteRepository.findByMail(email);
-        if (utente == null) {
-            throw new RuntimeException("Utente non trovato!");
-        }
-        return utente;
-    }
-    
-    // Aggiorna profilo utente
-    public Utente aggiornaProfilo(Integer id, ProfiloDTO dto) {
-        Utente utente = trovaPerID(id);
-        
-        // Aggiorna solo i campi forniti (non null)
-        if (dto.getNome() != null && !dto.getNome().isEmpty()) {
-            utente.setNome(dto.getNome());
-        }
-        
-        if (dto.getCognome() != null && !dto.getCognome().isEmpty()) {
-            utente.setCognome(dto.getCognome());
-        }
-        
-        if (dto.getMail() != null && !dto.getMail().isEmpty()) {
-            // Verifica che la nuova email non sia già usata da altri
-            if (!dto.getMail().equals(utente.getMail())) {
-                if (utenteRepository.existsByMail(dto.getMail())) {
-                    throw new RuntimeException("Email già in uso da un altro utente!");
-                }
-                utente.setMail(dto.getMail());
+        for (Utente u : utenti) {
+            if (u.getMail().equals(dto.getMail())) {
+                utente = u;
+                break;
             }
         }
         
-        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
-            utente.setPassword(dto.getPassword()); // In produzione, criptare!
+        if (utente == null) {
+            throw new RuntimeException("Credenziali non valide");
         }
         
-        // Salva modifiche
-        return utenteRepository.save(utente);
+        if (!utente.getPassword().equals(dto.getPassword())) {
+            throw new RuntimeException("Credenziali non valide");
+        }
+        
+        // Prepara risposta
+        RispostaLoginDTO risposta = new RispostaLoginDTO();
+        risposta.setId(utente.getId());
+        risposta.setNome(utente.getNome());
+        risposta.setCognome(utente.getCognome());
+        risposta.setMail(utente.getMail());
+        risposta.setRuolo(utente.getRuolo());
+        risposta.setMessaggio("Login effettuato con successo");
+        
+        return risposta;
     }
     
-    // Ottieni tutti gli utenti (per admin)
-    public List<Utente> tuttiGliUtenti() {
+    // Ottieni profilo utente
+    public ProfiloDTO getProfilo(Integer id) {
+        Utente utente = utenteRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+        
+        ProfiloDTO profilo = new ProfiloDTO();
+        profilo.setNome(utente.getNome());
+        profilo.setCognome(utente.getCognome());
+        profilo.setMail(utente.getMail());
+        profilo.setPassword("********");
+        
+        return profilo;
+    }
+    
+    // Aggiorna profilo utente
+    public ProfiloDTO aggiornaProfilo(Integer id, ProfiloDTO dto) {
+        Utente utente = utenteRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+        
+        if (dto.getNome() != null) {
+            utente.setNome(dto.getNome());
+        }
+        if (dto.getCognome() != null) {
+            utente.setCognome(dto.getCognome());
+        }
+        if (dto.getMail() != null) {
+            // Verifica che la nuova email non sia già in uso
+            if (!utente.getMail().equals(dto.getMail())) {
+                List<Utente> utenti = utenteRepository.findAll();
+                for (Utente u : utenti) {
+                    if (u.getMail().equals(dto.getMail())) {
+                        throw new RuntimeException("Email già in uso");
+                    }
+                }
+            }
+            utente.setMail(dto.getMail());
+        }
+        if (dto.getPassword() != null && !dto.getPassword().equals("********")) {
+            utente.setPassword(dto.getPassword());
+        }
+        
+        utenteRepository.save(utente);
+        
+        return getProfilo(id);
+    }
+    
+    // Elimina account
+    public void eliminaAccount(Integer id) {
+        if (!utenteRepository.existsById(id)) {
+            throw new RuntimeException("Utente non trovato");
+        }
+        utenteRepository.deleteById(id);
+    }
+    
+    // Trova tutti gli utenti
+    public List<Utente> trovaTuttiGliUtenti() {
         return utenteRepository.findAll();
     }
     
-    // Verifica se un utente è admin
-    public boolean isAdmin(Integer userId) {
-        Utente utente = trovaPerID(userId);
-        return "ADMIN".equals(utente.getRuolo());
+    // Cambia ruolo utente
+    public Utente cambiaRuolo(Integer id, String nuovoRuolo) {
+        Utente utente = utenteRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+        
+        utente.setRuolo(nuovoRuolo);
+        return utenteRepository.save(utente);
     }
 }

@@ -1,15 +1,12 @@
 package com.example.InfoTirocini.Service;
 
-import com.example.InfoTirocini.Model.Candidatura;
-import com.example.InfoTirocini.Model.Utente;
-import com.example.InfoTirocini.Model.Lavoro;
-import com.example.InfoTirocini.Repository.CandidaturaRepository;
-import com.example.InfoTirocini.Repository.UtenteRepository;
-import com.example.InfoTirocini.Repository.LavoroRepository;
+import com.example.InfoTirocini.Model.*;
+import com.example.InfoTirocini.Repository.*;
 import com.example.InfoTirocini.dto.CandidaturaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,87 +23,137 @@ public class CandidaturaService {
     
     // Crea nuova candidatura
     public Candidatura creaCandidatura(CandidaturaDTO dto) {
-        // Verifica che l'utente non sia già candidato
-        if (candidaturaRepository.existsByUtenteIdAndLavoroId(
-                dto.getUtenteId(), dto.getLavoroId())) {
-            throw new RuntimeException("Sei già candidato per questo lavoro!");
+        // Verifica che non esista già una candidatura
+        List<Candidatura> esistenti = candidaturaRepository.findAll();
+        for (Candidatura c : esistenti) {
+            if (c.getUtente().getId().equals(dto.getUtenteId()) && 
+                c.getLavoro().getId().equals(dto.getLavoroId())) {
+                throw new RuntimeException("Candidatura già esistente per questo lavoro");
+            }
         }
         
-        // Trova utente
         Utente utente = utenteRepository.findById(dto.getUtenteId())
-            .orElseThrow(() -> new RuntimeException("Utente non trovato!"));
+            .orElseThrow(() -> new RuntimeException("Utente non trovato"));
         
-        // Trova lavoro
         Lavoro lavoro = lavoroRepository.findById(dto.getLavoroId())
-            .orElseThrow(() -> new RuntimeException("Lavoro non trovato!"));
+            .orElseThrow(() -> new RuntimeException("Lavoro non trovato"));
         
-        // Crea candidatura
         Candidatura candidatura = new Candidatura();
         candidatura.setUtente(utente);
         candidatura.setLavoro(lavoro);
         candidatura.setDataCandidatura(LocalDateTime.now());
-        candidatura.setStato("IN_ATTESA");
+        candidatura.setStato("In attesa");
         
-        // Salva e restituisci
         return candidaturaRepository.save(candidatura);
     }
     
-    // Ottieni candidature di un utente
-    public List<Candidatura> candidatureUtente(Integer utenteId) {
-        // Verifica che l'utente esista
-        if (!utenteRepository.existsById(utenteId)) {
-            throw new RuntimeException("Utente non trovato!");
-        }
-        
-        return candidaturaRepository.findByUtenteId(utenteId);
+    // Ottieni tutte le candidature
+    public List<Candidatura> trovaTutteLeCandidature() {
+        return candidaturaRepository.findAll();
     }
     
-    // Ottieni candidature per un lavoro (per admin)
-    public List<Candidatura> candidaturePerLavoro(Integer lavoroId) {
-        // Verifica che il lavoro esista
-        if (!lavoroRepository.existsById(lavoroId)) {
-            throw new RuntimeException("Lavoro non trovato!");
+    // Trova candidature per utente
+    public List<Candidatura> trovaCandidaturePerUtente(Integer utenteId) {
+        List<Candidatura> tutte = candidaturaRepository.findAll();
+        List<Candidatura> risultati = new ArrayList<>();
+        
+        for (Candidatura c : tutte) {
+            if (c.getUtente().getId().equals(utenteId)) {
+                risultati.add(c);
+            }
         }
         
-        return candidaturaRepository.findByLavoroId(lavoroId);
+        return risultati;
     }
     
-    // Trova candidatura per ID
-    public Candidatura trovaPerID(Integer id) {
-        return candidaturaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Candidatura non trovata!"));
-    }
-    
-    // Aggiorna stato candidatura (per admin)
-    public Candidatura aggiornaStato(Integer candidaturaId, String nuovoStato) {
-        // Stati validi
-        List<String> statiValidi = List.of("IN_ATTESA", "ACCETTATA", "RIFIUTATA");
+    // Trova candidature per lavoro
+    public List<Candidatura> trovaCandidaturePerLavoro(Integer lavoroId) {
+        List<Candidatura> tutte = candidaturaRepository.findAll();
+        List<Candidatura> risultati = new ArrayList<>();
         
-        if (!statiValidi.contains(nuovoStato)) {
-            throw new RuntimeException("Stato non valido! Usa: IN_ATTESA, ACCETTATA, RIFIUTATA");
+        for (Candidatura c : tutte) {
+            if (c.getLavoro().getId().equals(lavoroId)) {
+                risultati.add(c);
+            }
         }
         
-        // Trova candidatura
-        Candidatura candidatura = trovaPerID(candidaturaId);
+        return risultati;
+    }
+    
+    // Aggiorna stato candidatura
+    public Candidatura aggiornaStatoCandidatura(Integer id, String nuovoStato) {
+        Candidatura candidatura = candidaturaRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Candidatura non trovata"));
         
-        // Aggiorna stato
+        if (!nuovoStato.equals("In attesa") && 
+            !nuovoStato.equals("Accettata") && 
+            !nuovoStato.equals("Rifiutata")) {
+            throw new RuntimeException("Stato non valido");
+        }
+        
         candidatura.setStato(nuovoStato);
-        
-        // Salva e restituisci
         return candidaturaRepository.save(candidatura);
     }
     
     // Elimina candidatura
     public void eliminaCandidatura(Integer id) {
         if (!candidaturaRepository.existsById(id)) {
-            throw new RuntimeException("Candidatura non trovata!");
+            throw new RuntimeException("Candidatura non trovata");
         }
-        
         candidaturaRepository.deleteById(id);
     }
     
-    // Conta candidature per un lavoro
+    // Ritira candidatura
+    public void ritiraCandidatura(Integer utenteId, Integer candidaturaId) {
+        Candidatura candidatura = candidaturaRepository.findById(candidaturaId)
+            .orElseThrow(() -> new RuntimeException("Candidatura non trovata"));
+        
+        if (!candidatura.getUtente().getId().equals(utenteId)) {
+            throw new RuntimeException("Non autorizzato a ritirare questa candidatura");
+        }
+        
+        candidaturaRepository.deleteById(candidaturaId);
+    }
+    
+    // Conta candidature per lavoro
     public long contaCandidaturePerLavoro(Integer lavoroId) {
-        return candidaturaRepository.findByLavoroId(lavoroId).size();
+        List<Candidatura> tutte = candidaturaRepository.findAll();
+        long count = 0;
+        
+        for (Candidatura c : tutte) {
+            if (c.getLavoro().getId().equals(lavoroId)) {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+    
+    // Trova candidature per stato
+    public List<Candidatura> trovaCandidaturePerStato(String stato) {
+        List<Candidatura> tutte = candidaturaRepository.findAll();
+        List<Candidatura> risultati = new ArrayList<>();
+        
+        for (Candidatura c : tutte) {
+            if (c.getStato() != null && c.getStato().equals(stato)) {
+                risultati.add(c);
+            }
+        }
+        
+        return risultati;
+    }
+    
+    // Verifica se utente si è già candidato
+    public boolean isUtenteCandidato(Integer utenteId, Integer lavoroId) {
+        List<Candidatura> tutte = candidaturaRepository.findAll();
+        
+        for (Candidatura c : tutte) {
+            if (c.getUtente().getId().equals(utenteId) && 
+                c.getLavoro().getId().equals(lavoroId)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

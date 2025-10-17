@@ -1,10 +1,12 @@
 package com.example.InfoTirocini.Service;
 
 import com.example.InfoTirocini.Model.Azienda;
+import com.example.InfoTirocini.Model.Lavoro;
 import com.example.InfoTirocini.Repository.AziendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AziendaService {
@@ -12,46 +14,64 @@ public class AziendaService {
     @Autowired
     private AziendaRepository aziendaRepository;
     
+    // Crea nuova azienda
+    public Azienda creaAzienda(String nome) {
+        Azienda azienda = new Azienda();
+        azienda.setNome(nome);
+        return aziendaRepository.save(azienda);
+    }
+    
     // Ottieni tutte le aziende
-    public List<Azienda> tutteLeAziende() {
+    public List<Azienda> trovaTutteLeAziende() {
         return aziendaRepository.findAll();
     }
     
     // Trova azienda per ID
-    public Azienda trovaPerID(Integer id) {
-        return aziendaRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Azienda non trovata!"));
+    public Optional<Azienda> trovaAziendaPerId(Integer id) {
+        return aziendaRepository.findById(id);
     }
     
-    // Crea nuova azienda (per admin)
-    public Azienda creaAzienda(String nome) {
-        if (nome == null || nome.isEmpty()) {
-            throw new RuntimeException("Il nome dell'azienda è obbligatorio!");
-        }
-        
-        Azienda nuovaAzienda = new Azienda();
-        nuovaAzienda.setNome(nome);
-        
-        return aziendaRepository.save(nuovaAzienda);
-    }
-    
-    // Aggiorna azienda (per admin)
+    // Aggiorna azienda
     public Azienda aggiornaAzienda(Integer id, String nuovoNome) {
-        Azienda azienda = trovaPerID(id);
+        Azienda azienda = aziendaRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Azienda non trovata"));
         
-        if (nuovoNome != null && !nuovoNome.isEmpty()) {
-            azienda.setNome(nuovoNome);
-        }
-        
+        azienda.setNome(nuovoNome);
         return aziendaRepository.save(azienda);
     }
     
-    // Elimina azienda (per admin)
+    // Elimina azienda
     public void eliminaAzienda(Integer id) {
         if (!aziendaRepository.existsById(id)) {
-            throw new RuntimeException("Azienda non trovata!");
+            throw new RuntimeException("Azienda non trovata");
+        }
+        aziendaRepository.deleteById(id);
+    }
+    
+    // Trova azienda per nome
+    public Optional<Azienda> trovaAziendaPerNome(String nome) {
+        List<Azienda> tutte = aziendaRepository.findAll();
+        
+        for (Azienda a : tutte) {
+            if (a.getNome() != null && a.getNome().equals(nome)) {
+                return Optional.of(a);
+            }
         }
         
-        aziendaRepository.deleteById(id);
+        return Optional.empty();
+    }
+    
+    // Ottieni lavori di un'azienda
+    public List<Lavoro> getLavoriAzienda(Integer aziendaId) {
+        Azienda azienda = aziendaRepository.findById(aziendaId)
+            .orElseThrow(() -> new RuntimeException("Azienda non trovata"));
+        return azienda.getLavori();
+    }
+    
+    // Conta lavori per azienda
+    public int contaLavoriPerAzienda(Integer aziendaId) {
+        Azienda azienda = aziendaRepository.findById(aziendaId)
+            .orElseThrow(() -> new RuntimeException("Azienda non trovata"));
+        return azienda.getLavori() != null ? azienda.getLavori().size() : 0;
     }
 }

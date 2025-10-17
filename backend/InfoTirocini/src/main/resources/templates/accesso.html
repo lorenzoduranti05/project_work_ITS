@@ -147,42 +147,56 @@
     </style>
 </head>
 <body>
-
     <div class="container">
-        <!-- SEZIONE SINISTRA  -->
-        <div class="description">
-            <h2>Benvenuto su Info Tirocini</h2>
-            <p>
-                La piattaforma completa per <span class="highlight">gestire e trovare tirocini</span> 
-                in modo semplice e veloce.
-            </p>
-            <p>
-                Connetti studenti e aziende, gestisci documentazione, monitora i progressi 
-                e accedi a tutte le informazioni necessarie in un unico posto.
-            </p>
-        </div>
-
-        <!-- SEZIONE LOGIN -->
-        <div class="box">
-            <img class="logo" src="logo2.png" alt="Logo InfoTirocini">
-            <h1>ACCEDI</h1>
-
-            <form th:action="@{/login}" method="POST">
-                <label for="email">Email</label>
-                <input id="email" type="email" name="email" required>
+        <h1>Benvenuto su Info Tirocini</h1>
+        <p>La piattaforma completa per gestire e trovare tirocini in modo semplice e veloce.</p>
+        <p>Connetti studenti e aziende, gestisci documentazione, monitora i progressi 
+           e accedi a tutte le informazioni necessarie in un unico posto.</p>
+        
+        <div class="login-form">
+            <h2>ACCEDI</h2>
+            
+            <!-- Mostra messaggio di errore se presente -->
+            <div th:if="${errore}" class="alert alert-danger">
+                <p th:text="${errore}"></p>
+            </div>
+            
+            <!-- Mostra messaggio di successo se presente -->
+            <div th:if="${messaggio}" class="alert alert-success">
+                <p th:text="${messaggio}"></p>
+            </div>
+            
+            <!-- Form di login -->
+            <form th:action="@{/accesso}" th:object="${loginDTO}" method="POST">
+                <div class="form-group">
+                    <label for="mail">Email</label>
+                    <input type="email" 
+                           id="mail" 
+                           name="mail"
+                           th:field="*{mail}" 
+                           class="form-control" 
+                           required>
+                </div>
                 
-                <label for="password">Password</label>
-                <input id="password" type="password" name="password" required>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" 
+                           id="password" 
+                           name="password"
+                           th:field="*{password}" 
+                           class="form-control" 
+                           required>
+                </div>
                 
-                <button type="submit"><a th:href="@{/dashboard_cards.html}"></a>Accedi</button>
+                <button type="submit" class="btn btn-primary">Accedi</button>
             </form>
-
-            <div class="link">
-                Non hai un account? <a th:href="@{/registrazione}">Registrati qui</a>
+            
+            <div class="registration-link">
+                <p>Non hai un account? 
+                   <a th:href="@{/registrazione}">Registrati qui</a>
+                </p>
             </div>
         </div>
     </div>
-
-
 </body>
 </html>

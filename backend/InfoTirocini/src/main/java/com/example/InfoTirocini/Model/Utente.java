@@ -23,15 +23,6 @@ public class Utente {
     @JsonManagedReference("utente-candidature")
     private List<Candidatura> candidature;
     
-    @ManyToMany
-    @JoinTable(
-        name = "utente_competenza",
-        joinColumns = @JoinColumn(name = "utente_id"),
-        inverseJoinColumns = @JoinColumn(name = "competenza_id")
-    )
-    @JsonIgnoreProperties("utenti")
-    private List<Competenza> competenze;
-    
     // Costruttori
     public Utente() {}
     
@@ -90,13 +81,5 @@ public class Utente {
     
     public void setCandidature(List<Candidatura> candidature) {
         this.candidature = candidature;
-    }
-    
-    public List<Competenza> getCompetenze() {
-        return competenze;
-    }
-    
-    public void setCompetenze(List<Competenza> competenze) {
-        this.competenze = competenze;
     }
 }

@@ -28,6 +28,7 @@ public class Lavoro {
     @JsonManagedReference("lavoro-candidature")
     private List<Candidatura> candidature;
     
+    // Competenze richieste per questo lavoro
     @ManyToMany
     @JoinTable(
         name = "lavoro_competenza",
@@ -35,7 +36,7 @@ public class Lavoro {
         inverseJoinColumns = @JoinColumn(name = "competenza_id")
     )
     @JsonIgnoreProperties("lavori")
-    private List<Competenza> competenze;
+    private List<Competenza> competenzeRichieste;
     
     // Costruttori
     public Lavoro() {}
@@ -97,11 +98,11 @@ public class Lavoro {
         this.candidature = candidature;
     }
     
-    public List<Competenza> getCompetenze() {
-        return competenze;
+    public List<Competenza> getCompetenzeRichieste() {
+        return competenzeRichieste;
     }
     
-    public void setCompetenze(List<Competenza> competenze) {
-        this.competenze = competenze;
+    public void setCompetenzeRichieste(List<Competenza> competenzeRichieste) {
+        this.competenzeRichieste = competenzeRichieste;
     }
 }

@@ -84,16 +84,6 @@ public class AdminController {
         }
     }
     
-    @DeleteMapping("/competenze/{id}")
-    public ResponseEntity<?> eliminaCompetenza(@PathVariable Integer id) {
-        try {
-            competenzaService.eliminaCompetenza(id);
-            return ResponseEntity.ok("Competenza eliminata con successo!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-    
     @GetMapping("/check/{userId}")
     public ResponseEntity<?> verificaAdmin(@PathVariable Integer userId) {
         try {

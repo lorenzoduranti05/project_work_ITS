@@ -15,15 +15,24 @@ public class UtenteService {
     private UtenteRepository utenteRepository;
 
     public RispostaLoginDTO registraUtente(RegistrazioneDTO dto) {
+        // 1. Controlla se l'email esiste già
         if (utenteRepository.existsByMail(dto.getMail())) {
             throw new RuntimeException("Email già registrata");
         }
+
+
+        // Controlla se la password è nulla o più corta di 6 caratteri
+        if (dto.getPassword() == null || dto.getPassword().length() < 6) {
+            throw new RuntimeException("La password deve contenere almeno 6 caratteri.");
+        }
+
 
         Utente nuovoUtente = new Utente();
 
         String nomeCompleto = dto.getNome();
         String nome = nomeCompleto;
         String cognome = "";
+
 
         int primoSpazio = nomeCompleto.trim().indexOf(" ");
         if (primoSpazio != -1) {
@@ -38,6 +47,7 @@ public class UtenteService {
         nuovoUtente.setRuolo("USER");
 
         Utente salvato = utenteRepository.save(nuovoUtente);
+
 
         RispostaLoginDTO risposta = new RispostaLoginDTO();
         risposta.setId(salvato.getId());
@@ -74,7 +84,7 @@ public class UtenteService {
 
     public ProfiloDTO getProfilo(Integer id) {
         Utente utente = utenteRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+                .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
         ProfiloDTO profilo = new ProfiloDTO();
         profilo.setNome(utente.getNome());
@@ -87,7 +97,7 @@ public class UtenteService {
 
     public ProfiloDTO aggiornaProfilo(Integer id, ProfiloDTO dto) {
         Utente utente = utenteRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+                .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
         if (dto.getNome() != null) {
             utente.setNome(dto.getNome());
@@ -123,7 +133,7 @@ public class UtenteService {
 
     public Utente cambiaRuolo(Integer id, String nuovoRuolo) {
         Utente utente = utenteRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+                .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
         utente.setRuolo(nuovoRuolo);
         return utenteRepository.save(utente);

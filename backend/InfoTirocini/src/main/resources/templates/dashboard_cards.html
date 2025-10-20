@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 	<meta charset="UTF-8">
@@ -312,7 +312,6 @@
 			font-size: 0.9em;
 		}
 
-		/* Modal */
 		.modal {
 			display: none;
 			position: fixed;
@@ -536,7 +535,7 @@
 	<nav>
 		<div class="nav-container">
 			<a th:href="@{/home}" class="logo">
-				<img src="../immagini/Logo_Senza_Scritta.png">
+				<img th:src="@{/immagini/Logo_Senza_Scritta.png}">
 			</a>
 			<div class="nav-title">
 				<h2>
@@ -545,42 +544,47 @@
 			</div>
 			<div class="user-menu">
 				<div class="user-avatar" onclick="toggleUserDropdown()">
-					<span class="user-avatar-icon" id="navAvatarIcon">👤</span>
-					<img id="navAvatarImg" style="display: none;">
-				</div>
-				<div class="user-dropdown" id="userDropdown">
-					<div class="dropdown-header">
-						<div class="dropdown-avatar">
-							<span class="dropdown-avatar-icon" id="dropdownAvatarIcon">👤</span>
-							<img id="dropdownAvatarImg" style="display: none;">
-						</div>
-						<div class="user-name">Mario Rossi</div>
-						<div class="user-email">mario.rossi@email.com</div>
+				    <span class="user-avatar-icon" id="navAvatarIcon">&#128100;</span>
+				    <img id="navAvatarImg" style="display: none;">
+				</div>				<div class="user-dropdown" id="userDropdown">
+					
+					<div class="dropdown-header" sec:authorize="isAuthenticated()">
+					    <div class="dropdown-avatar">
+					        <span class="dropdown-avatar-icon" id="dropdownAvatarIcon">&#128100;</span>
+					        <img id="dropdownAvatarImg" style="display: none;">
+					    </div>
+					    
+					    <div class="user-name" th:text="${#authentication.principal.nome} + ' ' + ${#authentication.principal.cognome}">
+					        Nome Cognome
+					    </div>
+					    <div class="user-email" th:text="${#authentication.principal.mail}">
+					        email@example.com
+					    </div>
 					</div>
 					<ul class="dropdown-menu">
-						<li>
-							<a href="#">
-								<span class="icon">👤</span>
-								<span>Il Mio Profilo</span>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span class="icon">✏️</span>
-								<span>Modifica Profilo</span>
-							</a>
-						</li>
+					    <li>
+					        <a href="#">
+					            <span class="icon">&#128100;</span> 
+					            <span>Il Mio Profilo</span>
+					        </a>
+					    </li>
+					    <li>
+					        <a href="#">
+					            <span class="icon">✏️</span> 
+					            <span>Modifica Profilo</span>
+					        </a>
+					    </li>
 					</ul>
 					<div class="dropdown-divider"></div>
 					<ul class="dropdown-menu">
-						<li>
-							<form th:action="@{/logout}" method="POST" style="margin: 0;">
-								<button type="submit" class="logout-btn-as-link">
-									<span class="icon">🚪</span>
-									<span>Esci</span>
-								</button>
-							</form>
-						</li>
+					    <li>
+					        <form th:action="@{/logout}" method="POST" style="margin: 0;">
+					            <button type="submit" class="logout-btn-as-link">
+					                <span class="icon">&#128682;</span> 
+					                <span>Esci</span>
+					            </button>
+					        </form>
+					    </li>
 					</ul>
 				</div>
 			</div>
@@ -720,27 +724,23 @@
 			document.body.style.overflow = 'auto';
 		}
 
-		// Chiudi modal cliccando fuori
 		document.getElementById('modal').addEventListener('click', (e) => {
 			if (e.target.id === 'modal') {
 				closeModal();
 			}
 		});
 
-		// Chiudi modal con tasto ESC
 		document.addEventListener('keydown', (e) => {
 			if (e.key === 'Escape') {
 				closeModal();
 			}
 		});
 
-		// Funzioni per il menu utente
 		function toggleUserDropdown() {
 			const dropdown = document.getElementById('userDropdown');
 			dropdown.classList.toggle('active');
 		}
 
-		// Chiudi dropdown cliccando fuori
 		document.addEventListener('click', (e) => {
 			const userMenu = document.querySelector('.user-menu');
 			const dropdown = document.getElementById('userDropdown');
@@ -749,24 +749,18 @@
 			}
 		});
 
-		// Upload foto profilo
-
 		function applyToArticle() {
-			// Mostra notifica
 			const toast = document.getElementById('toast');
 			toast.classList.add('show');
 
-			// Nascondi notifica dopo 3 secondi
 			setTimeout(() => {
 				toast.classList.remove('show');
 			}, 3000);
 
-			// Chiudi il modal
 			setTimeout(() => {
 				closeModal();
 			}, 1500);
 		}
-
 
 		createCards();
 	</script>

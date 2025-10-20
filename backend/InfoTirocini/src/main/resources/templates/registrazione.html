@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info Tirocini - Registrazione</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #0f4c5c;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+          h2 {
+            color: #0f4c5c;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        label {
+            display: block;
+            color: #0f4c5c;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: #0f4c5c;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #0f4c5c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: #1a6b7f;
+        }
+
+        .link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .link a {
+            color: #e9b8a6;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
+
+        .checkbox-group {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-group input {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: normal;
+            font-size: 14px;
+        }
+		.alert-danger {
+		    color:darkred;
+            font-size: 0.9em;
+		}
+
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.5); 
+            
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+        }
+        
+        .modal-link {
+            color: #e9b8a6;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+		<img class="logo" th:src="@{/immagini/Logo_Con_Scritta.png}" alt="Logo InfoTirocini">
+        <h1>Info Tirocini</h1>
+        <h2>Registrazione</h2>
+
+        <div th:if="${error}" class="alert-danger" style="text-align: center; margin-bottom: 10px;">
+            <p th:text="${error}"></p>
+        </div>
+
+        <form th:action="@{/registrazione}" th:object="${registrazioneDTO}" method="POST">
+            <div>
+                <label for="nome">Nome</label>
+                <input id="nome" type="text" th:field="*{nome}" placeholder="Mario" required>
+                <span class="alert-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span>
+            </div>
+			<div>
+				<label for="cognome">Cognome</label>
+			   	<input id="cognome" type="text" th:field="*{cognome}" placeholder="Rossi" required>
+                <span class="alert-danger" th:if="${#fields.hasErrors('cognome')}" th:errors="*{cognome}"></span>
+			</div>
+
+            <div>
+                <label for="mail">Email</label>
+                <input id="mail" type="email" th:field="*{mail}" placeholder="tua@email.com" required>
+                <span class="alert-danger" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"></span>
+            </div>
+
+            <div>
+                <label for="password">Password</label>
+                <input id="password" type="password" th:field="*{password}" placeholder="Minimo 6 caratteri" required>
+                <span class="alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </div>
+
+            <div>
+                <label for="confermaPassword">Conferma Password</label>
+                <input id="confermaPassword" type="password" th:field="*{confermaPassword}" placeholder="Ripeti password" required>
+                <span class="alert-danger" th:if="${#fields.hasErrors('confermaPassword')}" th:errors="*{confermaPassword}"></span>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" name="termini" id="termini" required>
+                <label for="termini">Accetto i <span id="linkTermini" class="modal-link">termini e le condizioni</span></label>
+            </div>
+
+            <button type="submit">Registrati</button>
+        </form>
+
+        <div class="link">
+            Hai già un account? <a th:href="@{/accesso}">Accedi qui</a>
+        </div>
+    </div>
+
+    <div id="modalTermini" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Termini e Condizioni d'Uso</h2>
+            <p>Benvenuto su Info Tirocini. Utilizzando questa piattaforma, accetti di essere vincolato dai seguenti termini e condizioni.</p>
+            
+            <h4>1. Utilizzo della Piattaforma</h4>
+            <p>L'utente si impegna a utilizzare la piattaforma in modo responsabile e legale. È vietato inserire informazioni false, ingannevoli o che violino i diritti di terzi.</p>
+
+            <h4>2. Account Utente</h4>
+            <p>L'utente è responsabile della custodia delle proprie credenziali di accesso (email e password). Qualsiasi attività svolta tramite l'account sarà imputata all'utente.</p>
+
+            <h4>3. Privacy e Dati Personali</h4>
+            <p>I dati forniti saranno trattati in conformità con la nostra Informativa sulla Privacy (GDPR). La piattaforma si impegna a proteggere i dati personali, ma non può garantire la sicurezza assoluta contro accessi non autorizzati.</p>
+
+            <h4>4. Limitazione di Responsabilità</h4>
+            <p>La piattaforma "Info Tirocini" agisce come intermediario tra studenti e aziende. Non siamo responsabili per l'esito dei tirocini, la veridicità delle offerte pubblicate dalle aziende o il comportamento degli utenti.</p>
+            
+            <h4>5. Modifiche ai Termini</h4>
+            <p>Ci riserviamo il diritto di modificare questi termini in qualsiasi momento. Le modifiche saranno efficaci dalla loro pubblicazione sulla piattaforma.</p>
+        </div>
+    </div>
+
+    <script>
+        var modal = document.getElementById("modalTermini");
+        var link = document.getElementById("linkTermini");
+        var closeBtn = document.querySelector(".close-btn");
+
+        link.onclick = function(event) {
+            event.preventDefault(); 
+            modal.style.display = "flex"; 
+        }
+
+        closeBtn.onclick = function() {
+            modal.style.display = "none"; 
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none"; 
+            }
+        }
+    </script>
+</body>
+</html>

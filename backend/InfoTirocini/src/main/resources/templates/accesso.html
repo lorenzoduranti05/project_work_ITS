@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info Tirocini - Accesso</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            display: flex;
+            align-items: stretch;
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(6px);
+        }
+        .description {
+            flex: 1.2;
+            padding: 50px;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .description h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        .description p {
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        .box {
+            flex: 1;
+            background: #ffffff;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            display: block;
+        }
+        h1 {
+            color: #0f4c5c;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        label {
+            display: block;
+            text-align: left;
+            color: #0f4c5c;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: #0f4c5c;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #0f4c5c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #1a6b7f;
+        }
+        .link {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+        .link a {
+            color: #e9b8a6;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .alert {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+		
+		
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="description">
+            <h2>Benvenuto su Info Tirocini</h2>
+            <p>La piattaforma completa per <b>gestire e trovare tirocini </b> in modo semplice e veloce. <br><br> Connetti studenti e aziende, gestisci documentazione, monitora i progressi e accedi a tutte le informazioni necessarie in un unico posto.</p>
+        </div>
+
+        <div class="box">
+			<img class="logo" th:src="@{/immagini/Logo_Con_Scritta.png}" alt="Logo InfoTirocini">
+            <h1>Accedi</h1>
+
+            <div th:if="${param.error}" class="alert alert-danger">
+                <p>Email o password non corretti. Riprova.</p>
+            </div>
+
+            <div th:if="${success}" class="alert alert-success">
+                <p th:text="${success}"></p>
+            </div>
+            
+            <div th:if="${param.logout}" class="alert alert-success">
+                Logout effettuato con successo.
+            </div>
+
+            <form th:action="@{/perform_login}" method="POST">
+                <div>
+                    <label for="mail">Email</label>
+                    <input type="email" id="mail" name="mail" required>
+                </div>
+                <div>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Accedi</button>
+            </form>
+
+            <div class="link">
+                <p>Non hai un account? <a th:href="@{/registrazione}">Registrati qui</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

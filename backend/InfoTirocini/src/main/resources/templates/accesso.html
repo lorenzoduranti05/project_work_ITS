@@ -122,9 +122,7 @@
             color: #155724;
         }
 		
-		b {
-			color: #e9b8a6;
-		}
+		
     </style>
 </head>
 <body>
@@ -137,25 +135,26 @@
         <div class="box">
             <h1>Accedi</h1>
 
-            <div th:if="${error}" class="alert alert-danger">
-                <p th:text="${error}"></p>
+            <div th:if="${param.error}" class="alert alert-danger">
+                <p>Email o password non corretti. Riprova.</p>
             </div>
 
             <div th:if="${success}" class="alert alert-success">
                 <p th:text="${success}"></p>
             </div>
+            
             <div th:if="${param.logout}" class="alert alert-success">
                 Logout effettuato con successo.
             </div>
 
-            <form th:action="@{/accesso}" method="POST" th:object="${loginDTO}">
+            <form th:action="@{/perform_login}" method="POST">
                 <div>
                     <label for="mail">Email</label>
-                    <input type="email" id="mail" th:field="*{mail}" required>
+                    <input type="email" id="mail" name="mail" required>
                 </div>
                 <div>
                     <label for="password">Password</label>
-                    <input type="password" id="password" th:field="*{password}" required>
+                    <input type="password" id="password" name="password" required>
                 </div>
                 <button type="submit">Accedi</button>
             </form>

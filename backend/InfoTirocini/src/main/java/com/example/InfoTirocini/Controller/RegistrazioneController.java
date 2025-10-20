@@ -2,9 +2,11 @@ package com.example.InfoTirocini.Controller;
 
 import com.example.InfoTirocini.Service.UtenteService;
 import com.example.InfoTirocini.dto.RegistrazioneDTO;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +25,15 @@ public class RegistrazioneController {
     }
 
     @PostMapping("/registrazione")
-    public String processaRegistrazione(@ModelAttribute("registrazioneDTO") RegistrazioneDTO dto, Model model, RedirectAttributes redirectAttributes) {
+    public String processaRegistrazione(
+            @Valid @ModelAttribute("registrazioneDTO") RegistrazioneDTO dto,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            return "registrazione";
+        }
 
         if (!dto.getPassword().equals(dto.getConfermaPassword())) {
             model.addAttribute("error", "Le password non coincidono. Riprova.");

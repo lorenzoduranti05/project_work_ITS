@@ -1,9 +1,15 @@
 package com.example.InfoTirocini.config;
 
+import com.example.InfoTirocini.Model.Utente;
+import com.example.InfoTirocini.Repository.UtenteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -12,9 +18,32 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+
+    @Autowired
+    private UtenteRepository utenteRepository;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return username -> {
+            
+          Utente utente = utenteRepository.findByMail(username);
+            
+            if (utente == null) {
+                throw new UsernameNotFoundException("Utente non trovato: " + username);
+            }
+
+
+            return User.builder()
+                .username(utente.getMail())
+                .password(utente.getPassword())
+                .roles(utente.getRuolo())
+                .build();
+        };
     }
 
     @Bean
@@ -23,19 +52,25 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable());
 
         http.authorizeHttpRequests(auth -> auth
+               
                 .requestMatchers("/accesso", "/registrazione", "/css/**", "/js/**").permitAll() 
+          
                 .anyRequest().authenticated() 
         )
         .formLogin(form -> form
                 .loginPage("/accesso") 
-                .loginProcessingUrl("/perform_login")
+                .loginProcessingUrl("/perform_login") 
+                
+     
+                .usernameParameter("mail") 
+                
                 .defaultSuccessUrl("/home", true) 
-                .failureUrl("/login?error=true") 
+                .failureUrl("/accesso?error=true") 
                 .permitAll()
         )
         .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout=true")
+                .logoutSuccessUrl("/accesso?logout=true") 
                 .permitAll()
         );
 

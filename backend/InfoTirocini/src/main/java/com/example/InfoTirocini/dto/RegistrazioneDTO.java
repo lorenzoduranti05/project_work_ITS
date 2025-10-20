@@ -5,9 +5,12 @@ import jakarta.validation.constraints.*;
 public class RegistrazioneDTO {
 
     @NotBlank(message = "Nome obbligatorio")
+    @Pattern(regexp = "^[\\p{L} ']+$", message = "Il nome può contenere solo lettere, spazi e apostrofi")
     private String nome;
     
+
     @NotBlank(message = "Cognome obbligatorio")
+    @Pattern(regexp = "^[\\p{L} ']+$", message = "Il cognome può contenere solo lettere, spazi e apostrofi")
     private String cognome;
 
     @NotBlank(message = "Email obbligatoria")
@@ -23,6 +26,7 @@ public class RegistrazioneDTO {
 
 
     public RegistrazioneDTO() {}
+
 
 
     public String getNome() {

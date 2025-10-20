@@ -11,7 +11,7 @@ public class LoginDTO {
     @NotBlank(message = "Password obbligatoria")
     private String password;
     
-    // Costruttori
+
     public LoginDTO() {}
     
     public LoginDTO(String mail, String password) {
@@ -19,7 +19,6 @@ public class LoginDTO {
         this.password = password;
     }
     
-    // Getter e Setter
     public String getMail() {
         return mail;
     }

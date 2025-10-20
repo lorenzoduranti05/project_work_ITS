@@ -134,9 +134,13 @@
 
         <form th:action="@{/registrazione}" th:object="${registrazioneDTO}" method="POST">
             <div>
-                <label for="nome">Nome completo</label>
-                <input id="nome" type="text" th:field="*{nome}" placeholder="Mario Rossi" required>
+                <label for="nome">Nome</label>
+                <input id="nome" type="text" th:field="*{nome}" placeholder="Mario" required>
             </div>
+			<div>
+				<label for="nome">Cognome</label>
+			   	<input id="nome" type="text" th:field="*{cognome}" placeholder="Rossi" required>
+			           </div>
 
             <div>
                 <label for="mail">Email</label>

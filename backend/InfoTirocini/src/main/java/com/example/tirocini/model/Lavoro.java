@@ -28,10 +28,10 @@ public class Lavoro {
     @JsonManagedReference("lavoro-candidature")
     private List<Candidatura> candidature;
 
-    // Costruttori
+
     public Lavoro() {}
 
-    // Getter e Setter
+
     public Integer getId() {
         return id;
     }

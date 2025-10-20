@@ -18,34 +18,31 @@ public class UtenteService {
     @Autowired
     private UtenteRepository utenteRepository;
 
-    // 2. Inietta il PasswordEncoder (che hai definito come @Bean)
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     public RispostaLoginDTO registraUtente(RegistrazioneDTO dto) {
-        // 1. Controlla se l'email esiste già
+
         if (utenteRepository.existsByMail(dto.getMail())) {
             throw new RuntimeException("Email già registrata");
         }
 
-        // Controlla se la password è nulla o più corta di 6 caratteri
+
         if (dto.getPassword() == null || dto.getPassword().length() < 6) {
             throw new RuntimeException("La password deve contenere almeno 6 caratteri.");
         }
 
         Utente nuovoUtente = new Utente();
 
-        // Corretto per usare i campi separati dal DTO
         nuovoUtente.setNome(dto.getNome());
         nuovoUtente.setCognome(dto.getCognome());
 
         nuovoUtente.setMail(dto.getMail());
-        
-        // --- MODIFICA CHIAVE (Registrazione) ---
-        // Codifica la password prima di salvarla nel database
+
         String passwordHash = passwordEncoder.encode(dto.getPassword());
         nuovoUtente.setPassword(passwordHash);
-        // --- FINE MODIFICA ---
+
 
         nuovoUtente.setRuolo("USER");
         Utente salvato = utenteRepository.save(nuovoUtente);
@@ -68,12 +65,11 @@ public class UtenteService {
             throw new RuntimeException("USER_NOT_FOUND");
         }
 
-        // --- MODIFICA CHIAVE (Login) ---
-        // Confronta la password in chiaro (dal DTO) con l'hash salvato (dal DB)
+
         if (!passwordEncoder.matches(dto.getPassword(), utente.getPassword())) {
             throw new RuntimeException("INVALID_PASSWORD");
         }
-        // --- FINE MODIFICA ---
+
 
         RispostaLoginDTO risposta = new RispostaLoginDTO();
         risposta.setId(utente.getId());
@@ -94,7 +90,7 @@ public class UtenteService {
         profilo.setNome(utente.getNome());
         profilo.setCognome(utente.getCognome());
         profilo.setMail(utente.getMail());
-        profilo.setPassword("********"); // Corretto, non esporre mai la password
+        profilo.setPassword("********"); 
 
         return profilo;
     }
@@ -115,14 +111,12 @@ public class UtenteService {
             }
             utente.setMail(dto.getMail());
         }
-        
-        // --- MODIFICA CHIAVE (Aggiornamento Password) ---
-        // Se la password è stata cambiata (non è "********" e non è vuota)
+       
         if (dto.getPassword() != null && !dto.getPassword().isBlank() && !dto.getPassword().equals("********")) {
-            // Codifica la nuova password prima di salvarla
+
             utente.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
-        // --- FINE MODIFICA ---
+
 
         utenteRepository.save(utente);
 

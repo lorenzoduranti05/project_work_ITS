@@ -16,27 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `competenza`
+-- Table structure for table `utente`
 --
 
-DROP TABLE IF EXISTS `competenza`;
+DROP TABLE IF EXISTS `utente`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `competenza` (
+CREATE TABLE `utente` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(255) DEFAULT NULL,
-  `tipo_competenza` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `cognome` varchar(255) DEFAULT NULL,
+  `mail` varchar(255) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `ruolo` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `mail` (`mail`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `competenza`
+-- Dumping data for table `utente`
 --
 
-LOCK TABLES `competenza` WRITE;
-/*!40000 ALTER TABLE `competenza` DISABLE KEYS */;
-/*!40000 ALTER TABLE `competenza` ENABLE KEYS */;
+LOCK TABLES `utente` WRITE;
+/*!40000 ALTER TABLE `utente` DISABLE KEYS */;
+INSERT INTO `utente` VALUES (1,'Admin','Superuser','admin@example.com','adminpass','ADMIN'),(2,'Mario','Rossi','user@example.com','userpass','USER'),(3,'Nicolò','Esposito','giannicolo@example.com','123456','USER'),(4,'gianpaolo','duranti','gianpaolo@duranti.it','123','USER'),(5,'gianpaolo','duranti','gianpaolzo@duranti.it',' z','USER'),(6,'asd','as d','ciao@gmail.com','ciaociao','USER'),(7,'Bonny Clo','De Clide','bonny8@gmail.com','$2a$10$AVVRA8ajPKZlxM7sNIIyrOlhymKnqzQIA1rOXBLmCSO989v8QbfBa','USER');
+/*!40000 ALTER TABLE `utente` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-17 16:28:14
+-- Dump completed on 2025-10-20 11:42:03

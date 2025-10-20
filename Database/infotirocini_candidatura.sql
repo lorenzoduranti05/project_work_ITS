@@ -16,26 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `azienda`
+-- Table structure for table `candidatura`
 --
 
-DROP TABLE IF EXISTS `azienda`;
+DROP TABLE IF EXISTS `candidatura`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `azienda` (
+CREATE TABLE `candidatura` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nome` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `data_candidatura` datetime DEFAULT NULL,
+  `stato` varchar(255) DEFAULT NULL,
+  `lavoro_id` int DEFAULT NULL,
+  `utente_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `lavoro_id` (`lavoro_id`),
+  KEY `utente_id` (`utente_id`),
+  CONSTRAINT `candidatura_ibfk_1` FOREIGN KEY (`lavoro_id`) REFERENCES `lavoro` (`id`),
+  CONSTRAINT `candidatura_ibfk_2` FOREIGN KEY (`utente_id`) REFERENCES `utente` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `azienda`
+-- Dumping data for table `candidatura`
 --
 
-LOCK TABLES `azienda` WRITE;
-/*!40000 ALTER TABLE `azienda` DISABLE KEYS */;
-/*!40000 ALTER TABLE `azienda` ENABLE KEYS */;
+LOCK TABLES `candidatura` WRITE;
+/*!40000 ALTER TABLE `candidatura` DISABLE KEYS */;
+/*!40000 ALTER TABLE `candidatura` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -47,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-17 16:28:14
+-- Dump completed on 2025-10-20 11:42:03

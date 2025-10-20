@@ -60,11 +60,8 @@ public class SecurityConfig {
         )
         .formLogin(form -> form
                 .loginPage("/accesso") 
-                .loginProcessingUrl("/perform_login") 
-                
-     
-                .usernameParameter("mail") 
-                
+                .loginProcessingUrl("/perform_login")     
+                .usernameParameter("mail")       
                 .defaultSuccessUrl("/home", true) 
                 .failureUrl("/accesso?error=true") 
                 .permitAll()

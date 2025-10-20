@@ -533,8 +533,6 @@
                         <div class="dropdown-avatar">
                             <span class="dropdown-avatar-icon" id="dropdownAvatarIcon">👤</span>
                             <img id="dropdownAvatarImg" style="display: none;">
-                            <label for="fileInput" class="upload-overlay">Cambia</label>
-                            <input type="file" id="fileInput" accept="image/*" onchange="uploadProfilePicture(event)">
                         </div>
                         <div class="user-name" th:text="${utente.nome} + ' ' + ${utente.cognome}">Mario Rossi</div>
                         <div class="user-email" th:text="${utente.mail}">mario.rossi@email.com</div>
@@ -550,12 +548,6 @@
                             <a href="#">
                                 <span class="icon">✏️</span>
                                 <span>Modifica Profilo</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="icon">⚙️</span>
-                                <span>Impostazioni</span>
                             </a>
                         </li>
                     </ul>
@@ -702,33 +694,7 @@
             if (userMenu && !userMenu.contains(e.target) && dropdown.classList.contains('active')) {
                 dropdown.classList.remove('active');
             }
-        });
-
-        // Upload foto profilo (funzionalità mantenuta)
-        let profileImage = null;
-
-        function uploadProfilePicture(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    profileImage = e.target.result;
-                    
-                    const navIcon = document.getElementById('navAvatarIcon');
-                    const navImg = document.getElementById('navAvatarImg');
-                    navIcon.style.display = 'none';
-                    navImg.src = profileImage;
-                    navImg.style.display = 'block';
-                    
-                    const dropdownIcon = document.getElementById('dropdownAvatarIcon');
-                    const dropdownImg = document.getElementById('dropdownAvatarImg');
-                    dropdownIcon.style.display = 'none';
-                    dropdownImg.src = profileImage;
-                    dropdownImg.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
+        })
 
         function applyToArticle() {
             const toast = document.getElementById('toast');

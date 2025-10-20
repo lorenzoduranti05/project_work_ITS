@@ -23,10 +23,10 @@ public class Utente {
     @JsonManagedReference("utente-candidature")
     private List<Candidatura> candidature;
 
-    // Costruttori
+
     public Utente() {}
 
-    // Getter e Setter
+
     public Integer getId() {
         return id;
     }

@@ -17,10 +17,10 @@ public class Azienda {
     @JsonManagedReference("azienda-lavori")
     private List<Lavoro> lavori;
 
-    // Costruttori
+
     public Azienda() {}
 
-    // Getter e Setter
+
     public Integer getId() {
         return id;
     }

@@ -18,10 +18,10 @@ public class Competenza {
     @JsonIgnoreProperties("competenze")
     private List<Candidatura> candidature;
 
-    // Costruttori
+ 
     public Competenza() {}
 
-    // Getter e Setter
+
     public Integer getId() {
         return id;
     }

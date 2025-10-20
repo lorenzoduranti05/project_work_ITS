@@ -1,8 +1,10 @@
-package com.example.InfoTirocini.Repository;
+package com.example.tirocini.repository;
 
-import com.example.InfoTirocini.Model.Candidatura;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.example.tirocini.model.Candidatura;
+
 import java.util.List;
 
 @Repository

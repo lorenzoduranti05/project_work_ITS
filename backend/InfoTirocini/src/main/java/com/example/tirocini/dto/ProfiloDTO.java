@@ -1,4 +1,4 @@
-package com.example.InfoTirocini.dto;
+package com.example.tirocini.dto;
 
 public class ProfiloDTO {
     private String nome;

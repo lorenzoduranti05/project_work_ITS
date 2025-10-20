@@ -1,7 +1,8 @@
-package com.example.InfoTirocini.config;
+package com.example.tirocini.config;
 
-import com.example.InfoTirocini.Model.Utente;
-import com.example.InfoTirocini.Repository.UtenteRepository;
+import com.example.tirocini.model.Utente;
+import com.example.tirocini.repository.UtenteRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

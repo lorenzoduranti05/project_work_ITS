@@ -1,4 +1,4 @@
-package com.example.InfoTirocini.Model;
+package com.example.tirocini.model;
 
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

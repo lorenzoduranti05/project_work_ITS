@@ -1,7 +1,8 @@
-package com.example.InfoTirocini.Controller;
+package com.example.tirocini.controller;
 
-import com.example.InfoTirocini.Service.UtenteService;
-import com.example.InfoTirocini.dto.RegistrazioneDTO;
+import com.example.tirocini.dto.RegistrazioneDTO;
+import com.example.tirocini.service.UtenteService;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

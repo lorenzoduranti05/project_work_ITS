@@ -1,8 +1,9 @@
-package com.example.InfoTirocini.Service;
+package com.example.tirocini.service;
 
-import com.example.InfoTirocini.Model.Utente;
-import com.example.InfoTirocini.Repository.UtenteRepository;
-import com.example.InfoTirocini.dto.*;
+import com.example.tirocini.dto.*;
+import com.example.tirocini.model.Utente;
+import com.example.tirocini.repository.UtenteRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -12,7 +12,7 @@ public class LavoroDTO {
     private String descrizione;
     private Integer aziendaId;
     
-    // Costruttori
+
     public LavoroDTO() {}
     
     public LavoroDTO(String nome, String durata, String orari, 
@@ -24,7 +24,7 @@ public class LavoroDTO {
         this.aziendaId = aziendaId;
     }
     
-    // Getter e Setter
+
     public String getNome() {
         return nome;
     }

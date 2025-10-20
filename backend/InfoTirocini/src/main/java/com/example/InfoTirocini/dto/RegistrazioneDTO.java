@@ -6,6 +6,9 @@ public class RegistrazioneDTO {
 
     @NotBlank(message = "Nome obbligatorio")
     private String nome;
+    
+    @NotBlank(message = "Cognome obbligatorio")
+    private String cognome;
 
     @NotBlank(message = "Email obbligatoria")
     @Email(message = "Formato email non valido")
@@ -18,16 +21,23 @@ public class RegistrazioneDTO {
     @NotBlank(message = "Conferma password obbligatoria")
     private String confermaPassword;
 
-    // Costruttori
+
     public RegistrazioneDTO() {}
 
-    // Getter e Setter
+
     public String getNome() {
         return nome;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+    public String getCognome() {
+        return cognome;
+    }
+
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
     }
 
     public String getMail() {

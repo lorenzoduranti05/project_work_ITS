@@ -8,7 +8,7 @@ public class RispostaLoginDTO {
     private String ruolo;
     private String messaggio;
     
-    // Costruttori
+
     public RispostaLoginDTO() {}
     
     public RispostaLoginDTO(Integer id, String nome, String cognome, 
@@ -21,7 +21,7 @@ public class RispostaLoginDTO {
         this.messaggio = messaggio;
     }
     
-    // Getter e Setter
+
     public Integer getId() {
         return id;
     }

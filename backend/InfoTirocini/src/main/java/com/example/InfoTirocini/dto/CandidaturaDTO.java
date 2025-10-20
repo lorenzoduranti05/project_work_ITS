@@ -12,7 +12,7 @@ public class CandidaturaDTO {
     
     private String messaggio;
     
-    // Costruttori
+
     public CandidaturaDTO() {}
     
     public CandidaturaDTO(Integer utenteId, Integer lavoroId, String messaggio) {
@@ -21,7 +21,7 @@ public class CandidaturaDTO {
         this.messaggio = messaggio;
     }
     
-    // Getter e Setter
+
     public Integer getUtenteId() {
         return utenteId;
     }

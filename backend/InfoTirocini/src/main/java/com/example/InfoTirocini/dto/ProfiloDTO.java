@@ -6,7 +6,7 @@ public class ProfiloDTO {
     private String mail;
     private String password;
     
-    // Costruttori
+
     public ProfiloDTO() {}
     
     public ProfiloDTO(String nome, String cognome, String mail, String password) {
@@ -16,7 +16,7 @@ public class ProfiloDTO {
         this.password = password;
     }
     
-    // Getter e Setter
+
     public String getNome() {
         return nome;
     }

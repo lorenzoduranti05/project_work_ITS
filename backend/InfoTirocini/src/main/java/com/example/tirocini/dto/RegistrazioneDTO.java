@@ -14,7 +14,8 @@ public class RegistrazioneDTO {
     private String cognome;
 
     @NotBlank(message = "Email obbligatoria")
-    @Email(message = "Formato email non valido")
+    @Email(message = "Formato email non valido") 
+    @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Formato email non valido (es. utente@dominio.com)")
     private String mail;
 
     @NotBlank(message = "Password obbligatoria")

@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -32,73 +34,72 @@ public class ProfiloController {
 
     @GetMapping("/profilo")
     public String mostraProfilo(@AuthenticationPrincipal Utente principal, Model model) {
-
         if (principal == null) {
             return "redirect:/accesso?error=unauthorized";
         }
 
+        // Ricarica l'utente dal DB per avere l'URL immagine aggiornato
         Utente utente = utenteRepository.findById(principal.getId())
-                .orElse(principal);
+                .orElse(principal); // Usa principal come fallback
 
+        // Se non c'è un DTO flash (da un errore precedente), crea uno nuovo
         if (!model.containsAttribute("profiloDTO")) {
             ProfiloDTO dto = new ProfiloDTO();
             dto.setNome(utente.getNome());
             dto.setCognome(utente.getCognome());
             dto.setMail(utente.getMail());
+            // Non pre-popolare campi password
             model.addAttribute("profiloDTO", dto);
         }
 
-        model.addAttribute("utente", utente);
+        model.addAttribute("utente", utente); // Passa l'utente completo (con URL immagine)
 
         try {
-            List<Candidatura> tutteCandidature = candidaturaRepository.findByUtenteId(utente.getId()); //
-
+            List<Candidatura> tutteCandidature = candidaturaRepository.findByUtenteId(utente.getId());
             List<Candidatura> candidatureInviate = tutteCandidature.stream()
                     .filter(c -> "Inviata".equalsIgnoreCase(c.getStato()))
-                    .collect(Collectors.toList()); //
-
+                    .collect(Collectors.toList());
             List<Candidatura> candidatureAccettate = tutteCandidature.stream()
                     .filter(c -> "Accettata".equalsIgnoreCase(c.getStato()))
-                    .collect(Collectors.toList()); //
-
+                    .collect(Collectors.toList());
             List<Candidatura> candidatureRifiutate = tutteCandidature.stream()
                     .filter(c -> "Rifiutata".equalsIgnoreCase(c.getStato()))
-                    .collect(Collectors.toList()); //
+                    .collect(Collectors.toList());
 
             model.addAttribute("candidatureInviate", candidatureInviate);
-            model.addAttribute("inviateCount", candidatureInviate.size()); //
-
+            model.addAttribute("inviateCount", candidatureInviate.size());
             model.addAttribute("candidatureAccettate", candidatureAccettate);
-            model.addAttribute("accettateCount", candidatureAccettate.size()); //
-
+            model.addAttribute("accettateCount", candidatureAccettate.size());
             model.addAttribute("candidatureRifiutate", candidatureRifiutate);
-            model.addAttribute("rifiutateCount", candidatureRifiutate.size()); //
-
+            model.addAttribute("rifiutateCount", candidatureRifiutate.size());
         } catch (Exception e) {
-             model.addAttribute("errorMessage", "Errore nel caricamento delle candidature."); //
+             model.addAttribute("errorMessage", "Errore nel caricamento delle candidature.");
         }
 
-        return "Profilo"; //
+        return "Profilo";
     }
 
     @PostMapping("/profilo/aggiorna")
     public String aggiornaProfilo(
             @ModelAttribute("profiloDTO") ProfiloDTO dto,
+            @RequestParam(value = "profileImageFile", required = false) MultipartFile profileImageFile, // Aggiunto parametro per il file
             @AuthenticationPrincipal Utente utente,
             RedirectAttributes redirectAttributes) {
 
         if (utente == null) {
-            return "redirect:/accesso"; //
+            return "redirect:/accesso";
         }
 
         try {
-            utenteService.aggiornaProfilo(utente.getId(), dto); //
-            redirectAttributes.addFlashAttribute("successMessage", "Profilo aggiornato con successo!"); //
+            // Passa il file al service
+            utenteService.aggiornaProfilo(utente.getId(), dto, profileImageFile);
+            redirectAttributes.addFlashAttribute("successMessage", "Profilo aggiornato con successo!");
         } catch (RuntimeException ex) {
-            redirectAttributes.addFlashAttribute("profiloDTO", dto); //
-            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage()); //
+            // Se c'è un errore, rimanda indietro il DTO compilato e il messaggio d'errore
+            redirectAttributes.addFlashAttribute("profiloDTO", dto);
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
         }
 
-        return "redirect:/profilo"; //
+        return "redirect:/profilo"; // Ricarica la pagina del profilo
     }
 }

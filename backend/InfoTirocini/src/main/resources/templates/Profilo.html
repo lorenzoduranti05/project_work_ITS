@@ -278,7 +278,9 @@
 			font-weight: bold;
 		}
 
-		.form-group input {
+		.form-group input[type="text"],
+		.form-group input[type="email"],
+		.form-group input[type="password"] {
 			width: 100%;
             padding: 12px;
             border: 2px solid #ddd;
@@ -286,6 +288,17 @@
             font-size: 14px;
             box-sizing: border-box;
 		}
+		.form-group input[type="file"] {
+			display: block;
+			width: 100%;
+			border: 1px solid #ccc;
+			padding: 6px;
+			border-radius: 4px;
+			font-size: 14px;
+			box-sizing: border-box;
+			margin-top: 5px;
+		}
+
 
 		.form-group input:focus {
             border-color: var(--color-petrolio-scuro);
@@ -346,9 +359,16 @@
         }
 
         #profileImageInput {
-            display: none;
+             /* Non più nascosto, gestito nel modal */
         }
-
+		#imagePreview {
+			max-width: 100px;
+			max-height: 100px;
+			margin-top: 10px;
+			display: none;
+			border-radius: 50%;
+			object-fit: cover;
+		}
 
 		@media (max-width: 800px) {
 			.top-dashboard {
@@ -406,19 +426,16 @@
 	<div class="top-dashboard">
 		<div class="profile-card">
 			<div class="profile-role-container">
-				<h2 class="profile-role" th:text="${utente.ruolo == 'USER' ? 'Modifica Profilo' : utente.ruolo}">Modifica Profilo</h2>
+				<h2 class="profile-role" th:text="${utente.ruolo == 'USER' ? 'Il Tuo Profilo' : utente.ruolo}">Il Tuo Profilo</h2>
 				<button class="edit-profile-button" title="Modifica Profilo" id="openModalBtn">
 					<img th:src="@{/immagini/modifica12.png}" alt="Modifica" style="width: 24px; height: 24px;">
 				</button>
 			</div>
             <div class="profile-icon" id="profileIconContainer">
-                <label for="profileImageInput" style="cursor: pointer;">
-                    <img th:src="@{/immagini/icona.png}" alt="Avatar" id="profileAvatar"
-                         style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
-                </label>
-                <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
-                <div class="upload-overlay-text">Cambia</div>
-            </div>
+                 <img th:src="${utente.profileImageUrl != null ? utente.profileImageUrl : '/immagini/icona.png'}"
+                      alt="Avatar" id="profileAvatar"
+                      style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+                 </div>
 			<div class="contact-item">
 				<br>
 				<div>
@@ -451,7 +468,7 @@
 					<div class="number">
 						<a th:text="${inviateCount}">0</a> </div>
 					<div class="stat-dropdown">
-						<div th:each="c : ${candidatureInviate}" class="stat-dropdown-item"> <span th:text="${c.lavoro?.nome}"></span> </div>
+						<div th:each="c : ${candidatureInviate}" class="stat-dropdown-item"> <span th:text="${c.lavoro?.nome}">Nome Lavoro</span> </div>
 						<div th:if="${inviateCount == 0}" class="stat-dropdown-item"
 							style="text-align: center; color: #ccc;">
 							Nessuna candidatura inviata. </div>
@@ -464,7 +481,7 @@
 						<a th:text="${accettateCount}">0</a> </div>
 					<div class="stat-dropdown">
 						<div th:each="c : ${candidatureAccettate}" class="stat-dropdown-item">
-							<span th:text="${c.lavoro?.nome}"></span>
+							<span th:text="${c.lavoro?.nome}">Nome Lavoro</span>
 						</div>
 						<div th:if="${accettateCount == 0}" class="stat-dropdown-item"
 							style="text-align: center; color: #ccc;">
@@ -478,7 +495,7 @@
 						<a th:text="${rifiutateCount}">0</a> </div>
 					<div class="stat-dropdown">
 						<div th:each="c : ${candidatureRifiutate}" class="stat-dropdown-item">
-							<span th:text="${c.lavoro?.nome}"></span>
+							<span th:text="${c.lavoro?.nome}">Nome Lavoro</span>
 						</div>
 						<div th:if="${rifiutateCount == 0}" class="stat-dropdown-item"
 							style="text-align: center; color: #ccc;">
@@ -494,7 +511,7 @@
 			<span class="modal-close-btn" id="closeModalBtn">&times;</span>
 			<h2>Modifica Profilo</h2>
 
-			<form th:action="@{/profilo/aggiorna}" th:object="${profiloDTO}" method="POST" id="editProfileForm">
+			<form th:action="@{/profilo/aggiorna}" th:object="${profiloDTO}" method="POST" id="editProfileForm" enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="nome">Nome</label>
 					<input id="nome" type="text" th:field="*{nome}" required>
@@ -507,6 +524,12 @@
 					<label for="mail">Email</label>
 					<input id="mail" type="email" th:field="*{mail}" required>
 				</div>
+
+                 <div class="form-group">
+                    <label for="profileImageInput">Immagine Profilo (opzionale)</label>
+                    <input type="file" id="profileImageInput" name="profileImageFile" accept="image/*">
+                    <img id="imagePreview" src="#" alt="Anteprima immagine"/>
+                 </div>
 
 				<hr style="margin: 20px 0; border: 1px solid #eee;">
 
@@ -533,94 +556,131 @@
 	</div>
 
 	<script>
-	    const statCards = document.querySelectorAll('.stat-card');
-	    statCards.forEach((card, index) => {
-	        card.addEventListener('click', () => {
-	            statCards.forEach(c => { if (c !== card) c.classList.remove('active') });
-	            card.classList.toggle('active');
-	        });
-	    });
+		const statCards = document.querySelectorAll('.stat-card');
+		statCards.forEach((card, index) => {
+			card.addEventListener('click', () => {
+				statCards.forEach(c => {if (c !== card) c.classList.remove('active')});
+				card.classList.toggle('active');
+			});
+		});
 
-	    var modal = document.getElementById("editProfileModal");
-	    var openBtn = document.getElementById("openModalBtn");
-	    var closeBtn = document.getElementById("closeModalBtn");
-	    var form = document.getElementById("editProfileForm");
-	    var newPasswordInput = document.getElementById("password");
-	    var confirmPasswordInput = document.getElementById("confermaPassword");
-	    var passwordMatchError = document.getElementById("passwordMatchError");
+		var modal = document.getElementById("editProfileModal");
+        var openBtn = document.getElementById("openModalBtn");
+        var closeBtn = document.getElementById("closeModalBtn");
+		var form = document.getElementById("editProfileForm");
+        var newPasswordInput = document.getElementById("password");
+        var confirmPasswordInput = document.getElementById("confermaPassword");
+        var passwordMatchError = document.getElementById("passwordMatchError");
+        var profileImageInput = document.getElementById('profileImageInput');
+        var imagePreview = document.getElementById('imagePreview');
 
-	    function openEditModal() {
-	        newPasswordInput.value = '';
-	        confirmPasswordInput.value = '';
-	        document.getElementById('passwordAttuale').value = '';
-	        passwordMatchError.style.display = 'none';
-	        if (modal) {
-	             modal.style.display = "flex";
-	        }
-	    }
+		function openEditModal() {
+             // Resetta campi password e errori
+             newPasswordInput.value = '';
+             confirmPasswordInput.value = '';
+             document.getElementById('passwordAttuale').value = '';
+             passwordMatchError.style.display = 'none';
 
-	    if (openBtn) {
-	        openBtn.onclick = function(event) {
-	            event.preventDefault();
-	            openEditModal();
-	        }
-	    }
+             // Resetta input file e anteprima
+             profileImageInput.value = ''; // Cancella selezione file precedente
+             imagePreview.style.display = 'none';
+             imagePreview.src = '#';
 
-	    if (closeBtn) {
-	        closeBtn.onclick = function() {
-	            if (modal) {
-	                 modal.style.display = "none";
-	            }
-	        }
-	    }
+             if (modal) {
+                  modal.style.display = "flex";
+             }
+         }
 
-	    window.onclick = function(event) {
-	        if (event.target == modal) {
-	            if (modal) {
-	                 modal.style.display = "none";
-	            }
-	        }
-	    }
+         if (openBtn) {
+             openBtn.onclick = function(event) {
+                 event.preventDefault();
+                 openEditModal();
+             }
+         }
 
-	    function validatePasswordMatch() {
-	        if (newPasswordInput.value !== confirmPasswordInput.value && newPasswordInput.value !== '') {
-	            passwordMatchError.style.display = 'block';
-	            return false;
-	        } else {
-	            passwordMatchError.style.display = 'none';
-	            return true;
-	        }
-	    }
 
-	    if (newPasswordInput && confirmPasswordInput) {
+        if (closeBtn) {
+            closeBtn.onclick = function() {
+                if (modal) {
+                     modal.style.display = "none";
+                }
+            }
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                if (modal) {
+                     modal.style.display = "none";
+                }
+            }
+        }
+
+        function validatePasswordMatch() {
+            if (newPasswordInput.value !== confirmPasswordInput.value && newPasswordInput.value !== '') {
+                passwordMatchError.style.display = 'block';
+                return false;
+            } else {
+                passwordMatchError.style.display = 'none';
+                return true;
+            }
+        }
+
+        if (newPasswordInput && confirmPasswordInput) {
 	        newPasswordInput.addEventListener('keyup', validatePasswordMatch);
 	        confirmPasswordInput.addEventListener('keyup', validatePasswordMatch);
-	    }
+        }
 
-	    if (form) {
+        if (form) {
 	        form.addEventListener('submit', function(event) {
 	            if (newPasswordInput.value !== '' && !validatePasswordMatch()) {
 	                event.preventDefault();
 	                alert("Le nuove password inserite non coincidono. Controlla e riprova.");
 	            }
+	             // Non serve FormData qui perché usiamo il submit standard del form HTML
 	        });
-	    }
+        }
+
 
 		document.addEventListener("DOMContentLoaded", function() {
-		        var errorMessage = document.querySelector(".alert-danger");
-		        if (errorMessage && errorMessage.textContent.trim() !== "") {
-		            if (!document.querySelector(".alert-success")) {
-		                 openEditModal();
-		            }
-		        }
-				
-		        const urlParams = new URLSearchParams(window.location.search);
-		        if (urlParams.has('edit') && urlParams.get('edit') === 'true') {
-		            openEditModal();
-		            const newUrl = window.location.pathname;
-		            window.history.replaceState({}, document.title, newUrl);
-		        }
-		    });
+			var errorMessage = document.querySelector(".alert-danger");
+			// Se c'è un messaggio di errore (es. da redirectAttributes), apri il modale
+			if (errorMessage && errorMessage.textContent.trim() !== "") {
+				// Assicurati che non ci sia anche un messaggio di successo (che avrebbe priorità)
+				if (!document.querySelector(".alert-success")) {
+					 openEditModal();
+				}
+			}
+
+			// Gestione parametro URL per aprire modale (es. da link nel menu)
+			const urlParams = new URLSearchParams(window.location.search);
+	        if (urlParams.has('edit') && urlParams.get('edit') === 'true') {
+	            openEditModal();
+	            // Rimuovi il parametro dall'URL per non riaprire al refresh
+	            const newUrl = window.location.pathname;
+	            window.history.replaceState({}, document.title, newUrl);
+	        }
+		});
+
+
+        // Script per l'anteprima dell'immagine nel modale
+        if (profileImageInput && imagePreview) {
+	        profileImageInput.addEventListener('change', function(event) {
+	            const file = event.target.files[0];
+	            if (file) {
+	                const reader = new FileReader();
+	                reader.onload = function(e) {
+	                    imagePreview.src = e.target.result;
+	                    imagePreview.style.display = 'block'; // Mostra l'anteprima
+	                }
+	                reader.readAsDataURL(file);
+	            } else {
+	                // Se l'utente annulla la selezione
+	                imagePreview.style.display = 'none';
+	                imagePreview.src = '#';
+	            }
+	        });
+        }
+
 	</script>
 </body>
 </html>

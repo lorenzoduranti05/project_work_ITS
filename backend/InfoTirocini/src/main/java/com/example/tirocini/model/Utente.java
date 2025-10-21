@@ -25,10 +25,12 @@ public class Utente implements UserDetails {
     private String password;
     private String ruolo;
 
+    @Column(name = "profile_image_url") // Aggiunto per l'immagine
+    private String profileImageUrl;
+
     @OneToMany(mappedBy = "utente", cascade = CascadeType.ALL)
     @JsonManagedReference("utente-candidature")
     private List<Candidatura> candidature;
-
 
     public Utente() {}
 
@@ -117,5 +119,14 @@ public class Utente implements UserDetails {
 
     public void setCandidature(List<Candidatura> candidature) {
         this.candidature = candidature;
+    }
+
+    // Getter e Setter per profileImageUrl
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }

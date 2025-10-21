@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/candidature") 
+@RequestMapping("/api/candidature")
 public class CandidaturaController {
 
     @Autowired
@@ -20,8 +20,8 @@ public class CandidaturaController {
     @PostMapping
     public ResponseEntity<?> applica(
             @RequestParam("lavoroId") Integer lavoroId,
-            @AuthenticationPrincipal Utente utente) { 
-        
+            @AuthenticationPrincipal Utente utente) {
+
         if (utente == null) {
             return ResponseEntity.status(401).body("Utente non autenticato.");
         }

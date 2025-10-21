@@ -4,6 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 	<title>Profilo Aggiornato</title>
 	<style>
 		:root {
@@ -363,7 +364,7 @@
 
 <body>
 	<div class="navbar">
-		<a th:href="@{/home}" class="back-arrow">←</a>
+		<a th:href="@{/home}" class="back-arrow"><i class="fas fa-arrow-left"></i></a>
 
 		<a th:href="@{/home}" class="logo-link">
 			<img class="logo" th:src="@{/immagini/Logo_Con_Scritta.png}" alt="Logo InfoTirocini">
@@ -380,7 +381,7 @@
 	<div class="top-dashboard">
 		<div class="profile-card">
 			<div class="profile-role-container">
-				<h2 class="profile-role" th:text="${utente.ruolo == 'USER' ? 'Studente' : utente.ruolo}">Studente</h2>
+				<h2 class="profile-role" th:text="${utente.ruolo == 'USER' ? 'Modifica Profilo' : utente.ruolo}">Modifica Profilo</h2>
 				<button class="edit-profile-button" title="Modifica Profilo" id="openModalBtn">
 					<img th:src="@{/immagini/modifica12.png}" alt="Modifica" style="width: 24px; height: 24px;">
 				</button>

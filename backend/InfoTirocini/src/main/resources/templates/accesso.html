@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Info Tirocini - Accesso</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -153,6 +154,23 @@
             }
         }
 		
+		.password-toggle-icon {
+		    position: absolute;
+		    /* Aumenta questo valore per spostare l'icona più in basso */
+		    top: 65%; 
+		    right: 12px;
+		    /* Mantiene il transform per centrare rispetto alla sua dimensione */
+		    transform: translateY(-50%); 
+		    cursor: pointer;
+		    user-select: none;
+		    font-size: 1.2rem;
+		    color: #aaa;
+		    z-index: 2; 
+		}
+		.password-toggle-icon:hover {
+			color: #0F4C5C;
+		}
+		
     </style>
 </head>
 <body>
@@ -183,9 +201,10 @@
                     <label for="mail">Email</label>
                     <input type="email" id="mail" name="mail" required>
                 </div>
-                <div>
+                <div style="position: relative;">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required>
+					<span class="password-toggle-icon" onclick="togglePasswordVisibility('password')"><i class="fa-solid fa-eye"></i></span>
                 </div>
                 <button type="submit">Accedi</button>
             </form>
@@ -195,5 +214,19 @@
             </div>
         </div>
     </div>
+	
+	<script>
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling; 
+            if (input.type === "password") {
+                input.type = "text";
+                icon.innerHTML = '<i class="fa-solid fa-person-walking-with-cane"></i>'; 
+            } else {
+                input.type = "password";
+                icon.innerHTML = '<i class="fa-solid fa-eye"></i>'; 
+            }
+        }
+    </script>
 </body>
 </html>

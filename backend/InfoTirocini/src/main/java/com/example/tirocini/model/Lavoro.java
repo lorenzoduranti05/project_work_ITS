@@ -18,7 +18,7 @@ public class Lavoro {
     private String durata;
     private String orari;
     private String descrizione;
-    
+
     @Column(name = "image_url")
     private String imageUrl;
 
@@ -33,7 +33,7 @@ public class Lavoro {
 
     @ManyToMany
     @JoinTable(
-        name = "lavoro_competenza", 
+        name = "lavoro_competenza",
         joinColumns = @JoinColumn(name = "lavoro_id"),
         inverseJoinColumns = @JoinColumn(name = "competenza_id")
     )
@@ -97,7 +97,7 @@ public class Lavoro {
     public void setCandidature(List<Candidatura> candidature) {
         this.candidature = candidature;
     }
-    
+
     public String getImageUrl() {
         return imageUrl;
     }

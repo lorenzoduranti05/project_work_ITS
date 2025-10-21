@@ -436,6 +436,7 @@
 				</div>
 
 				<div class="card stat-card">
+<<<<<<< Updated upstream
 					<h3>Candidature Accettate</h3>
 					<div class="number">
 						<a th:text="${accettateCount}">0</a>
@@ -459,6 +460,41 @@
 							Nessuna candidatura rifiutata.
 						</div>
 					</div>
+=======
+				    <h3>Candidature Accettate</h3>
+				    <div class="number">
+				        <a th:text="${accettateCount}">0</a>
+				    </div>
+				    <div class="stat-dropdown">
+				        <div th:each="c : ${candidatureAccettate}"
+				             th:if="${#strings.equalsIgnoreCase(c.stato, 'Accettata')}" class="stat-dropdown-item">
+				            <span th:text="${c.lavoro?.nome}">Nome Lavoro Accettato</span>
+				        </div>
+
+				        <div th:if="${accettateCount == 0}" class="stat-dropdown-item"
+				             style="text-align: center; color: #ccc;">
+				            Nessuna candidatura accettata.
+				        </div>
+				    </div>
+				</div>
+
+				<div class="card stat-card">
+				    <h3>Candidature Rifiutate</h3>
+				    <div class="number">
+				        <a th:text="${rifiutateCount}">0</a>
+				    </div>
+				    <div class="stat-dropdown">
+				        <div th:each="c : ${candidatureRifiutate}"
+				             th:if="${#strings.equalsIgnoreCase(c.stato, 'Rifiutata')}" class="stat-dropdown-item">
+				            <span th:text="${c.lavoro?.nome}">Nome Lavoro Rifiutato</span>
+				        </div>
+
+				        <div th:if="${rifiutateCount == 0}" class="stat-dropdown-item"
+				             style="text-align: center; color: #ccc;">
+				            Nessuna candidatura rifiutata.
+				        </div>
+				    </div>
+>>>>>>> Stashed changes
 				</div>
 			</div>
 		</div>

@@ -1,5 +1,6 @@
 package com.example.tirocini.controller;
 
+
 import com.example.tirocini.model.Lavoro;
 import com.example.tirocini.repository.LavoroRepository;
 import java.util.List;
@@ -18,6 +19,7 @@ public class DashboardController {
     @Autowired
     private UtenteRepository utenteRepository;
 
+
     @Autowired
     private LavoroRepository lavoroRepository;
 
@@ -28,7 +30,9 @@ public class DashboardController {
 
         model.addAttribute("utente", utente); 
         
+
         List<Lavoro> lavori = lavoroRepository.findAll();
+        
 
         model.addAttribute("lavori", lavori);
         

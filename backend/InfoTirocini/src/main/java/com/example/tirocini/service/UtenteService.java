@@ -7,7 +7,7 @@ import com.example.tirocini.repository.UtenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-// 1. Importa il PasswordEncoder di Spring Security
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;

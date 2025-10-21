@@ -81,7 +81,6 @@
 			align-self: flex-start;
 			height: 100%;
 			width: 300px;
-
 		}
 
 		.top-row {
@@ -196,6 +195,8 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
+            position: relative;
+            overflow: hidden;
 		}
 
 		.contact-item {
@@ -325,6 +326,30 @@
     		border-color: #f5c6cb;
 		}
 
+        .upload-overlay-text {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 59, 92, 0.8);
+            color: white;
+            text-align: center;
+            padding: 5px 0;
+            font-size: 11px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .profile-icon:hover .upload-overlay-text {
+            opacity: 1;
+        }
+
+        #profileImageInput {
+            display: none;
+        }
+
+
 		@media (max-width: 800px) {
 			.top-dashboard {
 				flex-direction: column;
@@ -386,10 +411,14 @@
 					<img th:src="@{/immagini/modifica12.png}" alt="Modifica" style="width: 24px; height: 24px;">
 				</button>
 			</div>
-			<div class="profile-icon">
-				<img th:src="@{/immagini/icona.png}" alt="Avatar"
-					style="width: 100px; height: 100px; border-radius: 50%;">
-			</div>
+            <div class="profile-icon" id="profileIconContainer">
+                <label for="profileImageInput" style="cursor: pointer;">
+                    <img th:src="@{/immagini/icona.png}" alt="Avatar" id="profileAvatar"
+                         style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+                </label>
+                <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+                <div class="upload-overlay-text">Cambia</div>
+            </div>
 			<div class="contact-item">
 				<br>
 				<div>
@@ -567,6 +596,24 @@
 				}
 			}
 		});
+
+        const profileImageInput = document.getElementById('profileImageInput');
+        const profileAvatar = document.getElementById('profileAvatar');
+        const profileIconContainer = document.getElementById('profileIconContainer');
+
+        profileImageInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    profileAvatar.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+                console.log("Immagine selezionata:", file.name);
+            }
+        });
+
 	</script>
 </body>
 </html>

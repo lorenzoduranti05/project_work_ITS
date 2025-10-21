@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@
             padding: 20px;
             box-sizing: border-box;
         }
+
         .container {
             display: flex;
             align-items: stretch;
@@ -27,6 +29,7 @@
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(6px);
         }
+
         .description {
             flex: 1.2;
             padding: 50px;
@@ -35,14 +38,17 @@
             flex-direction: column;
             justify-content: center;
         }
+
         .description h2 {
             font-size: 32px;
             margin-bottom: 20px;
         }
+
         .description p {
             line-height: 1.8;
             font-size: 16px;
         }
+
         .box {
             flex: 1;
             background: #ffffff;
@@ -51,17 +57,20 @@
             flex-direction: column;
             justify-content: center;
         }
+
         .logo {
             width: 80px;
             height: 80px;
             margin: 0 auto 15px;
             display: block;
         }
+
         h1 {
             color: #0f4c5c;
             margin-bottom: 25px;
             text-align: center;
         }
+
         label {
             display: block;
             text-align: left;
@@ -70,6 +79,7 @@
             margin-top: 15px;
             margin-bottom: 5px;
         }
+
         input {
             width: 100%;
             padding: 12px;
@@ -78,10 +88,12 @@
             font-size: 14px;
             box-sizing: border-box;
         }
+
         input:focus {
             border-color: #0f4c5c;
             outline: none;
         }
+
         button {
             width: 100%;
             padding: 12px;
@@ -94,42 +106,54 @@
             margin-top: 20px;
             transition: all 0.3s;
         }
+
         button:hover {
             background: #1a6b7f;
         }
+
         .link {
             text-align: center;
             margin-top: 20px;
             color: #666;
         }
+
         .link a {
             color: #e9b8a6;
             text-decoration: none;
             font-weight: bold;
         }
+
         .alert {
             padding: 10px;
             margin-bottom: 15px;
             border-radius: 5px;
             text-align: center;
         }
+
         .alert-danger {
             background-color: #f8d7da;
             color: #721c24;
         }
+
         .alert-success {
             background-color: #d4edda;
             color: #155724;
         }
-		@media (max-width: 992px) {
+
+        @media (max-width: 992px) {
             .container {
                 flex-direction: column;
                 align-items: center;
                 max-width: 600px;
             }
+
             .description {
                 padding: 40px 30px;
                 text-align: center;
+            }
+
+            .box {
+                margin-top: 30px;
             }
         }
 
@@ -137,33 +161,41 @@
             body {
                 padding: 20px;
             }
+
             .description {
                 padding: 25px 20px;
             }
+
             .box {
                 padding: 25px 20px;
+
+                margin-top: 25px;
             }
+
             input {
                 padding: 7px;
                 font-size: 13px;
             }
+
             button {
                 padding: 9px;
                 font-size: 14px;
             }
         }
-		
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="description">
             <h2>Benvenuto su Info Tirocini</h2>
-            <p>La piattaforma completa per <b>gestire e trovare tirocini </b> in modo semplice e veloce. <br><br> Connetti studenti e aziende, gestisci documentazione, monitora i progressi e accedi a tutte le informazioni necessarie in un unico posto.</p>
+            <p>La piattaforma completa per <b>gestire e trovare tirocini </b> in modo semplice e veloce. <br><br>
+                Connetti studenti e aziende, gestisci documentazione, monitora i progressi e accedi a tutte le
+                informazioni necessarie in un unico posto.</p>
         </div>
 
         <div class="box">
-			<img class="logo" th:src="@{/immagini/Logo_Con_Scritta.png}" alt="Logo InfoTirocini">
+            <img class="logo" th:src="@{/immagini/Logo_Con_Scritta.png}" alt="Logo InfoTirocini">
             <h1>Accedi</h1>
 
             <div th:if="${param.error}" class="alert alert-danger">
@@ -173,7 +205,7 @@
             <div th:if="${success}" class="alert alert-success">
                 <p th:text="${success}"></p>
             </div>
-            
+
             <div th:if="${param.logout}" class="alert alert-success">
                 Logout effettuato con successo.
             </div>
@@ -196,4 +228,5 @@
         </div>
     </div>
 </body>
+
 </html>

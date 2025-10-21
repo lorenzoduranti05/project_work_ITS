@@ -576,18 +576,17 @@
 						<div class="user-email" th:text="${utente.mail}">mario.rossi@email.com</div>
 					</div>
 					<ul class="dropdown-menu">
-						<li>
-							<a href="#">
-								<span class="icon">👤</span>
-								<span>Il Mio Profilo</span>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span class="icon">✏️</span>
-								<span>Modifica Profilo</span>
-							</a>
-						</li>
+					    <li>
+					        <a th:href="@{/profilo}"> <span class="icon">👤</span>
+					            <span>Il Mio Profilo</span>
+					        </a>
+					    </li>
+					    <li>
+					        <a href="#">
+					            <span class="icon">✏️</span>
+					            <span>Modifica Profilo</span>
+					        </a>
+					    </li>
 					</ul>
 					<div class="dropdown-divider"></div>
 					<ul class="dropdown-menu">

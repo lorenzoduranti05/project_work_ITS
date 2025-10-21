@@ -45,6 +45,15 @@
             width: auto;
         }
 
+        .admin-badge {
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.5em;
+            font-weight: 600;
+        }
+
         .back-arrow {
             position: absolute;
             left: 20px;
@@ -78,7 +87,7 @@
             position: sticky;
             top: 20px;
             align-self: flex-start;
-            height: 100%;
+            height: 404px;
         }
 
         .top-row {
@@ -105,7 +114,7 @@
         .card.stat-card {
             cursor: pointer;
             overflow: hidden;
-            max-height: 45%;
+            max-height: 100%;
         }
 
         .card.stat-card h3 {
@@ -140,7 +149,7 @@
         }
 
         .card.stat-card.active .stat-dropdown {
-            max-height: calc(3 * 2em + 25px);
+            max-height: 150px;
             overflow-y: auto;
             padding: 15px 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) inset;
@@ -253,34 +262,24 @@
 </head>
 
 <body>
-    <div class="navbar">
-        <a href="pagina_precedente.html" class="back-arrow">←</a>
-        <a href="home.html"><img src="logo2.png" alt="logo"></a>
-        Profilo
+    <div class="navbar"> <a href="pagina_precedente.html" class="back-arrow">←</a> <a href="home.html"><img
+                src="logo2.png" alt="logo"></a> Profilo <span class="admin-badge">ADMIN</span></div>
     </div>
     <div class="top-dashboard">
         <div class="profile-card">
             <div class="profile-role-container">
-                <h2 class="profile-role">Studente</h2>
-                <button class="role-button" title="Modifica ruolo">
-                    <img src="modifica12.png" alt="Modifica">
-                </button>
+                <h2 class="profile-role">Studente</h2> <button class="role-button" title="Modifica ruolo"> <img
+                        src="modifica12.png" alt="Modifica"> </button>
             </div>
-            <div class="profile-icon">
-                <img src="icona.png" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%;">
-            </div>
-            <div class="contact-item">
-                <br>
-                <div><span class="contact-label">Nome: </span><br><span>nome prova</span></div>
-                <br>
-                <div><span class="contact-label">Cognome: </span><br><span>cognome prova</span></div>
-                <br>
-                <div><span class="contact-label">Email: </span><br><span>studente.esempio@dominio.it</span></div>
-                <br>
+            <div class="profile-icon"> <img src="icona.png" alt="Avatar"
+                    style="width: 100px; height: 100px; border-radius: 50%;"> </div>
+            <div class="contact-item"> <br>
+                <div><span class="contact-label">Nome: </span><br><span>nome prova</span></div> <br>
+                <div><span class="contact-label">Cognome: </span><br><span>cognome prova</span></div> <br>
+                <div><span class="contact-label">Email: </span><br><span>studente.esempio@dominio.it</span></div> <br>
                 <div><span class="contact-label">Password: </span><br><span>Prova</span></div>
             </div>
         </div>
-
         <div class="top-row">
             <div class="stats-container">
                 <div class="card stat-card">
@@ -295,37 +294,10 @@
                         <div class="stat-dropdown-item">Borse di Studio</div>
                     </div>
                 </div>
-                <div class="card stat-card">
-                    <h3>Candidature Accettate</h3>
-                    <div class="number"><a>4</a></div>
-                    <div class="stat-dropdown">
-                        <div class="stat-dropdown-item">Tirocini</div>
-                        <div class="stat-dropdown-item">Lavoro Part-Time</div>
-                        <div class="stat-dropdown-item">Borse di Studio</div>
-                    </div>
-                </div>
-                <div class="card stat-card">
-                    <h3>Candidature Rifiutate</h3>
-                    <div class="number"><a>4</a></div>
-                    <div class="stat-dropdown">
-                        <div class="stat-dropdown-item">Tirocini</div>
-                        <div class="stat-dropdown-item">Lavoro Part-Time</div>
-                        <div class="stat-dropdown-item">Borse di Studio</div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-    <script>
-        const statCards = document.querySelectorAll('.stat-card');
-        statCards.forEach((card, index) => {
-            if (index === 0) card.classList.add('active');
-            card.addEventListener('click', () => {
-                statCards.forEach(c => { if (c !== card) c.classList.remove('active') });
-                card.classList.toggle('active');
-            });
-        });
-    </script>
+    <script> const statCards = document.querySelectorAll('.stat-card'); statCards.forEach((card, index) => { if (index === 0) card.classList.add('active'); card.addEventListener('click', () => { statCards.forEach(c => { if (c !== card) c.classList.remove('active') }); card.classList.toggle('active'); }); }); </script>
 </body>
 
 </html>

@@ -629,11 +629,10 @@
     </div>
     
     <script>
-        // L'array 'articles' e la funzione 'createCards()' sono stati rimossi.
-        // L'HTML è ora generato da Thymeleaf (sul server).
+
 
         function openModal(cardElement) {
-            // Leggiamo i dati direttamente dagli attributi "data-*" della card cliccata
+
             const title = cardElement.getAttribute('data-titolo');
             const author = cardElement.getAttribute('data-azienda');
             const duration = cardElement.getAttribute('data-durata');
@@ -642,20 +641,19 @@
 
             const modal = document.getElementById('modal');
             
-            // Nascondiamo l'elemento categoria che non usiamo
             document.getElementById('modalCategory').style.display = 'none';
 
-            // Popoliamo il modal con i dati del DB
-            document.getElementById('modalTitle').textContent = title; // Nome Lavoro
+  
+            document.getElementById('modalTitle').textContent = title; 
             
-            // Meta: Azienda, Durata, Orari
+  
             document.getElementById('modalMeta').innerHTML = `
                 🏭 ${author || 'Azienda non specificata'} • 
                 🕐 ${duration || 'Durata non specificata'} • 
                 📅 ${schedule || 'Orari non specificati'}
             `;
             
-            document.getElementById('modalText').textContent = content; // Descrizione
+            document.getElementById('modalText').textContent = content; 
             
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -667,27 +665,27 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Chiudi modal cliccando fuori
+ 
         document.getElementById('modal').addEventListener('click', (e) => {
             if (e.target.id === 'modal') {
                 closeModal();
             }
         });
 
-        // Chiudi modal con tasto ESC
+  
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeModal();
             }
         });
 
-        // Funzioni per il menu utente
+        
         function toggleUserDropdown() {
             const dropdown = document.getElementById('userDropdown');
             dropdown.classList.toggle('active');
         }
 
-        // Chiudi dropdown cliccando fuori
+     
         document.addEventListener('click', (e) => {
             const userMenu = document.querySelector('.user-menu');
             const dropdown = document.getElementById('userDropdown');

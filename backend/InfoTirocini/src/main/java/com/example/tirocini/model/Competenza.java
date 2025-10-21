@@ -18,9 +18,11 @@ public class Competenza {
     @JsonIgnoreProperties("competenze")
     private List<Candidatura> candidature;
 
+    @ManyToMany(mappedBy = "competenze")
+    @JsonIgnoreProperties("competenze")
+    private List<Lavoro> lavori;
  
     public Competenza() {}
-
 
     public Integer getId() {
         return id;
@@ -52,5 +54,13 @@ public class Competenza {
 
     public void setCandidature(List<Candidatura> candidature) {
         this.candidature = candidature;
+    }
+    
+    public List<Lavoro> getLavori() {
+        return lavori;
+    }
+
+    public void setLavori(List<Lavoro> lavori) {
+        this.lavori = lavori;
     }
 }

@@ -302,16 +302,23 @@
 		}
 		
 		.card-category {
-		            display: inline-block;
-		            background: #E9B8A6;
-		            color: #0F4C5C;
-		            padding: 5px 15px;
-		            border-radius: 20px;
-		            font-size: 0.8em;
-		            margin-bottom: 10px;
-		            font-weight: 600;
-					width: fit-content;
-		        }
+		    display: inline-block;
+		    background: #E9B8A6;
+		    color: #0F4C5C;
+		    border-radius: 20px;
+		    font-weight: 600;
+			width: fit-content;
+            padding: 4px 12px;
+            font-size: 0.75em;
+		}
+
+        .card-category-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+            min-height: 28px;
+        }
 
 		.card-title {
 			font-size: 1.5em;
@@ -365,7 +372,6 @@
 			from {
 				opacity: 0;
 			}
-
 			to {
 				opacity: 1;
 			}
@@ -387,7 +393,6 @@
 				transform: translateY(50px);
 				opacity: 0;
 			}
-
 			to {
 				transform: translateY(0);
 				opacity: 1;
@@ -407,16 +412,22 @@
 		}
 		
 		.modal-category {
-		            display: inline-block;
-		            background: #E9B8A6;
-		            color: #0F4C5C;
-		            padding: 8px 20px;
-		            border-radius: 25px;
-		            font-size: 0.9em;
-		            margin-bottom: 15px;
-		            font-weight: 600;
-					width: fit-content;
-		        }
+		    display: inline-block;
+		    background: #E9B8A6;
+		    color: #0F4C5C;
+		    border-radius: 25px;
+		    font-weight: 600;
+			width: fit-content;
+            padding: 4px 12px;
+            font-size: 0.75em;
+		}
+
+        .modal-category-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
 
 		.modal-title {
 			font-size: 2.5em;
@@ -438,8 +449,8 @@
 		}
 
 		.apply-btn {
-			background: #E9B8A6;
-			color: #0F4C5C;
+			background: #0F4C5C;
+			color: #Fafafa;
 			padding: 15px 40px;
 			border: none;
 			border-radius: 30px;
@@ -457,7 +468,6 @@
 
 		.apply-btn:hover {
 			background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
-			;
 			color: white;
 			border-radius: 20px;
 			box-shadow: 0 6px 20px rgba(15, 76, 92, 0.4);
@@ -494,7 +504,6 @@
 				transform: translateX(400px);
 				opacity: 0;
 			}
-
 			to {
 				transform: translateX(0);
 				opacity: 1;
@@ -520,9 +529,7 @@
 			top: 20px;
 			right: 20px;
 			width: 40px;
-		
 			height: 40px;
-		
 			border-radius: 50%;
 			display: flex;
 			align-items: center;
@@ -530,22 +537,16 @@
 			cursor: pointer;
 			font-size: 35px;
 			color: rgb(128, 128, 128);
-			
 			transition: all 0.3s ease;
 			background: none;
-			
 			z-index: 10;
 		}
 
 		.close-btn:hover {
 			color: #e74c3c;
-			
 			background: none;
-			
 			transform: scale(1.1);
-			
 			border-radius: 0;
-			
 		}
 	</style>
 </head>
@@ -576,17 +577,18 @@
 						<div class="user-email" th:text="${utente.mail}">mario.rossi@email.com</div>
 					</div>
 					<ul class="dropdown-menu">
-					    <li>
-					        <a th:href="@{/profilo}"> <span class="icon">👤</span>
-					            <span>Il Mio Profilo</span>
-					        </a>
-					    </li>
-					    <li>
-					        <a href="#">
-					            <span class="icon">✏️</span>
-					            <span>Modifica Profilo</span>
-					        </a>
-					    </li>
+						<li>
+							<a href="#">
+								<span class="icon">👤</span>
+								<span>Il Mio Profilo</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="icon">✏️</span>
+								<span>Modifica Profilo</span>
+							</a>
+						</li>
 					</ul>
 					<div class="dropdown-divider"></div>
 					<ul class="dropdown-menu">
@@ -613,13 +615,19 @@
 				<div th:each="lavoro : ${lavori}" class="card" th:onclick="openModal(this)" th:data-id="${lavoro.id}"
 					th:data-titolo="${lavoro.nome}" th:data-azienda="${lavoro.azienda?.nome}"
 					th:data-descrizione="${lavoro.descrizione}" th:data-durata="${lavoro.durata}"
-					th:data-orari="${lavoro.orari}" th:data-image-url="@{'/immagini/' + ${lavoro.imageUrl}}">
+					th:data-orari="${lavoro.orari}" th:data-image-url="@{'/immagini/' + ${lavoro.imageUrl}}"
+					
+					th:data-competenze="${lavoro.competenze != null ? #strings.arrayJoin(lavoro.competenze.![nome], '||') : ''}">
 
 					<img th:src="@{'/immagini/' + ${lavoro.imageUrl}}" alt="Immagine tirocinio" class="card-image" />
 
-
 					<div class="card-content">
-						<div class="card-category">Competenza</div>
+						<div class="card-category-container">
+							<span th:each="comp : ${lavoro.competenze}" class="card-category" th:text="${comp.nome}">
+								Competenza
+							</span>
+						</div>
+
 						<h3 class="card-title" th:text="${lavoro.nome}">Titolo Annuncio</h3>
 
 						<p class="card-excerpt"
@@ -631,7 +639,7 @@
 							<span th:text="'🏭 ' + ${lavoro.azienda?.nome ?: 'Azienda non specificata'}">Nome
 								Azienda</span>
 
-							<span th:text="'🕐 ' + ${lavoro.durata ?: 'N/D'}">Durata</span>
+							<span th:text="'📅 ' + ${lavoro.durata ?: 'N/D'}">Durata</span>
 						</div>
 					</div>
 				</div>
@@ -645,8 +653,8 @@
 			<div class="close-btn" onclick="closeModal()">×</div>
 			<div class="modal-image" id="modalImage"></div>
 			<div class="modal-body">
-				<span class="modal-category" id="modalCategory" style="display:none;"></span>
-				<div class="modal-category">Competenza</div>
+				<div class="modal-category-container" id="modalCategoryContainer">
+				</div>
 
 				<h2 class="modal-title" id="modalTitle"></h2>
 				<div class="modal-meta" id="modalMeta"></div>
@@ -676,18 +684,35 @@
 			const schedule = cardElement.getAttribute('data-orari');
 			const content = cardElement.getAttribute('data-descrizione');
 			const imageUrl = cardElement.getAttribute('data-image-url');
-
+			const competenze = cardElement.getAttribute('data-competenze');
+			
 			currentLavoroId = id;
 
 			const modal = document.getElementById('modal');
 
-			document.getElementById('modalCategory').style.display = 'none';
+			const modalCategoryContainer = document.getElementById('modalCategoryContainer');
+			modalCategoryContainer.innerHTML = ''; 
+
+			if (competenze && competenze.trim() !== '') {
+				const competenzeArray = competenze.split('||'); 
+				competenzeArray.forEach(nomeCompetenza => {
+					const tagSpan = document.createElement('span');
+					tagSpan.className = 'modal-category'; 
+					tagSpan.textContent = nomeCompetenza.trim();
+					tagSpan.style.display = 'inline-block';
+					modalCategoryContainer.appendChild(tagSpan);
+				});
+				modalCategoryContainer.style.display = 'flex'; 
+			} else {
+				modalCategoryContainer.style.display = 'none'; 
+			}
+
 			document.getElementById('modalImage').style.backgroundImage = `url('${imageUrl}')`;
 			document.getElementById('modalTitle').textContent = title;
 			document.getElementById('modalMeta').innerHTML = `
                 🏭 ${author || 'Azienda non specificata'} • 
-                🕐 ${duration || 'Durata non specificata'} • 
-                📅 ${schedule || 'Orari non specificati'}
+                🕐 ${schedule || 'Orari non specificati'} • 
+				📅 ${duration || 'Durata non specificata'}
             `;
 			document.getElementById('modalText').textContent = content;
 

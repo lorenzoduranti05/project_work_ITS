@@ -575,14 +575,13 @@
             <div class="dashboard" id="dashboard">
                 
                 <div th:each="lavoro : ${lavori}" class="card"
-                     
                      th:onclick="openModal(this)"
+                     th:data-id="${lavoro.id}"
                      th:data-titolo="${lavoro.nome}"
                      th:data-azienda="${lavoro.azienda?.nome}"
                      th:data-descrizione="${lavoro.descrizione}"
                      th:data-durata="${lavoro.durata}"
                      th:data-orari="${lavoro.orari}"
-					 
 					 th:data-image-url="@{${lavoro.imageUrl}}"
                      >
                     
@@ -632,78 +631,113 @@
     </div>
     
 	<script>
-			function openModal(cardElement) {
-				const title = cardElement.getAttribute('data-titolo');
-				const author = cardElement.getAttribute('data-azienda');
-				const duration = cardElement.getAttribute('data-durata');
-				const schedule = cardElement.getAttribute('data-orari');
-				const content = cardElement.getAttribute('data-descrizione');
-				const imageUrl = cardElement.getAttribute('data-image-url'); 
+        let currentLavoroId = null;
 
-				const modal = document.getElementById('modal');
-				
-				document.getElementById('modalCategory').style.display = 'none';
+        function openModal(cardElement) {
+            const id = cardElement.getAttribute('data-id');
+            const title = cardElement.getAttribute('data-titolo');
+            const author = cardElement.getAttribute('data-azienda');
+            const duration = cardElement.getAttribute('data-durata');
+            const schedule = cardElement.getAttribute('data-orari');
+            const content = cardElement.getAttribute('data-descrizione');
+            const imageUrl = cardElement.getAttribute('data-image-url'); 
 
-				document.getElementById('modalImage').style.backgroundImage = `url('${imageUrl}')`;
-	  
-				document.getElementById('modalTitle').textContent = title; 
-				
-				document.getElementById('modalMeta').innerHTML = `
-					🏭 ${author || 'Azienda non specificata'} • 
-					🕐 ${duration || 'Durata non specificata'} • 
-					📅 ${schedule || 'Orari non specificati'}
-				`;
-				
-				document.getElementById('modalText').textContent = content; 
-				
-				modal.classList.add('active');
-				document.body.style.overflow = 'hidden';
-			}
+            currentLavoroId = id; 
 
-			function closeModal() {
-				const modal = document.getElementById('modal');
-				modal.classList.remove('active');
-				document.body.style.overflow = 'auto';
-				document.getElementById('modalImage').style.backgroundImage = '';
-			}
+            const modal = document.getElementById('modal');
+            
+            document.getElementById('modalCategory').style.display = 'none';
+            document.getElementById('modalImage').style.backgroundImage = `url('${imageUrl}')`;
+            document.getElementById('modalTitle').textContent = title; 
+            document.getElementById('modalMeta').innerHTML = `
+                🏭 ${author || 'Azienda non specificata'} • 
+                🕐 ${duration || 'Durata non specificata'} • 
+                📅 ${schedule || 'Orari non specificati'}
+            `;
+            document.getElementById('modalText').textContent = content; 
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
 
-			document.getElementById('modal').addEventListener('click', (e) => {
-				if (e.target.id === 'modal') {
-					closeModal();
-				}
-			});
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('modalImage').style.backgroundImage = '';
+            currentLavoroId = null;
+        }
 
-			document.addEventListener('keydown', (e) => {
-				if (e.key === 'Escape') {
-					closeModal();
-				}
-			});
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                closeModal();
+            }
+        });
 
-			function toggleUserDropdown() {
-				const dropdown = document.getElementById('userDropdown');
-				dropdown.classList.toggle('active');
-			}
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
 
-			document.addEventListener('click', (e) => {
-				const userMenu = document.querySelector('.user-menu');
-				const dropdown = document.getElementById('userDropdown');
-				if (userMenu && !userMenu.contains(e.target) && dropdown.classList.contains('active')) {
-					dropdown.classList.remove('active');
-				}
-			})
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('active');
+        }
 
-			function applyToArticle() {
-				const toast = document.getElementById('toast');
-				toast.classList.add('show');
-				
-				setTimeout(() => {
-					toast.classList.remove('show');
-				}, 3000);
-				
-				setTimeout(() => {
-					closeModal();
-				}, 1500);
-			}
-		</script>
+        document.addEventListener('click', (e) => {
+            const userMenu = document.querySelector('.user-menu');
+            const dropdown = document.getElementById('userDropdown');
+            if (userMenu && !userMenu.contains(e.target) && dropdown.classList.contains('active')) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        function showToast(message, isSuccess = true) {
+            const toast = document.getElementById('toast');
+            const toastText = toast.querySelector('.toast-text');
+            const toastIcon = toast.querySelector('.toast-icon');
+
+            toastText.textContent = message;
+            toastIcon.textContent = isSuccess ? '✅' : '❌';
+            toast.style.background = isSuccess ? '#0F4C5C' : '#e74c3c'; 
+
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        async function applyToArticle() {
+            if (currentLavoroId === null) {
+                showToast('Errore: ID Lavoro non trovato.', false);
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/candidature?lavoroId=${currentLavoroId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json' 
+                    }
+                });
+
+                const responseBody = await response.text();
+
+                if (response.ok) {
+                    showToast(responseBody || 'Candidatura inviata con successo!', true);
+                    setTimeout(() => {
+                        closeModal();
+                    }, 1500);
+                } else {
+                    showToast(responseBody || 'Errore durante la candidatura.', false);
+                }
+
+            } catch (error) {
+                console.error('Errore Fetch:', error);
+                showToast('Errore di connessione con il server.', false);
+            }
+        }
+    </script>
 </body>
 </html>

@@ -407,8 +407,8 @@
 				</div>
 				<br>
 				<div>
-					<span class="contact-label">Password:</span><br>
-					<span>**********</span>
+					<span class="contact-label">Password: </span><br>
+					<span>********</span>
 				</div>
 			</div>
 		</div>
@@ -416,48 +416,43 @@
 		<div class="top-row">
 			<div class="stats-container">
 
-				<div class="card stat-card active">
+				<div class="card stat-card">
 					<h3>Candidature Inviate</h3>
 					<div class="number">
-						<a th:text="${inviateCount}">0</a>
-					</div>
+						<a th:text="${inviateCount}">0</a> </div>
 					<div class="stat-dropdown">
-
-						<div th:each="c : ${candidatureInviate}"
-							th:if="${#strings.equalsIgnoreCase(c.stato, 'Inviata')}" class="stat-dropdown-item">
-							<span th:text="${c.lavoro?.nome}"></span>
-						</div>
-
+						<div th:each="c : ${candidatureInviate}" class="stat-dropdown-item"> <span th:text="${c.lavoro?.nome}"></span> </div>
 						<div th:if="${inviateCount == 0}" class="stat-dropdown-item"
 							style="text-align: center; color: #ccc;">
-							Nessuna candidatura inviata.
-						</div>
+							Nessuna candidatura inviata. </div>
 					</div>
 				</div>
 
 				<div class="card stat-card">
 					<h3>Candidature Accettate</h3>
 					<div class="number">
-						<a th:text="${accettateCount}">0</a>
-					</div>
+						<a th:text="${accettateCount}">0</a> </div>
 					<div class="stat-dropdown">
+						<div th:each="c : ${candidatureAccettate}" class="stat-dropdown-item">
+							<span th:text="${c.lavoro?.nome}"></span>
+						</div>
 						<div th:if="${accettateCount == 0}" class="stat-dropdown-item"
 							style="text-align: center; color: #ccc;">
-							Nessuna candidatura accettata.
-						</div>
+							Nessuna candidatura accettata. </div>
 					</div>
 				</div>
 
 				<div class="card stat-card">
 					<h3>Candidature Rifiutate</h3>
 					<div class="number">
-						<a th:text="${rifiutateCount}">0</a>
-					</div>
+						<a th:text="${rifiutateCount}">0</a> </div>
 					<div class="stat-dropdown">
+						<div th:each="c : ${candidatureRifiutate}" class="stat-dropdown-item">
+							<span th:text="${c.lavoro?.nome}"></span>
+						</div>
 						<div th:if="${rifiutateCount == 0}" class="stat-dropdown-item"
 							style="text-align: center; color: #ccc;">
-							Nessuna candidatura rifiutata.
-						</div>
+							Nessuna candidatura rifiutata. </div>
 					</div>
 				</div>
 			</div>
@@ -510,7 +505,6 @@
 	<script>
 		const statCards = document.querySelectorAll('.stat-card');
 		statCards.forEach((card, index) => {
-			if (index === 0) card.classList.add('active');
 			card.addEventListener('click', () => {
 				statCards.forEach(c => {if (c !== card) c.classList.remove('active')});
 				card.classList.toggle('active');

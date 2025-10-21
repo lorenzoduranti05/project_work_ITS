@@ -310,8 +310,7 @@
 						
 						<div th:each="c : ${candidatureInviate}"
 						     th:if="${#strings.equalsIgnoreCase(c.stato, 'Inviata')}" class="stat-dropdown-item">
-						    <span th:text="${c.lavoro?.nome ?: 'Nome non disp.'}">Nome Lavoro</span> -
-						    <span th:text="${c.lavoro?.azienda?.nome ?: 'Azienda non disp.'}">Nome Azienda</span>
+						    <span th:text="${c.lavoro?.nome}"></span>
 						</div>
 
 						<div th:if="${inviateCount == 0}" class="stat-dropdown-item"

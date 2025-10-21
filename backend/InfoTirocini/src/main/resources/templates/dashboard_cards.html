@@ -1,746 +1,778 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Articoli</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dashboard Articoli</title>
 	<style>
-			* {
-				margin: 0;
-				padding: 0;
-				box-sizing: border-box;
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+			min-height: 100vh;
+			padding: 0;
+			margin: 0;
+		}
+
+		nav {
+			background: #Fafafa;
+			backdrop-filter: blur(10px);
+			padding: 20px 0;
+			box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+			position: sticky;
+			top: 0;
+			z-index: 100;
+		}
+
+		.nav-title {
+			color: #0F4C5C;
+		}
+
+		.nav-container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.logo {
+			font-size: 1.8em;
+			font-weight: bold;
+			color: #E9B8A6;
+			display: flex;
+			align-items: center;
+			gap: 15px;
+			text-decoration: none;
+		}
+
+		.logo img {
+			width: 50px;
+			height: 50px;
+			object-fit: contain;
+		}
+
+		.user-menu {
+			position: relative;
+		}
+
+		.user-avatar {
+			width: 45px;
+			height: 45px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			border: 2px solid transparent;
+			overflow: hidden;
+		}
+
+		.user-avatar:hover {
+			background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+			border-radius: 20%;
+			transform: scale(1.05);
+		}
+
+		.user-avatar img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		.user-avatar-icon {
+			font-size: 24px;
+			color: #0F4C5C;
+		}
+
+		.user-dropdown {
+			position: absolute;
+			top: 60px;
+			right: 0;
+			background: #Fafafa;
+			border-radius: 15px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+			padding: 20px;
+			min-width: 280px;
+			display: none;
+			animation: dropdownSlide 0.3s ease;
+		}
+
+		.user-dropdown.active {
+			display: block;
+		}
+
+		@keyframes dropdownSlide {
+			from {
+				opacity: 0;
+				transform: translateY(-10px);
 			}
 
-			body {
-				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-				background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
-				min-height: 100vh;
-				padding: 0;
-				margin: 0;
-			}
-
-			nav {
-				background: #Fafafa;
-				backdrop-filter: blur(10px);
-				padding: 20px 0;
-				box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
-				position: sticky;
-				top: 0;
-				z-index: 100;
-			}
-
-			.nav-title {
-				color: #0F4C5C;
-			}
-
-			.nav-container {
-				max-width: 1200px;
-				margin: 0 auto;
-				padding: 0 20px;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-			}
-
-			.logo {
-				font-size: 1.8em;
-				font-weight: bold;
-				color: #E9B8A6;
-				display: flex;
-				align-items: center;
-				gap: 15px;
-				text-decoration: none;
-			}
-
-			.logo img {
-				width: 50px;
-				height: 50px;
-				object-fit: contain;
-			}
-
-			.user-menu {
-				position: relative;
-			}
-
-			.user-avatar {
-				width: 45px;
-				height: 45px;
-				border-radius: 50%;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				cursor: pointer;
-				transition: all 0.3s ease;
-				border: 2px solid transparent;
-				overflow: hidden;
-			}
-
-			.user-avatar:hover {
-				background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
-				border-radius: 20%;
-				transform: scale(1.05);
-			}
-
-			.user-avatar img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-			}
-
-			.user-avatar-icon {
-				font-size: 24px;
-				color: #0F4C5C;
-			}
-
-			.user-dropdown {
-				position: absolute;
-				top: 60px;
-				right: 0;
-				background: #Fafafa;
-				border-radius: 15px;
-				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-				padding: 20px;
-				min-width: 280px;
-				display: none;
-				animation: dropdownSlide 0.3s ease;
-			}
-
-			.user-dropdown.active {
-				display: block;
-			}
-
-			@keyframes dropdownSlide {
-				from {
-					opacity: 0;
-					transform: translateY(-10px);
-				}
-
-				to {
-					opacity: 1;
-					transform: translateY(0);
-				}
-			}
-
-			.dropdown-header {
-				text-align: center;
-				padding-bottom: 15px;
-				border-bottom: 2px solid #Fafafa;
-				margin-bottom: 15px;
-			}
-
-			.dropdown-avatar {
-				width: 80px;
-				height: 80px;
-				border-radius: 50%;
-				background: #E9B8A6;
-				margin: 0 auto 10px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				position: relative;
-				overflow: hidden;
-			}
-
-			.dropdown-avatar img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-			}
-
-			.dropdown-avatar-icon {
-				font-size: 40px;
-				color: #0F4C5C;
-			}
-
-			.upload-overlay {
-				position: absolute;
-				bottom: 0;
-				left: 0;
-				right: 0;
-				background: rgba(15, 76, 92, 0.9);
-				color: white;
-				padding: 5px;
-				font-size: 11px;
-				text-align: center;
-				cursor: pointer;
-				transition: all 0.3s ease;
-			}
-
-			.upload-overlay:hover {
-				background: #0F4C5C;
-			}
-
-			.user-name {
-				font-size: 1.2em;
-				font-weight: bold;
-				color: #0F4C5C;
-				margin-bottom: 5px;
-			}
-
-			.user-email {
-				font-size: 0.9em;
-				color: #666;
-			}
-
-			.dropdown-menu {
-				list-style: none;
-			}
-
-			.dropdown-menu li {
-				margin-bottom: 8px;
-			}
-
-			.dropdown-menu a {
-				display: flex;
-				align-items: center;
-				gap: 12px;
-				padding: 12px 15px;
-				color: #333;
-				text-decoration: none;
-				border-radius: 10px;
-				transition: all 0.3s ease;
-				font-size: 1em;
-			}
-
-			.dropdown-menu a:hover {
-				background: rgba(233, 184, 166, 0.2);
-				color: #0F4C5C;
-			}
-
-			.dropdown-menu .icon {
-				font-size: 20px;
-				width: 24px;
-				text-align: center;
-			}
-
-			.dropdown-divider {
-				height: 1px;
-				background: #f0f0f0;
-				margin: 10px 0;
-			}
-
-			.logout-btn-as-link {
-				display: flex;
-				align-items: center;
-				gap: 12px;
-				padding: 12px 15px;
-				font-size: 1em;
-				border-radius: 10px;
-				transition: all 0.3s ease;
-				background: none;
-				border: none;
-				cursor: pointer;
-				width: 100%;
-				text-align: left;
-				font-family: inherit;
-				color: #e74c3c !important;
-			}
-			
-			.logout-btn-as-link:hover {
-				background: rgba(231, 76, 60, 0.1) !important;
-			}
-
-			#fileInput {
-				display: none;
-			}
-
-			.content-wrapper {
-				padding: 40px 20px;
-			}
-
-			.container {
-				max-width: 1200px;
-				margin: 0 auto;
-			}
-
-			h1 {
-				text-align: center;
-				color: #fafafa;
-				margin-bottom: 40px;
-				font-size: 2.5em;
-				text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-			}
-
-			.dashboard {
-				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-				gap: 30px;
-				margin-bottom: 30px;
-			}
-
-			.card {
-				background: #Fafafa;
-				border-radius: 15px;
-				overflow: hidden;
-				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-				cursor: pointer;
-				transition: all 0.3s ease;
-				position: relative;
-				display: flex;
-	    		flex-direction: column;
-			}
-
-			.card:hover {
-				transform: translateY(-5px);
-				box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-			}
-
-			.card-image {
-				width: 100%;
-				height: 200px;
-				object-fit: cover;
-				background: linear-gradient(135deg, #0F4C5C 0%, #1a6b7d 100%);
-				flex-shrink: 0;
-			}
-
-			.card-content {
-				padding: 20px;
-				display: flex;
-	            flex-direction: column;
-	            flex-grow: 1;
-			}
-
-			.card-title {
-				font-size: 1.5em;
-				margin-bottom: 10px;
-				color: #333;
-			}
-
-			.card-excerpt {
-				color: #666;
-				line-height: 1.6;
-				display: -webkit-box;
-				-webkit-line-clamp: 3;
-				-webkit-box-orient: vertical;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				min-height: calc(1.6em * 3);
-				margin-bottom: 15px;
-			}
-
-			.card-meta {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				color: #999;
-				font-size: 0.9em;
-				margin-top: auto;
-	            padding-top: 10px;
-			}
-
-			.modal {
-				display: none;
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				background: rgba(0, 0, 0, 0.8);
-				z-index: 1000;
-				overflow-y: auto;
-				animation: fadeIn 0.3s ease;
-			}
-
-			.modal.active {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				padding: 20px;
-			}
-
-			@keyframes fadeIn {
-				from {
-					opacity: 0;
-				}
-
-				to {
-					opacity: 1;
-				}
-			}
-
-			.modal-content {
-				background: white;
-				border-radius: 20px;
-				max-width: 800px;
-				width: 100%;
-				max-height: 90vh;
-				overflow-y: auto;
-				animation: slideUp 0.3s ease;
-				position: relative;
-			}
-
-			@keyframes slideUp {
-				from {
-					transform: translateY(50px);
-					opacity: 0;
-				}
-
-				to {
-					transform: translateY(0);
-					opacity: 1;
-				}
-			}
-
-			.modal-image {
-			    width: 100%;
-			    height: 360px;
-			    background-size: cover;  
-			    background-position: center; 
-			    background-repeat: no-repeat; 
-			}
-
-			.modal-body {
-				padding: 40px;
-			}
-
-			.modal-title {
-				font-size: 2.5em;
-				margin-bottom: 15px;
-				color: #333;
-			}
-
-			.modal-meta {
-				color: #999;
-				margin-bottom: 30px;
-				padding-bottom: 20px;
-				border-bottom: 2px solid #eee;
-			}
-
-			.modal-text {
-				color: #555;
-				line-height: 1.8;
-				font-size: 1.1em;
-			}
-
-			.apply-btn {
-				background: #E9B8A6;
-				color: #0F4C5C;
-				padding: 15px 40px;
-				border: none;
-				border-radius: 30px;
-				font-size: 1.1em;
-				font-weight: bold;
-				cursor: pointer;
-				transition: all 0.3s ease;
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				margin: 0 auto;
-				margin-top: 5%;
-				box-shadow: 0 4px 15px rgba(233, 184, 166, 0.4);
-			}
-
-			.apply-btn:hover {
-				background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
-				;
-				color: white;
-				border-radius: 20px;
-				box-shadow: 0 6px 20px rgba(15, 76, 92, 0.4);
-			}
-
-			.apply-btn:active {
+			to {
+				opacity: 1;
 				transform: translateY(0);
 			}
+		}
 
-			.btn-icon {
-				font-size: 1.2em;
+		.dropdown-header {
+			text-align: center;
+			padding-bottom: 15px;
+			border-bottom: 2px solid #Fafafa;
+			margin-bottom: 15px;
+		}
+
+		.dropdown-avatar {
+			width: 80px;
+			height: 80px;
+			border-radius: 50%;
+			background: #E9B8A6;
+			margin: 0 auto 10px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.dropdown-avatar img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		.dropdown-avatar-icon {
+			font-size: 40px;
+			color: #0F4C5C;
+		}
+
+		.upload-overlay {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background: rgba(15, 76, 92, 0.9);
+			color: white;
+			padding: 5px;
+			font-size: 11px;
+			text-align: center;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+
+		.upload-overlay:hover {
+			background: #0F4C5C;
+		}
+
+		.user-name {
+			font-size: 1.2em;
+			font-weight: bold;
+			color: #0F4C5C;
+			margin-bottom: 5px;
+		}
+
+		.user-email {
+			font-size: 0.9em;
+			color: #666;
+		}
+
+		.dropdown-menu {
+			list-style: none;
+		}
+
+		.dropdown-menu li {
+			margin-bottom: 8px;
+		}
+
+		.dropdown-menu a {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 12px 15px;
+			color: #333;
+			text-decoration: none;
+			border-radius: 10px;
+			transition: all 0.3s ease;
+			font-size: 1em;
+		}
+
+		.dropdown-menu a:hover {
+			background: rgba(233, 184, 166, 0.2);
+			color: #0F4C5C;
+		}
+
+		.dropdown-menu .icon {
+			font-size: 20px;
+			width: 24px;
+			text-align: center;
+		}
+
+		.dropdown-divider {
+			height: 1px;
+			background: #f0f0f0;
+			margin: 10px 0;
+		}
+
+		.logout-btn-as-link {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 12px 15px;
+			font-size: 1em;
+			border-radius: 10px;
+			transition: all 0.3s ease;
+			background: none;
+			border: none;
+			cursor: pointer;
+			width: 100%;
+			text-align: left;
+			font-family: inherit;
+			color: #e74c3c !important;
+		}
+
+		.logout-btn-as-link:hover {
+			background: rgba(231, 76, 60, 0.1) !important;
+		}
+
+		#fileInput {
+			display: none;
+		}
+
+		.content-wrapper {
+			padding: 40px 20px;
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+
+		h1 {
+			text-align: center;
+			color: #fafafa;
+			margin-bottom: 40px;
+			font-size: 2.5em;
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+		}
+
+		.dashboard {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			gap: 30px;
+			margin-bottom: 30px;
+		}
+
+		.card {
+			background: #Fafafa;
+			border-radius: 15px;
+			overflow: hidden;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+			cursor: pointer;
+			transition: all 0.3s ease;
+			position: relative;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+		}
+
+		.card-image {
+			width: 100%;
+			height: 200px;
+			object-fit: cover;
+			background: linear-gradient(135deg, #0F4C5C 0%, #1a6b7d 100%);
+			flex-shrink: 0;
+		}
+
+		.card-content {
+			padding: 20px;
+			display: flex;
+			flex-direction: column;
+			flex-grow: 1;
+		}
+		
+		.card-category {
+		            display: inline-block;
+		            background: #E9B8A6;
+		            color: #0F4C5C;
+		            padding: 5px 15px;
+		            border-radius: 20px;
+		            font-size: 0.8em;
+		            margin-bottom: 10px;
+		            font-weight: 600;
+					width: fit-content;
+		        }
+
+		.card-title {
+			font-size: 1.5em;
+			margin-bottom: 10px;
+			color: #333;
+		}
+
+		.card-excerpt {
+			color: #666;
+			line-height: 1.6;
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			min-height: calc(1.6em * 3);
+			margin-bottom: 15px;
+		}
+
+		.card-meta {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			color: #999;
+			font-size: 0.9em;
+			margin-top: auto;
+			padding-top: 10px;
+		}
+
+		.modal {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.8);
+			z-index: 1000;
+			overflow-y: auto;
+			animation: fadeIn 0.3s ease;
+		}
+
+		.modal.active {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 20px;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
 			}
 
-			.toast {
-				position: fixed;
-				bottom: 30px;
-				right: 30px;
-				background: #0F4C5C;
-				color: white;
-				padding: 20px 30px;
-				border-radius: 15px;
-				box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-				display: none;
-				animation: slideIn 0.3s ease;
-				z-index: 2000;
+			to {
+				opacity: 1;
+			}
+		}
+
+		.modal-content {
+			background: white;
+			border-radius: 20px;
+			max-width: 800px;
+			width: 100%;
+			max-height: 90vh;
+			overflow-y: auto;
+			animation: slideUp 0.3s ease;
+			position: relative;
+		}
+
+		@keyframes slideUp {
+			from {
+				transform: translateY(50px);
+				opacity: 0;
 			}
 
-			.toast.show {
-				display: block;
+			to {
+				transform: translateY(0);
+				opacity: 1;
+			}
+		}
+
+		.modal-image {
+			width: 100%;
+			height: 360px;
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+		}
+
+		.modal-body {
+			padding: 40px;
+		}
+		
+		.modal-category {
+		            display: inline-block;
+		            background: #E9B8A6;
+		            color: #0F4C5C;
+		            padding: 8px 20px;
+		            border-radius: 25px;
+		            font-size: 0.9em;
+		            margin-bottom: 15px;
+		            font-weight: 600;
+					width: fit-content;
+		        }
+
+		.modal-title {
+			font-size: 2.5em;
+			margin-bottom: 15px;
+			color: #333;
+		}
+
+		.modal-meta {
+			color: #999;
+			margin-bottom: 30px;
+			padding-bottom: 20px;
+			border-bottom: 2px solid #eee;
+		}
+
+		.modal-text {
+			color: #555;
+			line-height: 1.8;
+			font-size: 1.1em;
+		}
+
+		.apply-btn {
+			background: #E9B8A6;
+			color: #0F4C5C;
+			padding: 15px 40px;
+			border: none;
+			border-radius: 30px;
+			font-size: 1.1em;
+			font-weight: bold;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin: 0 auto;
+			margin-top: 5%;
+			box-shadow: 0 4px 15px rgba(233, 184, 166, 0.4);
+		}
+
+		.apply-btn:hover {
+			background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+			;
+			color: white;
+			border-radius: 20px;
+			box-shadow: 0 6px 20px rgba(15, 76, 92, 0.4);
+		}
+
+		.apply-btn:active {
+			transform: translateY(0);
+		}
+
+		.btn-icon {
+			font-size: 1.2em;
+		}
+
+		.toast {
+			position: fixed;
+			bottom: 30px;
+			right: 30px;
+			background: #0F4C5C;
+			color: white;
+			padding: 20px 30px;
+			border-radius: 15px;
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+			display: none;
+			animation: slideIn 0.3s ease;
+			z-index: 2000;
+		}
+
+		.toast.show {
+			display: block;
+		}
+
+		@keyframes slideIn {
+			from {
+				transform: translateX(400px);
+				opacity: 0;
 			}
 
-			@keyframes slideIn {
-				from {
-					transform: translateX(400px);
-					opacity: 0;
-				}
-
-				to {
-					transform: translateX(0);
-					opacity: 1;
-				}
+			to {
+				transform: translateX(0);
+				opacity: 1;
 			}
+		}
 
-			.toast-content {
-				display: flex;
-				align-items: center;
-				gap: 15px;
-			}
+		.toast-content {
+			display: flex;
+			align-items: center;
+			gap: 15px;
+		}
 
-			.toast-icon {
-				font-size: 24px;
-			}
+		.toast-icon {
+			font-size: 24px;
+		}
 
-			.toast-text {
-				font-size: 1em;
-			}
+		.toast-text {
+			font-size: 1em;
+		}
 
-			.close-btn {
-			    position: absolute;
-			    top: 20px;
-			    right: 20px;
-			    width: 40px; /* Manteniamo l'area cliccabile */
-			    height: 40px; /* Manteniamo l'area cliccabile */
-			    border-radius: 50%;
-			    display: flex;
-			    align-items: center;
-			    justify-content: center;
-			    cursor: pointer;
-			    font-size: 35px;
-			    color: rgb(128, 128, 128); /* Colore bianco di base */
-			    transition: all 0.3s ease;
-			    background: none; /* Rimuove qualsiasi sfondo */
-			    z-index: 10;
-			}
+		.close-btn {
+			position: absolute;
+			top: 20px;
+			right: 20px;
+			width: 40px;
+		
+			height: 40px;
+		
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			font-size: 35px;
+			color: rgb(128, 128, 128);
+			
+			transition: all 0.3s ease;
+			background: none;
+			
+			z-index: 10;
+		}
 
-			.close-btn:hover {
-			    color: #e74c3c; /* 1. Diventa rossa (lo stesso rosso del logout) */
-			    background: none; /* 2. Assicura che non ci sia sfondo all'hover */
-			    transform: scale(1.1); /* 3. Aggiunge un piccolo feedback visivo */
-			    border-radius: 0; /* 4. Rimuove il vecchio border-radius (riga 424) */
-			}
-		</style>
+		.close-btn:hover {
+			color: #e74c3c;
+			
+			background: none;
+			
+			transform: scale(1.1);
+			
+			border-radius: 0;
+			
+		}
+	</style>
 </head>
+
 <body>
-    <nav>
-        <div class="nav-container">
-            <a th:href="@{/home}" class="logo">
-                <img th:src="@{/immagini/Logo_Senza_Scritta.png}" alt="Logo">
-            </a>
-            <div class="nav-title">
-                <h2>
-                    InfoTirocini.com
-                </h2>
-            </div>
-            <div class="user-menu">
-                <div class="user-avatar" onclick="toggleUserDropdown()">
-                    <span class="user-avatar-icon" id="navAvatarIcon">👤</span>
-                    <img id="navAvatarImg" style="display: none;">
-                </div>
-                <div class="user-dropdown" id="userDropdown">
-                    <div class="dropdown-header">
-                        <div class="dropdown-avatar">
-                            <span class="dropdown-avatar-icon" id="dropdownAvatarIcon">👤</span>
-                            <img id="dropdownAvatarImg" style="display: none;">
-                        </div>
-                        <div class="user-name" th:text="${utente.nome} + ' ' + ${utente.cognome}">Mario Rossi</div>
-                        <div class="user-email" th:text="${utente.mail}">mario.rossi@email.com</div>
-                    </div>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="#">
-                                <span class="icon">👤</span>
-                                <span>Il Mio Profilo</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="icon">✏️</span>
-                                <span>Modifica Profilo</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="dropdown-divider"></div>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <form th:action="@{/logout}" method="POST" style="margin: 0;">
-                                <button type="submit" class="logout-btn-as-link">
-                                    <span class="icon">🚪</span>
-                                    <span>Esci</span>
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
+	<nav>
+		<div class="nav-container">
+			<a th:href="@{/home}" class="logo">
+				<img th:src="@{/immagini/Logo_Senza_Scritta.png}" alt="Logo">
+			</a>
+			<div class="nav-title">
+				<h2>
+					InfoTirocini.com
+				</h2>
+			</div>
+			<div class="user-menu">
+				<div class="user-avatar" onclick="toggleUserDropdown()">
+					<span class="user-avatar-icon" id="navAvatarIcon">👤</span>
+					<img id="navAvatarImg" style="display: none;">
+				</div>
+				<div class="user-dropdown" id="userDropdown">
+					<div class="dropdown-header">
+						<div class="dropdown-avatar">
+							<span class="dropdown-avatar-icon" id="dropdownAvatarIcon">👤</span>
+							<img id="dropdownAvatarImg" style="display: none;">
+						</div>
+						<div class="user-name" th:text="${utente.nome} + ' ' + ${utente.cognome}">Mario Rossi</div>
+						<div class="user-email" th:text="${utente.mail}">mario.rossi@email.com</div>
+					</div>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="#">
+								<span class="icon">👤</span>
+								<span>Il Mio Profilo</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="icon">✏️</span>
+								<span>Modifica Profilo</span>
+							</a>
+						</li>
+					</ul>
+					<div class="dropdown-divider"></div>
+					<ul class="dropdown-menu">
+						<li>
+							<form th:action="@{/logout}" method="POST" style="margin: 0;">
+								<button type="submit" class="logout-btn-as-link">
+									<span class="icon">🚪</span>
+									<span>Esci</span>
+								</button>
+							</form>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</nav>
 
-    <div class="content-wrapper">
-        <div class="container">
-            <h1>Annunci Tirocini</h1>
-            
-            <div class="dashboard" id="dashboard">
-                
-                <div th:each="lavoro : ${lavori}" class="card"
-                     th:onclick="openModal(this)"
-                     th:data-id="${lavoro.id}"
-                     th:data-titolo="${lavoro.nome}"
-                     th:data-azienda="${lavoro.azienda?.nome}"
-                     th:data-descrizione="${lavoro.descrizione}"
-                     th:data-durata="${lavoro.durata}"
-                     th:data-orari="${lavoro.orari}"
-					 th:data-image-url="@{${lavoro.imageUrl}}"
-                     >
-                    
-                    <img th:src="@{${lavoro.imageUrl}}" alt="Immagine tirocinio" class="card-image"/>
-                    <div class="card-content">
-                        <h3 class="card-title" th:text="${lavoro.nome}">Titolo Annuncio</h3>
-                        
-                        <p class="card-excerpt" 
-                           th:text="${lavoro.descrizione != null && #strings.length(lavoro.descrizione) > 100} ? ${#strings.substring(lavoro.descrizione, 0, 100)} + '...' : ${lavoro.descrizione}">
-                           Breve descrizione...
-                        </p>
-                        
-                        <div class="card-meta">
-                            <span th:text="'🏭 ' + ${lavoro.azienda?.nome ?: 'Azienda non specificata'}">Nome Azienda</span>
-                            
-                            <span th:text="'🕐 ' + ${lavoro.durata ?: 'N/D'}">Durata</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-    </div>
+	<div class="content-wrapper">
+		<div class="container">
+			<h1>Annunci Tirocini</h1>
 
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <div class="close-btn" onclick="closeModal()">×</div>
-            <div class="modal-image" id="modalImage"></div>
-            <div class="modal-body">
-                <span class="modal-category" id="modalCategory" style="display:none;"></span>
-                
-                <h2 class="modal-title" id="modalTitle"></h2>
-                <div class="modal-meta" id="modalMeta"></div>
-                <div class="modal-text" id="modalText"></div>
-                <button class="apply-btn" onclick="applyToArticle()">
-                    <span class="btn-icon">✉️</span>
-                    <span>Candidati Ora</span>
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="toast" id="toast">
-        <div class="toast-content">
-            <span class="toast-icon">✅</span>
-            <span class="toast-text">Candidatura inviata con successo!</span>
-        </div>
-    </div>
-    
+			<div class="dashboard" id="dashboard">
+
+				<div th:each="lavoro : ${lavori}" class="card" th:onclick="openModal(this)" th:data-id="${lavoro.id}"
+					th:data-titolo="${lavoro.nome}" th:data-azienda="${lavoro.azienda?.nome}"
+					th:data-descrizione="${lavoro.descrizione}" th:data-durata="${lavoro.durata}"
+					th:data-orari="${lavoro.orari}" th:data-image-url="@{'/immagini/' + ${lavoro.imageUrl}}">
+
+					<img th:src="@{'/immagini/' + ${lavoro.imageUrl}}" alt="Immagine tirocinio" class="card-image" />
+
+
+					<div class="card-content">
+						<h3 class="card-title" th:text="${lavoro.nome}">Titolo Annuncio</h3>
+
+						<p class="card-excerpt"
+							th:text="${lavoro.descrizione != null && #strings.length(lavoro.descrizione) > 100} ? ${#strings.substring(lavoro.descrizione, 0, 100)} + '...' : ${lavoro.descrizione}">
+							Breve descrizione...
+						</p>
+
+						<div class="card-meta">
+							<span th:text="'🏭 ' + ${lavoro.azienda?.nome ?: 'Azienda non specificata'}">Nome
+								Azienda</span>
+
+							<span th:text="'🕐 ' + ${lavoro.durata ?: 'N/D'}">Durata</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="modal" id="modal">
+		<div class="modal-content">
+			<div class="close-btn" onclick="closeModal()">×</div>
+			<div class="modal-image" id="modalImage"></div>
+			<div class="modal-body">
+				<span class="modal-category" id="modalCategory" style="display:none;"></span>
+
+				<h2 class="modal-title" id="modalTitle"></h2>
+				<div class="modal-meta" id="modalMeta"></div>
+				<div class="modal-text" id="modalText"></div>
+				<button class="apply-btn" onclick="applyToArticle()">
+					<span class="btn-icon">✉️</span>
+					<span>Candidati Ora</span>
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="toast" id="toast">
+		<div class="toast-content">
+			<span class="toast-icon">✅</span>
+			<span class="toast-text">Candidatura inviata con successo!</span>
+		</div>
+	</div>
+
 	<script>
-        let currentLavoroId = null;
+		let currentLavoroId = null;
 
-        function openModal(cardElement) {
-            const id = cardElement.getAttribute('data-id');
-            const title = cardElement.getAttribute('data-titolo');
-            const author = cardElement.getAttribute('data-azienda');
-            const duration = cardElement.getAttribute('data-durata');
-            const schedule = cardElement.getAttribute('data-orari');
-            const content = cardElement.getAttribute('data-descrizione');
-            const imageUrl = cardElement.getAttribute('data-image-url'); 
+		function openModal(cardElement) {
+			const id = cardElement.getAttribute('data-id');
+			const title = cardElement.getAttribute('data-titolo');
+			const author = cardElement.getAttribute('data-azienda');
+			const duration = cardElement.getAttribute('data-durata');
+			const schedule = cardElement.getAttribute('data-orari');
+			const content = cardElement.getAttribute('data-descrizione');
+			const imageUrl = cardElement.getAttribute('data-image-url');
 
-            currentLavoroId = id; 
+			currentLavoroId = id;
 
-            const modal = document.getElementById('modal');
-            
-            document.getElementById('modalCategory').style.display = 'none';
-            document.getElementById('modalImage').style.backgroundImage = `url('${imageUrl}')`;
-            document.getElementById('modalTitle').textContent = title; 
-            document.getElementById('modalMeta').innerHTML = `
+			const modal = document.getElementById('modal');
+
+			document.getElementById('modalCategory').style.display = 'none';
+			document.getElementById('modalImage').style.backgroundImage = `url('${imageUrl}')`;
+			document.getElementById('modalTitle').textContent = title;
+			document.getElementById('modalMeta').innerHTML = `
                 🏭 ${author || 'Azienda non specificata'} • 
                 🕐 ${duration || 'Durata non specificata'} • 
                 📅 ${schedule || 'Orari non specificati'}
             `;
-            document.getElementById('modalText').textContent = content; 
-            
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+			document.getElementById('modalText').textContent = content;
 
-        function closeModal() {
-            const modal = document.getElementById('modal');
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-            document.getElementById('modalImage').style.backgroundImage = '';
-            currentLavoroId = null;
-        }
+			modal.classList.add('active');
+			document.body.style.overflow = 'hidden';
+		}
 
-        document.getElementById('modal').addEventListener('click', (e) => {
-            if (e.target.id === 'modal') {
-                closeModal();
-            }
-        });
+		function closeModal() {
+			const modal = document.getElementById('modal');
+			modal.classList.remove('active');
+			document.body.style.overflow = 'auto';
+			document.getElementById('modalImage').style.backgroundImage = '';
+			currentLavoroId = null;
+		}
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-        });
+		document.getElementById('modal').addEventListener('click', (e) => {
+			if (e.target.id === 'modal') {
+				closeModal();
+			}
+		});
 
-        function toggleUserDropdown() {
-            const dropdown = document.getElementById('userDropdown');
-            dropdown.classList.toggle('active');
-        }
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape') {
+				closeModal();
+			}
+		});
 
-        document.addEventListener('click', (e) => {
-            const userMenu = document.querySelector('.user-menu');
-            const dropdown = document.getElementById('userDropdown');
-            if (userMenu && !userMenu.contains(e.target) && dropdown.classList.contains('active')) {
-                dropdown.classList.remove('active');
-            }
-        });
+		function toggleUserDropdown() {
+			const dropdown = document.getElementById('userDropdown');
+			dropdown.classList.toggle('active');
+		}
 
-        function showToast(message, isSuccess = true) {
-            const toast = document.getElementById('toast');
-            const toastText = toast.querySelector('.toast-text');
-            const toastIcon = toast.querySelector('.toast-icon');
+		document.addEventListener('click', (e) => {
+			const userMenu = document.querySelector('.user-menu');
+			const dropdown = document.getElementById('userDropdown');
+			if (userMenu && !userMenu.contains(e.target) && dropdown.classList.contains('active')) {
+				dropdown.classList.remove('active');
+			}
+		});
 
-            toastText.textContent = message;
-            toastIcon.textContent = isSuccess ? '✅' : '❌';
-            toast.style.background = isSuccess ? '#0F4C5C' : '#e74c3c'; 
+		function showToast(message, isSuccess = true) {
+			const toast = document.getElementById('toast');
+			const toastText = toast.querySelector('.toast-text');
+			const toastIcon = toast.querySelector('.toast-icon');
 
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
+			toastText.textContent = message;
+			toastIcon.textContent = isSuccess ? '✅' : '❌';
+			toast.style.background = isSuccess ? '#0F4C5C' : '#e74c3c';
 
-        async function applyToArticle() {
-            if (currentLavoroId === null) {
-                showToast('Errore: ID Lavoro non trovato.', false);
-                return;
-            }
+			toast.classList.add('show');
+			setTimeout(() => {
+				toast.classList.remove('show');
+			}, 3000);
+		}
 
-            try {
-                const response = await fetch(`/api/candidature?lavoroId=${currentLavoroId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json' 
-                    }
-                });
+		async function applyToArticle() {
+			if (currentLavoroId === null) {
+				showToast('Errore: ID Lavoro non trovato.', false);
+				return;
+			}
 
-                const responseBody = await response.text();
+			try {
+				const response = await fetch(`/api/candidature?lavoroId=${currentLavoroId}`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
 
-                if (response.ok) {
-                    showToast(responseBody || 'Candidatura inviata con successo!', true);
-                    setTimeout(() => {
-                        closeModal();
-                    }, 1500);
-                } else {
-                    showToast(responseBody || 'Errore durante la candidatura.', false);
-                }
+				const responseBody = await response.text();
 
-            } catch (error) {
-                console.error('Errore Fetch:', error);
-                showToast('Errore di connessione con il server.', false);
-            }
-        }
-    </script>
+				if (response.ok) {
+					showToast(responseBody || 'Candidatura inviata con successo!', true);
+					setTimeout(() => {
+						closeModal();
+					}, 1500);
+				} else {
+					showToast(responseBody || 'Errore durante la candidatura.', false);
+				}
+
+			} catch (error) {
+				console.error('Errore Fetch:', error);
+				showToast('Errore di connessione con il server.', false);
+			}
+		}
+	</script>
 </body>
+
 </html>

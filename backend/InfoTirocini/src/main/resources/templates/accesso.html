@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Info Tirocini - Accesso</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -107,6 +108,10 @@
             text-decoration: none;
             font-weight: bold;
         }
+		
+		.link a:hover {
+			text-decoration: underline;
+		}
         .alert {
             padding: 10px;
             margin-bottom: 15px;
@@ -125,7 +130,10 @@
             .container {
                 flex-direction: column;
                 align-items: center;
+				justify-content: flex-start;
                 max-width: 600px;
+				padding-top: 40px;
+				padding-bottom: 40px;
             }
             .description {
                 padding: 40px 30px;
@@ -137,11 +145,17 @@
             body {
                 padding: 20px;
             }
+			.container{
+				padding-top: 30px;
+				padding-bottom: 30px;
+			}
             .description {
                 padding: 25px 20px;
             }
             .box {
-                padding: 25px 20px;
+                padding: 40px 35px;
+				margin-top: 25px;
+				border-radius: 5%;
             }
             input {
                 padding: 7px;
@@ -152,6 +166,21 @@
                 font-size: 14px;
             }
         }
+		
+		.password-toggle-icon {
+		    position: absolute;
+		    top: 65%; 
+		    right: 12px;
+		    transform: translateY(-50%); 
+		    cursor: pointer;
+		    user-select: none;
+		    font-size: 1.2rem;
+		    color: #aaa;
+		    z-index: 2; 
+		}
+		.password-toggle-icon:hover {
+			color: #0F4C5C;
+		}
 		
     </style>
 </head>
@@ -183,9 +212,10 @@
                     <label for="mail">Email</label>
                     <input type="email" id="mail" name="mail" required>
                 </div>
-                <div>
+                <div style="position: relative;">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required>
+					<span class="password-toggle-icon" onclick="togglePasswordVisibility('password')"><i class="fa-solid fa-eye"></i></span>
                 </div>
                 <button type="submit">Accedi</button>
             </form>
@@ -195,5 +225,19 @@
             </div>
         </div>
     </div>
+	
+	<script>
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling; 
+            if (input.type === "password") {
+                input.type = "text";
+                icon.innerHTML = '<i class="fa-solid fa-person-walking-with-cane"></i>'; 
+            } else {
+                input.type = "password";
+                icon.innerHTML = '<i class="fa-solid fa-eye"></i>'; 
+            }
+        }
+    </script>
 </body>
 </html>

@@ -581,9 +581,11 @@
                      th:data-descrizione="${lavoro.descrizione}"
                      th:data-durata="${lavoro.durata}"
                      th:data-orari="${lavoro.orari}"
+					 
+					 th:data-image-url="@{${lavoro.imageUrl}}"
                      >
                     
-                    <div class="card-image"></div>
+                    <img th:src="@{${lavoro.imageUrl}}" alt="Immagine tirocinio" class="card-image"/>
                     <div class="card-content">
                         <h3 class="card-title" th:text="${lavoro.nome}">Titolo Annuncio</h3>
                         
@@ -628,84 +630,79 @@
         </div>
     </div>
     
-    <script>
+	<script>
+			function openModal(cardElement) {
+				const title = cardElement.getAttribute('data-titolo');
+				const author = cardElement.getAttribute('data-azienda');
+				const duration = cardElement.getAttribute('data-durata');
+				const schedule = cardElement.getAttribute('data-orari');
+				const content = cardElement.getAttribute('data-descrizione');
+				const imageUrl = cardElement.getAttribute('data-image-url'); 
 
+				const modal = document.getElementById('modal');
+				
+				document.getElementById('modalCategory').style.display = 'none';
 
-        function openModal(cardElement) {
+				document.getElementById('modalImage').style.backgroundImage = `url('${imageUrl}')`;
+	  
+				document.getElementById('modalTitle').textContent = title; 
+				
+				document.getElementById('modalMeta').innerHTML = `
+					🏭 ${author || 'Azienda non specificata'} • 
+					🕐 ${duration || 'Durata non specificata'} • 
+					📅 ${schedule || 'Orari non specificati'}
+				`;
+				
+				document.getElementById('modalText').textContent = content; 
+				
+				modal.classList.add('active');
+				document.body.style.overflow = 'hidden';
+			}
 
-            const title = cardElement.getAttribute('data-titolo');
-            const author = cardElement.getAttribute('data-azienda');
-            const duration = cardElement.getAttribute('data-durata');
-            const schedule = cardElement.getAttribute('data-orari');
-            const content = cardElement.getAttribute('data-descrizione');
+			function closeModal() {
+				const modal = document.getElementById('modal');
+				modal.classList.remove('active');
+				document.body.style.overflow = 'auto';
+				document.getElementById('modalImage').style.backgroundImage = '';
+			}
 
-            const modal = document.getElementById('modal');
-            
-            document.getElementById('modalCategory').style.display = 'none';
+			document.getElementById('modal').addEventListener('click', (e) => {
+				if (e.target.id === 'modal') {
+					closeModal();
+				}
+			});
 
-  
-            document.getElementById('modalTitle').textContent = title; 
-            
-  
-            document.getElementById('modalMeta').innerHTML = `
-                🏭 ${author || 'Azienda non specificata'} • 
-                🕐 ${duration || 'Durata non specificata'} • 
-                📅 ${schedule || 'Orari non specificati'}
-            `;
-            
-            document.getElementById('modalText').textContent = content; 
-            
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+			document.addEventListener('keydown', (e) => {
+				if (e.key === 'Escape') {
+					closeModal();
+				}
+			});
 
-        function closeModal() {
-            const modal = document.getElementById('modal');
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
+			function toggleUserDropdown() {
+				const dropdown = document.getElementById('userDropdown');
+				dropdown.classList.toggle('active');
+			}
 
- 
-        document.getElementById('modal').addEventListener('click', (e) => {
-            if (e.target.id === 'modal') {
-                closeModal();
-            }
-        });
+			document.addEventListener('click', (e) => {
+				const userMenu = document.querySelector('.user-menu');
+				const dropdown = document.getElementById('userDropdown');
+				if (userMenu && !userMenu.contains(e.target) && dropdown.classList.contains('active')) {
+					dropdown.classList.remove('active');
+				}
+			})
 
-  
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-        });
-
-        
-        function toggleUserDropdown() {
-            const dropdown = document.getElementById('userDropdown');
-            dropdown.classList.toggle('active');
-        }
-
-     
-        document.addEventListener('click', (e) => {
-            const userMenu = document.querySelector('.user-menu');
-            const dropdown = document.getElementById('userDropdown');
-            if (userMenu && !userMenu.contains(e.target) && dropdown.classList.contains('active')) {
-                dropdown.classList.remove('active');
-            }
-        })
-
-        function applyToArticle() {
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-            
-            setTimeout(() => {
-                closeModal();
-            }, 1500);
-        }
-    </script>
+			function applyToArticle() {
+				const toast = document.getElementById('toast');
+				toast.classList.add('show');
+				
+				setTimeout(() => {
+					toast.classList.remove('show');
+				}, 3000);
+				
+				setTimeout(() => {
+					closeModal();
+				}, 1500);
+			}
+		</script>
 </body>
 </html>

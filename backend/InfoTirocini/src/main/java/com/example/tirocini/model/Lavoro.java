@@ -18,6 +18,9 @@ public class Lavoro {
     private String durata;
     private String orari;
     private String descrizione;
+    
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @ManyToOne
     @JoinColumn(name = "azienda_id")
@@ -86,5 +89,13 @@ public class Lavoro {
 
     public void setCandidature(List<Candidatura> candidature) {
         this.candidature = candidature;
+    }
+    
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

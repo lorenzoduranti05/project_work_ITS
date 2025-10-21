@@ -29,6 +29,7 @@ CREATE TABLE `lavoro` (
   `orari` varchar(255) DEFAULT NULL,
   `descrizione` text,
   `azienda_id` int DEFAULT NULL,
+  `image_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `azienda_id` (`azienda_id`),
   CONSTRAINT `lavoro_ibfk_1` FOREIGN KEY (`azienda_id`) REFERENCES `azienda` (`id`)
@@ -41,7 +42,7 @@ CREATE TABLE `lavoro` (
 
 LOCK TABLES `lavoro` WRITE;
 /*!40000 ALTER TABLE `lavoro` DISABLE KEYS */;
-INSERT INTO `lavoro` VALUES (1,'Tirocinio Sviluppatore Frontend','6 mesi','9:00 - 18:00','Stiamo cercando uno stagista appassionato di sviluppo frontend per unirsi al nostro team. Lavorerai su progetti reali usando React e Tailwind.',1),(2,'Stage Marketing Digitale','3 mesi','Part-time Pomeriggio','Opportunità di stage nel nostro reparto marketing. Aiuterai nella gestione dei social media e nella creazione di campagne AdWords.',2),(3,'Tirocinio Backend Developer (Java)','6 mesi','Full-time','Unisciti al nostro team backend e impara a sviluppare API RESTful con Spring Boot e a gestire database relazionali.',1),(4,'Stage Assistente Risorse Umane','4 mesi','9:00 - 13:00','Supporto nelle attività di recruiting, gestione documentale e organizzazione eventi aziendali. Richiesta buona conoscenza pacchetto Office.',2),(5,'Tirocinio Sviluppo Software Embedded','6 mesi','Full-time','Partecipazione allo sviluppo di firmware per dispositivi IoT. Richiesta conoscenza base di C/C++ e sistemi Linux.',3),(6,'Stage Social Media Manager Junior','5 mesi','Flessibile (20h/sett)','Creazione e gestione di contenuti per i canali social aziendali (Facebook, Instagram, LinkedIn). Analisi delle performance e reporting.',1);
+INSERT INTO `lavoro` VALUES (1,'Tirocinio Sviluppatore Frontend','6 mesi','9:00 - 18:00','Stiamo cercando uno stagista appassionato di sviluppo frontend per unirsi al nostro team. Lavorerai su progetti reali usando React e Tailwind.',1,'immagini/techsolutions.jpeg'),(2,'Stage Marketing Digitale','3 mesi','Part-time Pomeriggio','Opportunità di stage nel nostro reparto marketing. Aiuterai nella gestione dei social media e nella creazione di campagne AdWords.',2,'immagini/visionate.png'),(3,'Tirocinio Backend Developer (Java)','6 mesi','Full-time','Unisciti al nostro team backend e impara a sviluppare API RESTful con Spring Boot e a gestire database relazionali.',1,'immagini/techsolutions.jpeg'),(4,'Stage Assistente Risorse Umane','4 mesi','9:00 - 13:00','Supporto nelle attività di recruiting, gestione documentale e organizzazione eventi aziendali. Richiesta buona conoscenza pacchetto Office.',2,'immagini/visionate.png'),(5,'Tirocinio Sviluppo Software Embedded','6 mesi','Full-time','Partecipazione allo sviluppo di firmware per dispositivi IoT. Richiesta conoscenza base di C/C++ e sistemi Linux.',3,'immagini/innovatech.png'),(6,'Stage Social Media Manager Junior','5 mesi','Flessibile (20h/sett)','Creazione e gestione di contenuti per i canali social aziendali (Facebook, Instagram, LinkedIn). Analisi delle performance e reporting.',1,'immagini/techsolutions.jpeg');
 /*!40000 ALTER TABLE `lavoro` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-20 17:12:21
+-- Dump completed on 2025-10-21 10:50:20

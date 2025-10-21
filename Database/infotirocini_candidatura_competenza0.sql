@@ -16,27 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `azienda`
+-- Table structure for table `candidatura_competenza`
 --
 
-DROP TABLE IF EXISTS `azienda`;
+DROP TABLE IF EXISTS `candidatura_competenza`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `azienda` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nome` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `candidatura_competenza` (
+  `candidatura_id` int NOT NULL,
+  `competenza_id` int NOT NULL,
+  PRIMARY KEY (`candidatura_id`,`competenza_id`),
+  KEY `competenza_id` (`competenza_id`),
+  CONSTRAINT `candidatura_competenza_ibfk_1` FOREIGN KEY (`candidatura_id`) REFERENCES `candidatura` (`id`),
+  CONSTRAINT `candidatura_competenza_ibfk_2` FOREIGN KEY (`competenza_id`) REFERENCES `competenza` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `azienda`
+-- Dumping data for table `candidatura_competenza`
 --
 
-LOCK TABLES `azienda` WRITE;
-/*!40000 ALTER TABLE `azienda` DISABLE KEYS */;
-INSERT INTO `azienda` VALUES (1,'Tech Solutions S.p.A.'),(2,'Web Agency Creativa'),(3,'Innovatech Labs');
-/*!40000 ALTER TABLE `azienda` ENABLE KEYS */;
+LOCK TABLES `candidatura_competenza` WRITE;
+/*!40000 ALTER TABLE `candidatura_competenza` DISABLE KEYS */;
+/*!40000 ALTER TABLE `candidatura_competenza` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-20 17:12:21
+-- Dump completed on 2025-10-21 10:50:19

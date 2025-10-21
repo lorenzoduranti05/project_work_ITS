@@ -99,26 +99,49 @@ public class UtenteService {
         Utente utente = utenteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
-        if (dto.getNome() != null) {
+        if (dto.getPasswordAttuale() == null || dto.getPasswordAttuale().isBlank()) {
+            throw new RuntimeException("È richiesta la password attuale per salvare le modifiche.");
+        }
+        if (!passwordEncoder.matches(dto.getPasswordAttuale(), utente.getPassword())) {
+            throw new RuntimeException("Password attuale non corretta.");
+        }
+
+        boolean modificato = false;
+        if (dto.getNome() != null && !dto.getNome().equals(utente.getNome())) {
             utente.setNome(dto.getNome());
+            modificato = true;
         }
-        if (dto.getCognome() != null) {
+        if (dto.getCognome() != null && !dto.getCognome().equals(utente.getCognome())) {
             utente.setCognome(dto.getCognome());
+            modificato = true;
         }
-        if (dto.getMail() != null) {
-            if (!utente.getMail().equals(dto.getMail()) && utenteRepository.existsByMail(dto.getMail())) {
-                throw new RuntimeException("Email già in uso");
+        if (dto.getMail() != null && !dto.getMail().equals(utente.getMail())) {
+            if (utenteRepository.existsByMail(dto.getMail())) {
+                throw new RuntimeException("Email già in uso da un altro account.");
             }
             utente.setMail(dto.getMail());
-        }
-       
-        if (dto.getPassword() != null && !dto.getPassword().isBlank() && !dto.getPassword().equals("********")) {
-
-            utente.setPassword(passwordEncoder.encode(dto.getPassword()));
+            modificato = true;
         }
 
+        String nuovaPassword = dto.getPassword();
+        String confermaNuovaPassword = dto.getConfermaPassword();
 
-        utenteRepository.save(utente);
+        boolean vuoleCambiarePassword = nuovaPassword != null && !nuovaPassword.isBlank();
+
+        if (vuoleCambiarePassword) {
+            if (nuovaPassword.length() < 6) {
+                 throw new RuntimeException("La nuova password deve avere almeno 6 caratteri.");
+            }
+            if (confermaNuovaPassword == null || !nuovaPassword.equals(confermaNuovaPassword)) {
+                throw new RuntimeException("Le nuove password non coincidono.");
+            }
+            utente.setPassword(passwordEncoder.encode(nuovaPassword));
+            modificato = true;
+        }
+
+        if (modificato) {
+            utenteRepository.save(utente);
+        }
 
         return getProfilo(id);
     }

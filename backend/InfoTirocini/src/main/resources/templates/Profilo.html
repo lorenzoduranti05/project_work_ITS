@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
@@ -169,7 +169,7 @@
 			font-weight: bold;
 		}
 
-		.role-button {
+		.edit-profile-button {
 			background: none;
 			border: none;
 			padding: 0;
@@ -177,12 +177,12 @@
 			transition: transform 0.2s;
 		}
 
-		.role-button img {
+		.edit-profile-button img {
 			width: 24px;
 			height: 24px;
 		}
 
-		.role-button:hover {
+		.edit-profile-button:hover {
 			transform: scale(1.2);
 		}
 
@@ -217,6 +217,111 @@
 			color: #FAFAFA;
 			overflow-wrap: break-word;
 			word-wrap: break-word;
+		}
+
+		.modal-overlay {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+			box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+        }
+
+        .modal-close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-close-btn:hover,
+        .modal-close-btn:focus {
+            color: black;
+        }
+
+		.modal-content h2 {
+			color: var(--color-petrolio-scuro);
+			text-align: center;
+			margin-top: 0;
+		}
+
+		.form-group {
+			margin-bottom: 15px;
+		}
+
+		.form-group label {
+			display: block;
+			color: var(--color-petrolio-scuro);
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+
+		.form-group input {
+			width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+		}
+
+		.form-group input:focus {
+            border-color: var(--color-petrolio-scuro);
+            outline: none;
+        }
+
+		.modal-button {
+			width: 100%;
+            padding: 12px;
+            background: var(--color-petrolio-scuro);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+		}
+
+		.modal-button:hover {
+			background: #1a6b7f;
+		}
+
+		.alert {
+			padding: 15px;
+			margin-bottom: 20px;
+			border-radius: 8px;
+			font-size: 1.1em;
+			text-align: center;
+		}
+		.alert-success {
+			color: #155724;
+    		background-color: #d4edda;
+    		border-color: #c3e6cb;
+		}
+		.alert-danger {
+			color: #721c24;
+    		background-color: #f8d7da;
+    		border-color: #f5c6cb;
 		}
 
 		@media (max-width: 800px) {
@@ -266,11 +371,17 @@
 
 		Profilo
 	</div>
+
+	<div style="max-width: 800px; margin: 0 auto 20px auto; padding: 0 20px;">
+		<div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+		<div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+	</div>
+
 	<div class="top-dashboard">
 		<div class="profile-card">
 			<div class="profile-role-container">
-				<h2 class="profile-role">Studente</h2>
-				<button class="role-button" title="Modifica ruolo">
+				<h2 class="profile-role" th:text="${utente.ruolo == 'USER' ? 'Studente' : utente.ruolo}">Studente</h2>
+				<button class="edit-profile-button" title="Modifica Profilo" id="openModalBtn">
 					<img th:src="@{/immagini/modifica12.png}" alt="Modifica" style="width: 24px; height: 24px;">
 				</button>
 			</div>
@@ -330,6 +441,10 @@
 						<a th:text="${accettateCount}">0</a>
 					</div>
 					<div class="stat-dropdown">
+						<div th:if="${accettateCount == 0}" class="stat-dropdown-item"
+							style="text-align: center; color: #ccc;">
+							Nessuna candidatura accettata.
+						</div>
 					</div>
 				</div>
 
@@ -339,12 +454,59 @@
 						<a th:text="${rifiutateCount}">0</a>
 					</div>
 					<div class="stat-dropdown">
+						<div th:if="${rifiutateCount == 0}" class="stat-dropdown-item"
+							style="text-align: center; color: #ccc;">
+							Nessuna candidatura rifiutata.
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<div id="editProfileModal" class="modal-overlay">
+		<div class="modal-content">
+			<span class="modal-close-btn" id="closeModalBtn">&times;</span>
+			<h2>Modifica Profilo</h2>
+
+			<form th:action="@{/profilo/aggiorna}" th:object="${profiloDTO}" method="POST" id="editProfileForm">
+				<div class="form-group">
+					<label for="nome">Nome</label>
+					<input id="nome" type="text" th:field="*{nome}" required>
+				</div>
+				<div class="form-group">
+					<label for="cognome">Cognome</label>
+					<input id="cognome" type="text" th:field="*{cognome}" required>
+				</div>
+				<div class="form-group">
+					<label for="mail">Email</label>
+					<input id="mail" type="email" th:field="*{mail}" required>
+				</div>
+
+				<hr style="margin: 20px 0; border: 1px solid #eee;">
+
+				<div class="form-group">
+					<label for="password">Nuova Password</label>
+					<input id="password" type="password" th:field="*{password}" placeholder="Lascia vuoto per non modificare">
+				</div>
+				<div class="form-group">
+					<label for="confermaPassword">Conferma Nuova Password</label>
+					<input id="confermaPassword" type="password" th:field="*{confermaPassword}" placeholder="Ripeti la nuova password">
+					<span id="passwordMatchError" style="color: red; font-size: 0.9em; display: none;">Le nuove password non coincidono.</span>
+				</div>
+
+				<hr style="margin: 20px 0; border: 1px solid #eee;">
+
+				<div class="form-group">
+					<label for="passwordAttuale">Password Attuale (Obbligatoria)</label>
+					<input id="passwordAttuale" type="password" th:field="*{passwordAttuale}" required placeholder="Inserisci la tua password attuale">
+				</div>
+
+				<button type="submit" class="modal-button">Salva Modifiche</button>
+			</form>
+		</div>
 	</div>
+
 	<script>
 		const statCards = document.querySelectorAll('.stat-card');
 		statCards.forEach((card, index) => {
@@ -354,7 +516,62 @@
 				card.classList.toggle('active');
 			});
 		});
+
+		var modal = document.getElementById("editProfileModal");
+        var openBtn = document.getElementById("openModalBtn");
+        var closeBtn = document.getElementById("closeModalBtn");
+		var form = document.getElementById("editProfileForm");
+        var newPasswordInput = document.getElementById("password");
+        var confirmPasswordInput = document.getElementById("confermaPassword");
+        var passwordMatchError = document.getElementById("passwordMatchError");
+
+        openBtn.onclick = function(event) {
+			event.preventDefault();
+            newPasswordInput.value = '';
+            confirmPasswordInput.value = '';
+            document.getElementById('passwordAttuale').value = '';
+            passwordMatchError.style.display = 'none';
+            modal.style.display = "flex";
+        }
+
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        function validatePasswordMatch() {
+            if (newPasswordInput.value !== confirmPasswordInput.value && newPasswordInput.value !== '') {
+                passwordMatchError.style.display = 'block';
+                return false;
+            } else {
+                passwordMatchError.style.display = 'none';
+                return true;
+            }
+        }
+
+        newPasswordInput.addEventListener('keyup', validatePasswordMatch);
+        confirmPasswordInput.addEventListener('keyup', validatePasswordMatch);
+
+        form.addEventListener('submit', function(event) {
+            if (newPasswordInput.value !== '' && !validatePasswordMatch()) {
+                event.preventDefault();
+                alert("Le nuove password inserite non coincidono. Controlla e riprova.");
+            }
+        });
+
+		document.addEventListener("DOMContentLoaded", function() {
+			var errorMessage = document.querySelector(".alert-danger");
+			if (errorMessage && errorMessage.textContent.trim() !== "") {
+				if (!document.querySelector(".alert-success")) {
+					modal.style.display = "flex";
+				}
+			}
+		});
 	</script>
 </body>
-
 </html>

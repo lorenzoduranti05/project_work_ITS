@@ -533,87 +533,94 @@
 	</div>
 
 	<script>
-		const statCards = document.querySelectorAll('.stat-card');
-		statCards.forEach((card, index) => {
-			card.addEventListener('click', () => {
-				statCards.forEach(c => {if (c !== card) c.classList.remove('active')});
-				card.classList.toggle('active');
-			});
-		});
+	    const statCards = document.querySelectorAll('.stat-card');
+	    statCards.forEach((card, index) => {
+	        card.addEventListener('click', () => {
+	            statCards.forEach(c => { if (c !== card) c.classList.remove('active') });
+	            card.classList.toggle('active');
+	        });
+	    });
 
-		var modal = document.getElementById("editProfileModal");
-        var openBtn = document.getElementById("openModalBtn");
-        var closeBtn = document.getElementById("closeModalBtn");
-		var form = document.getElementById("editProfileForm");
-        var newPasswordInput = document.getElementById("password");
-        var confirmPasswordInput = document.getElementById("confermaPassword");
-        var passwordMatchError = document.getElementById("passwordMatchError");
+	    var modal = document.getElementById("editProfileModal");
+	    var openBtn = document.getElementById("openModalBtn");
+	    var closeBtn = document.getElementById("closeModalBtn");
+	    var form = document.getElementById("editProfileForm");
+	    var newPasswordInput = document.getElementById("password");
+	    var confirmPasswordInput = document.getElementById("confermaPassword");
+	    var passwordMatchError = document.getElementById("passwordMatchError");
 
-        openBtn.onclick = function(event) {
-			event.preventDefault();
-            newPasswordInput.value = '';
-            confirmPasswordInput.value = '';
-            document.getElementById('passwordAttuale').value = '';
-            passwordMatchError.style.display = 'none';
-            modal.style.display = "flex";
-        }
+	    function openEditModal() {
+	        newPasswordInput.value = '';
+	        confirmPasswordInput.value = '';
+	        document.getElementById('passwordAttuale').value = '';
+	        passwordMatchError.style.display = 'none';
+	        if (modal) {
+	             modal.style.display = "flex";
+	        }
+	    }
 
-        closeBtn.onclick = function() {
-            modal.style.display = "none";
-        }
+	    if (openBtn) {
+	        openBtn.onclick = function(event) {
+	            event.preventDefault();
+	            openEditModal();
+	        }
+	    }
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
+	    if (closeBtn) {
+	        closeBtn.onclick = function() {
+	            if (modal) {
+	                 modal.style.display = "none";
+	            }
+	        }
+	    }
 
-        function validatePasswordMatch() {
-            if (newPasswordInput.value !== confirmPasswordInput.value && newPasswordInput.value !== '') {
-                passwordMatchError.style.display = 'block';
-                return false;
-            } else {
-                passwordMatchError.style.display = 'none';
-                return true;
-            }
-        }
+	    window.onclick = function(event) {
+	        if (event.target == modal) {
+	            if (modal) {
+	                 modal.style.display = "none";
+	            }
+	        }
+	    }
 
-        newPasswordInput.addEventListener('keyup', validatePasswordMatch);
-        confirmPasswordInput.addEventListener('keyup', validatePasswordMatch);
+	    function validatePasswordMatch() {
+	        if (newPasswordInput.value !== confirmPasswordInput.value && newPasswordInput.value !== '') {
+	            passwordMatchError.style.display = 'block';
+	            return false;
+	        } else {
+	            passwordMatchError.style.display = 'none';
+	            return true;
+	        }
+	    }
 
-        form.addEventListener('submit', function(event) {
-            if (newPasswordInput.value !== '' && !validatePasswordMatch()) {
-                event.preventDefault();
-                alert("Le nuove password inserite non coincidono. Controlla e riprova.");
-            }
-        });
+	    if (newPasswordInput && confirmPasswordInput) {
+	        newPasswordInput.addEventListener('keyup', validatePasswordMatch);
+	        confirmPasswordInput.addEventListener('keyup', validatePasswordMatch);
+	    }
+
+	    if (form) {
+	        form.addEventListener('submit', function(event) {
+	            if (newPasswordInput.value !== '' && !validatePasswordMatch()) {
+	                event.preventDefault();
+	                alert("Le nuove password inserite non coincidono. Controlla e riprova.");
+	            }
+	        });
+	    }
 
 		document.addEventListener("DOMContentLoaded", function() {
-			var errorMessage = document.querySelector(".alert-danger");
-			if (errorMessage && errorMessage.textContent.trim() !== "") {
-				if (!document.querySelector(".alert-success")) {
-					modal.style.display = "flex";
-				}
-			}
-		});
-
-        const profileImageInput = document.getElementById('profileImageInput');
-        const profileAvatar = document.getElementById('profileAvatar');
-        const profileIconContainer = document.getElementById('profileIconContainer');
-
-        profileImageInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    profileAvatar.src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-                console.log("Immagine selezionata:", file.name);
-            }
-        });
-
+		        var errorMessage = document.querySelector(".alert-danger");
+		        if (errorMessage && errorMessage.textContent.trim() !== "") {
+		            if (!document.querySelector(".alert-success")) {
+		                 openEditModal();
+		            }
+		        }
+				
+		        const urlParams = new URLSearchParams(window.location.search);
+		        if (urlParams.has('edit') && urlParams.get('edit') === 'true') {
+		            openEditModal();
+		            const newUrl = window.location.pathname;
+		            window.history.replaceState({}, document.title, newUrl);
+		        }
+		    });
 	</script>
 </body>
 </html>

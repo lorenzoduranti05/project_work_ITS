@@ -69,19 +69,19 @@
 		}
 
 		.profile-card {
-					border-radius: 8px;
-					padding: 40px 20px;
-					background-color: var(--color-petrolio-scuro);
-					display: flex;
-					flex-direction: column;
-					justify-content: flex-start;
-					position: sticky;
-					top: 20px;
-					align-self: flex-start;
-					height: 100%;
-					width: 300px; 
-					
-				}
+			border-radius: 8px;
+			padding: 40px 20px;
+			background-color: var(--color-petrolio-scuro);
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			position: sticky;
+			top: 20px;
+			align-self: flex-start;
+			height: 100%;
+			width: 300px;
+
+		}
 
 		.top-row {
 			flex: 1;
@@ -214,10 +214,10 @@
 		}
 
 		.contact-item span {
-					color: #FAFAFA;
-					overflow-wrap: break-word; 
-					word-wrap: break-word;    
-				}
+			color: #FAFAFA;
+			overflow-wrap: break-word;
+			word-wrap: break-word;
+		}
 
 		@media (max-width: 800px) {
 			.top-dashboard {
@@ -311,10 +311,10 @@
 						<a th:text="${inviateCount}">0</a>
 					</div>
 					<div class="stat-dropdown">
-						
+
 						<div th:each="c : ${candidatureInviate}"
-						     th:if="${#strings.equalsIgnoreCase(c.stato, 'Inviata')}" class="stat-dropdown-item">
-						    <span th:text="${c.lavoro?.nome}"></span>
+							th:if="${#strings.equalsIgnoreCase(c.stato, 'Inviata')}" class="stat-dropdown-item">
+							<span th:text="${c.lavoro?.nome}"></span>
 						</div>
 
 						<div th:if="${inviateCount == 0}" class="stat-dropdown-item"

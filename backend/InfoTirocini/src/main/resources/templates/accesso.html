@@ -108,6 +108,10 @@
             text-decoration: none;
             font-weight: bold;
         }
+		
+		.link a:hover {
+			text-decoration: underline;
+		}
         .alert {
             padding: 10px;
             margin-bottom: 15px;
@@ -126,7 +130,10 @@
             .container {
                 flex-direction: column;
                 align-items: center;
+				justify-content: flex-start;
                 max-width: 600px;
+				padding-top: 40px;
+				padding-bottom: 40px;
             }
             .description {
                 padding: 40px 30px;
@@ -138,11 +145,17 @@
             body {
                 padding: 20px;
             }
+			.container{
+				padding-top: 30px;
+				padding-bottom: 30px;
+			}
             .description {
                 padding: 25px 20px;
             }
             .box {
-                padding: 25px 20px;
+                padding: 40px 35px;
+				margin-top: 25px;
+				border-radius: 5%;
             }
             input {
                 padding: 7px;
@@ -156,10 +169,8 @@
 		
 		.password-toggle-icon {
 		    position: absolute;
-		    /* Aumenta questo valore per spostare l'icona più in basso */
 		    top: 65%; 
 		    right: 12px;
-		    /* Mantiene il transform per centrare rispetto alla sua dimensione */
 		    transform: translateY(-50%); 
 		    cursor: pointer;
 		    user-select: none;

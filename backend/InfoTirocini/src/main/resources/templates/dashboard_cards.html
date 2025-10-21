@@ -302,23 +302,23 @@
 		}
 
 		.card-category {
-		    display: inline-block;
-		    background: #E9B8A6;
-		    color: #0F4C5C;
-		    border-radius: 20px;
-		    font-weight: 600;
+			display: inline-block;
+			background: #E9B8A6;
+			color: #0F4C5C;
+			border-radius: 20px;
+			font-weight: 600;
 			width: fit-content;
-            padding: 4px 12px;
-            font-size: 0.75em;
+			padding: 4px 12px;
+			font-size: 0.75em;
 		}
 
-        .card-category-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-bottom: 10px;
-            min-height: 28px;
-        }
+		.card-category-container {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 5px;
+			margin-bottom: 10px;
+			min-height: 28px;
+		}
 
 		.card-title {
 			font-size: 1.5em;
@@ -372,6 +372,7 @@
 			from {
 				opacity: 0;
 			}
+
 			to {
 				opacity: 1;
 			}
@@ -393,6 +394,7 @@
 				transform: translateY(50px);
 				opacity: 0;
 			}
+
 			to {
 				transform: translateY(0);
 				opacity: 1;
@@ -412,22 +414,22 @@
 		}
 
 		.modal-category {
-		    display: inline-block;
-		    background: #E9B8A6;
-		    color: #0F4C5C;
-		    border-radius: 25px;
-		    font-weight: 600;
+			display: inline-block;
+			background: #E9B8A6;
+			color: #0F4C5C;
+			border-radius: 25px;
+			font-weight: 600;
 			width: fit-content;
-            padding: 4px 12px;
-            font-size: 0.75em;
+			padding: 4px 12px;
+			font-size: 0.75em;
 		}
 
-        .modal-category-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
+		.modal-category-container {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+			margin-bottom: 15px;
+		}
 
 		.modal-title {
 			font-size: 2.5em;
@@ -504,6 +506,7 @@
 				transform: translateX(400px);
 				opacity: 0;
 			}
+
 			to {
 				transform: translateX(0);
 				opacity: 1;
@@ -578,8 +581,7 @@
 					</div>
 					<ul class="dropdown-menu">
 						<li>
-							<a href="#">
-								<span class="icon">👤</span>
+							<a th:href="@{/profilo}"> <span class="icon">👤</span>
 								<span>Il Mio Profilo</span>
 							</a>
 						</li>
@@ -616,7 +618,6 @@
 					th:data-titolo="${lavoro.nome}" th:data-azienda="${lavoro.azienda?.nome}"
 					th:data-descrizione="${lavoro.descrizione}" th:data-durata="${lavoro.durata}"
 					th:data-orari="${lavoro.orari}" th:data-image-url="@{'/immagini/' + ${lavoro.imageUrl}}"
-
 					th:data-competenze="${lavoro.competenze != null ? #strings.arrayJoin(lavoro.competenze.![nome], '||') : ''}">
 
 					<img th:src="@{'/immagini/' + ${lavoro.imageUrl}}" alt="Immagine tirocinio" class="card-image" />

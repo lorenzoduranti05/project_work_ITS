@@ -1,6 +1,5 @@
 package com.example.tirocini.controller;
 
-// Import necessari per Lavoro e List
 import com.example.tirocini.model.Lavoro;
 import com.example.tirocini.repository.LavoroRepository;
 import java.util.List;
@@ -19,7 +18,6 @@ public class DashboardController {
     @Autowired
     private UtenteRepository utenteRepository;
 
-    // Iniettiamo il LavoroRepository
     @Autowired
     private LavoroRepository lavoroRepository;
 
@@ -30,10 +28,8 @@ public class DashboardController {
 
         model.addAttribute("utente", utente); 
         
-        // Recupera tutti i lavori dal DB
         List<Lavoro> lavori = lavoroRepository.findAll();
-        
-        // Passa la lista "lavori" al template
+
         model.addAttribute("lavori", lavori);
         
         return "dashboard_cards";            

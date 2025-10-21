@@ -18,26 +18,25 @@
         body {
             margin: 0;
             padding: 0;
-            height: 100vh;
-            overflow: hidden;
+            height: 100%;
+            overflow-x: hidden;
             font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
         }
 
         body {
             background: linear-gradient(135deg, #0f3b5cd4, #F0B8A6);
+            min-height: 100%;
         }
 
         .navbar {
             background-color: #fafafa;
-            color: var(--color-petrolio-scuro);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 15px;
-            padding: 10px 20px;
+            padding: 10px;
             font-size: 1.5em;
+            margin-bottom: 15px;
             position: relative;
         }
 
@@ -66,20 +65,20 @@
             align-items: stretch;
             justify-content: flex-start;
             flex-wrap: wrap;
-            flex: 1;
             padding: 0 20px 20px 20px;
-            overflow: auto;
         }
 
         .profile-card {
             border-radius: 8px;
-            padding: 20px;
+            padding: 40px 20px;
             background-color: var(--color-petrolio-scuro);
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            flex: 1;
-            min-height: 0;
+            position: sticky;
+            top: 20px;
+            align-self: flex-start;
+            height: 404px;
         }
 
         .top-row {
@@ -90,30 +89,27 @@
         .stats-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 20px;
             flex: 1;
-            min-height: 0;
         }
 
         .card {
             background-color: #fafafa;
-            border: 1px solid var(--color-bordo-card);
             border-radius: 8px;
             padding: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
             position: relative;
-            overflow: visible;
         }
 
         .card.stat-card {
             cursor: pointer;
             overflow: hidden;
-            justify-content: flex-start;
-            flex: 1;
+            max-height: 45%;
+        }
+
+        .card.stat-card h3 {
+            margin: 10px;
         }
 
         .number {
@@ -135,18 +131,16 @@
             z-index: 10;
             background-color: #0F3B5C;
             border-radius: 8px;
-            box-shadow: none;
             max-height: 0;
             overflow: hidden;
             text-align: center;
             width: 100%;
             box-sizing: border-box;
             transition: max-height 0.3s ease, padding 0.3s ease;
-            padding: 0 20px;
         }
 
         .card.stat-card.active .stat-dropdown {
-            max-height: 150px;
+            max-height: calc(3 * 2em + 25px);
             overflow-y: auto;
             padding: 15px 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) inset;
@@ -159,12 +153,35 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .profile-role {
+        .profile-role-container {
             text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-role {
             color: #fafafa;
             font-size: 1.5em;
-            margin-top: 10px;
             font-weight: bold;
+        }
+
+        .role-button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .role-button img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .role-button:hover {
+            transform: scale(1.2);
         }
 
         .profile-icon {
@@ -198,28 +215,38 @@
             color: #FAFAFA;
         }
 
-        .contacts-card a {
-            color: var(--color-petrolio-scuro);
-            text-decoration: none;
-        }
-
         @media (max-width: 800px) {
             .top-dashboard {
                 flex-direction: column;
                 align-items: center;
             }
-            .profile-card,
-            .stats-container {
+
+            .profile-card {
                 width: 90%;
-                max-height: 40vh;
+                max-width: 400px;
+                margin-bottom: 20px;
+                height: auto;
+                position: static;
             }
+
             .top-row {
                 width: 100%;
                 display: flex;
                 justify-content: center;
             }
+
+            .stats-container {
+                width: 100%;
+                max-width: 400px;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+
             .card.stat-card {
                 width: 100%;
+                max-width: 350px;
             }
         }
     </style>
@@ -228,19 +255,28 @@
 <body>
     <div class="navbar">
         <a href="pagina_precedente.html" class="back-arrow">←</a>
-        <a href="home.html"><img src="Logo_Senza_Scritta.png" alt="logo"></a>
+        <a href="home.html"><img src="logo2.png" alt="logo"></a>
         Profilo
     </div>
     <div class="top-dashboard">
         <div class="profile-card">
-            <h2 class="profile-role">Studente</h2>
+            <div class="profile-role-container">
+                <h2 class="profile-role">Studente</h2>
+                <button class="role-button" title="Modifica ruolo">
+                    <img src="modifica12.png" alt="Modifica">
+                </button>
+            </div>
             <div class="profile-icon">
-                <img src="profilo2.png" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%;">
+                <img src="icona.png" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%;">
             </div>
             <div class="contact-item">
+                <br>
                 <div><span class="contact-label">Nome: </span><br><span>nome prova</span></div>
+                <br>
                 <div><span class="contact-label">Cognome: </span><br><span>cognome prova</span></div>
+                <br>
                 <div><span class="contact-label">Email: </span><br><span>studente.esempio@dominio.it</span></div>
+                <br>
                 <div><span class="contact-label">Password: </span><br><span>Prova</span></div>
             </div>
         </div>
@@ -251,6 +287,9 @@
                     <h3>Candidature Inviate</h3>
                     <div class="number"><a>4</a></div>
                     <div class="stat-dropdown">
+                        <div class="stat-dropdown-item">Tirocini</div>
+                        <div class="stat-dropdown-item">Lavoro Part-Time</div>
+                        <div class="stat-dropdown-item">Borse di Studio</div>
                         <div class="stat-dropdown-item">Tirocini</div>
                         <div class="stat-dropdown-item">Lavoro Part-Time</div>
                         <div class="stat-dropdown-item">Borse di Studio</div>

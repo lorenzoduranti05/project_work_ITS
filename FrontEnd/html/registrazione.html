@@ -116,6 +116,42 @@
             font-weight: normal;
             font-size: 14px;
         }
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .box {
+                padding: 25px;
+                border-radius: 10px;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            input, button {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            label {
+                font-size: 13px;
+            }
+
+            .link {
+                font-size: 13px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -145,6 +181,7 @@
     <div class="checkbox-group">
         <input type="checkbox" name="termini" id="termini" required>
         <label for="termini">Accetto i termini e le condizioni</label>
+        <p></p>
     </div>
     
     <button type="submit">Registrati</button>

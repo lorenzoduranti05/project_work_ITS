@@ -254,13 +254,13 @@
 
 <body>
 	<div class="navbar">
-	    <a th:href="@{/home}" class="back-arrow">←</a>
+		<a th:href="@{/home}" class="back-arrow">←</a>
 
-	    <a th:href="@{/home}" class="logo-link">
-	        <img class="logo" th:src="@{/immagini/Logo_Con_Scritta.png}" alt="Logo InfoTirocini">
-	    </a>
+		<a th:href="@{/home}" class="logo-link">
+			<img class="logo" th:src="@{/immagini/Logo_Con_Scritta.png}" alt="Logo InfoTirocini">
+		</a>
 
-	    Profilo
+		Profilo
 	</div>
 	<div class="top-dashboard">
 		<div class="profile-card">
@@ -302,36 +302,46 @@
 			<div class="stats-container">
 				<div class="card stat-card">
 					<h3>Candidature Inviate</h3>
-					<div class="number"><a>4</a></div>
+					<div class="number">
+						<a th:text="${inviateCount}">4</a>
+					</div>
 					<div class="stat-dropdown">
-						<div class="stat-dropdown-item">Tirocini</div>
-						<div class="stat-dropdown-item">Lavoro Part-Time</div>
-						<div class="stat-dropdown-item">Borse di Studio</div>
-						<div class="stat-dropdown-item">Tirocini</div>
-						<div class="stat-dropdown-item">Lavoro Part-Time</div>
-						<div class="stat-dropdown-item">Borse di Studio</div>
+						<div th:each="c : ${candidatureInviate}"
+							th:if="${#strings.equalsIgnoreCase(c.stato, 'Inviata')}" class="stat-dropdown-item">
+							<span th:text="${c.lavoro.nome}">Nome Lavoro</span> - <span
+								th:text="${c.lavoro.azienda.nome}">Nome Azienda</span>
+						</div>
 					</div>
 				</div>
 				<div class="card stat-card">
 					<h3>Candidature Accettate</h3>
-					<div class="number"><a>4</a></div>
+					<div class="number">
+						<a th:text="${accettateCount}">4</a>
+					</div>
 					<div class="stat-dropdown">
-						<div class="stat-dropdown-item">Tirocini</div>
-						<div class="stat-dropdown-item">Lavoro Part-Time</div>
-						<div class="stat-dropdown-item">Borse di Studio</div>
+						<div th:each="c : ${candidatureInviate}"
+							th:if="${#strings.equalsIgnoreCase(c.stato, 'Accettata')}" class="stat-dropdown-item">
+							<span th:text="${c.lavoro.nome}">Nome Lavoro</span> - <span
+								th:text="${c.lavoro.azienda.nome}">Nome Azienda</span>
+						</div>
 					</div>
 				</div>
 				<div class="card stat-card">
 					<h3>Candidature Rifiutate</h3>
-					<div class="number"><a>4</a></div>
+					<div class="number">
+						<a th:text="${rifiutateCount}">4</a>
+					</div>
 					<div class="stat-dropdown">
-						<div class="stat-dropdown-item">Tirocini</div>
-						<div class="stat-dropdown-item">Lavoro Part-Time</div>
-						<div class="stat-dropdown-item">Borse di Studio</div>
+						<div th:each="c : ${candidatureInviate}"
+							th:if="${#strings.equalsIgnoreCase(c.stato, 'Rifiutata')}" class="stat-dropdown-item">
+							<span th:text="${c.lavoro.nome}">Nome Lavoro</span> - <span
+								th:text="${c.lavoro.azienda.nome}">Nome Azienda</span>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	</div>
 	<script>
 		const statCards = document.querySelectorAll('.stat-card');

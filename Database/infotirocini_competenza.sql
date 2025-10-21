@@ -16,32 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `utente`
+-- Table structure for table `competenza`
 --
 
-DROP TABLE IF EXISTS `utente`;
+DROP TABLE IF EXISTS `competenza`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `utente` (
+CREATE TABLE `competenza` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nome` varchar(255) DEFAULT NULL,
-  `cognome` varchar(255) DEFAULT NULL,
-  `mail` varchar(255) NOT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `ruolo` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `mail` (`mail`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `tipo_competenza` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `utente`
+-- Dumping data for table `competenza`
 --
 
-LOCK TABLES `utente` WRITE;
-/*!40000 ALTER TABLE `utente` DISABLE KEYS */;
-INSERT INTO `utente` VALUES (1,'Admin','Superuser','admin@example.com','adminpass','ADMIN'),(9,'test','test test','test@test.test','$2a$10$S59UUzvYvEMuNei0NahYQ.rywBUJNn6yfFb6leqfI24m9mDb5Ucyi','USER'),(10,'Nicolò','Esposito','Nicesp0505@gmail.com','$2a$10$AN9.21ia1UAnZu9BKHD5SeMYAhY3xItxHGH/XC/XRpRW3zusE/HNi','USER');
-/*!40000 ALTER TABLE `utente` ENABLE KEYS */;
+LOCK TABLES `competenza` WRITE;
+/*!40000 ALTER TABLE `competenza` DISABLE KEYS */;
+/*!40000 ALTER TABLE `competenza` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +48,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-21 10:50:19
+-- Dump completed on 2025-10-21 12:47:42

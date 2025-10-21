@@ -302,6 +302,7 @@
 		}
 
 		.card-category {
+<<<<<<< Updated upstream
 			display: inline-block;
 			background: #E9B8A6;
 			color: #0F4C5C;
@@ -319,6 +320,25 @@
 			margin-bottom: 10px;
 			min-height: 28px;
 		}
+=======
+		    display: inline-block;
+		    background: #E9B8A6;
+		    color: #0F4C5C;
+		    border-radius: 20px;
+		    font-weight: 600;
+			width: fit-content;
+            padding: 4px 12px;
+            font-size: 0.75em;
+		}
+
+        .card-category-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+            min-height: 28px;
+        }
+>>>>>>> Stashed changes
 
 		.card-title {
 			font-size: 1.5em;
@@ -412,6 +432,7 @@
 		}
 
 		.modal-category {
+<<<<<<< Updated upstream
 			display: inline-block;
 			background: #E9B8A6;
 			color: #0F4C5C;
@@ -428,6 +449,24 @@
 			gap: 8px;
 			margin-bottom: 15px;
 		}
+=======
+		    display: inline-block;
+		    background: #E9B8A6;
+		    color: #0F4C5C;
+		    border-radius: 25px;
+		    font-weight: 600;
+			width: fit-content;
+            padding: 4px 12px;
+            font-size: 0.75em;
+		}
+
+        .modal-category-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+>>>>>>> Stashed changes
 
 		.modal-title {
 			font-size: 2.5em;
@@ -578,7 +617,12 @@
 					</div>
 					<ul class="dropdown-menu">
 						<li>
+<<<<<<< Updated upstream
 							<a th:href="@{/profilo}"> <span class="icon">👤</span>
+=======
+							<a href="#">
+								<span class="icon">👤</span>
+>>>>>>> Stashed changes
 								<span>Il Mio Profilo</span>
 							</a>
 						</li>
@@ -615,6 +659,10 @@
 					th:data-titolo="${lavoro.nome}" th:data-azienda="${lavoro.azienda?.nome}"
 					th:data-descrizione="${lavoro.descrizione}" th:data-durata="${lavoro.durata}"
 					th:data-orari="${lavoro.orari}" th:data-image-url="@{'/immagini/' + ${lavoro.imageUrl}}"
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 					th:data-competenze="${lavoro.competenze != null ? #strings.arrayJoin(lavoro.competenze.![nome], '||') : ''}">
 
 					<img th:src="@{'/immagini/' + ${lavoro.imageUrl}}" alt="Immagine tirocinio" class="card-image" />

@@ -29,6 +29,7 @@ CREATE TABLE `utente` (
   `mail` varchar(255) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
   `ruolo` varchar(50) DEFAULT NULL,
+  `profile_image_url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `mail` (`mail`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -40,7 +41,7 @@ CREATE TABLE `utente` (
 
 LOCK TABLES `utente` WRITE;
 /*!40000 ALTER TABLE `utente` DISABLE KEYS */;
-INSERT INTO `utente` VALUES (1,'Admin','Superuser','admin@example.com','adminpass','ADMIN'),(9,'test','test test','test@test.test','$2a$10$S59UUzvYvEMuNei0NahYQ.rywBUJNn6yfFb6leqfI24m9mDb5Ucyi','USER'),(10,'Nicolò','Esposito','Nicesp0505@gmail.com','$2a$10$AN9.21ia1UAnZu9BKHD5SeMYAhY3xItxHGH/XC/XRpRW3zusE/HNi','USER'),(11,'test','test','test@gmail.com','$2a$10$tO89HZJ5CuDg00ZWg7KjLuK.dHKO2tg7mPgeVSbHolGFC0yIVUPpe','USER');
+INSERT INTO `utente` VALUES (1,'Admin','Superuser','admin@example.com','adminpass','ADMIN',NULL),(9,'test','test test','test@test.test','$2a$10$S59UUzvYvEMuNei0NahYQ.rywBUJNn6yfFb6leqfI24m9mDb5Ucyi','USER','/immagini/profili/user_9_d8d5290b-be93-4432-84f5-7bb72fac174c.png'),(10,'Nicolò','Esposito','Nicesp0505@gmail.com','$2a$10$AN9.21ia1UAnZu9BKHD5SeMYAhY3xItxHGH/XC/XRpRW3zusE/HNi','USER',NULL),(11,'test','test','test@gmail.com','$2a$10$tO89HZJ5CuDg00ZWg7KjLuK.dHKO2tg7mPgeVSbHolGFC0yIVUPpe','USER','/immagini/profili/user_11_11d40d82-f23b-4afc-96e5-e13573929186.jpeg');
 /*!40000 ALTER TABLE `utente` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-21 15:18:43
+-- Dump completed on 2025-10-22  9:34:45

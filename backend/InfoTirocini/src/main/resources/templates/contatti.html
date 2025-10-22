@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Info Tirocini - Contattaci</title>
+	<link rel="icon" th:href="@{/immagini/Logo_Senza_Scritta.png}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+			min-height: 100vh;
+			padding: 0;
+			margin: 0;
+			display: flex;
+            flex-direction: column;
+		}
+
+		nav {
+			background: #Fafafa;
+			backdrop-filter: blur(10px);
+			padding: 20px 0;
+			box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+			position: sticky;
+			top: 0;
+			z-index: 100;
+		}
+
+		.nav-title {
+			color: #0F4C5C;
+		}
+
+		.nav-container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 0 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.logo {
+			font-size: 1.8em;
+			font-weight: bold;
+			color: #E9B8A6;
+			display: flex;
+			align-items: center;
+			gap: 15px;
+			text-decoration: none;
+		}
+
+		.logo img {
+			width: 50px;
+			height: 50px;
+			object-fit: contain;
+		}
+
+		.user-menu {
+			position: relative;
+		}
+
+		.user-avatar {
+			width: 45px;
+			height: 45px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			border: 2px solid transparent;
+			overflow: hidden;
+		}
+
+		.user-avatar:hover {
+			background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+			border-radius: 20%;
+			transform: scale(1.05);
+		}
+
+		.user-avatar img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		.user-avatar-icon {
+			font-size: 24px;
+			color: #0F4C5C;
+		}
+
+		.user-dropdown {
+			position: absolute;
+			top: 60px;
+			right: 0;
+			background: #Fafafa;
+			border-radius: 15px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+			padding: 20px;
+			min-width: 280px;
+			display: none;
+			animation: dropdownSlide 0.3s ease;
+		}
+
+		.user-dropdown.active {
+			display: block;
+		}
+
+		@keyframes dropdownSlide {
+			from {
+				opacity: 0;
+				transform: translateY(-10px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		.dropdown-header {
+			text-align: center;
+			padding-bottom: 15px;
+			border-bottom: 2px solid #Fafafa;
+			margin-bottom: 15px;
+		}
+
+		.dropdown-avatar {
+			width: 80px;
+			height: 80px;
+			border-radius: 50%;
+			background: #E9B8A6;
+			margin: 0 auto 10px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.dropdown-avatar img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		.dropdown-avatar-icon {
+			font-size: 40px;
+			color: #0F4C5C;
+		}
+
+		.user-name {
+			font-size: 1.2em;
+			font-weight: bold;
+			color: #0F4C5C;
+			margin-bottom: 5px;
+		}
+
+		.user-email {
+			font-size: 0.9em;
+			color: #666;
+		}
+
+		.dropdown-menu {
+			list-style: none;
+            padding: 0;
+		}
+
+		.dropdown-menu li {
+			margin-bottom: 8px;
+		}
+
+		.dropdown-menu a {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 12px 15px;
+			color: #333;
+			text-decoration: none;
+			border-radius: 10px;
+			transition: all 0.3s ease;
+			font-size: 1em;
+		}
+
+		.dropdown-menu a:hover {
+			background: rgba(233, 184, 166, 0.2);
+			color: #0F4C5C;
+		}
+
+		.dropdown-menu .icon {
+			font-size: 20px;
+			width: 24px;
+			text-align: center;
+		}
+
+		.dropdown-divider {
+			height: 1px;
+			background: #f0f0f0;
+			margin: 10px 0;
+		}
+
+		.logout-btn-as-link {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 12px 15px;
+			font-size: 1em;
+			border-radius: 10px;
+			transition: all 0.3s ease;
+			background: none;
+			border: none;
+			cursor: pointer;
+			width: 100%;
+			text-align: left;
+			font-family: inherit;
+			color: #e74c3c !important;
+		}
+
+		.logout-btn-as-link:hover {
+			background: rgba(231, 76, 60, 0.1) !important;
+		}
+
+		.content-wrapper {
+			padding: 40px 20px;
+            flex-grow: 1;
+		}
+
+		.container {
+			max-width: 700px;
+			margin: 0 auto;
+		}
+
+		h1 {
+			text-align: center;
+			color: #fafafa;
+			margin-bottom: 40px;
+			font-size: 2.5em;
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+		}
+
+       
+        .contact-container {
+            background: #Fafafa;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+        }
+
+        .contact-info h2 {
+            color: #0F4C5C;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #E9B8A6;
+            padding-bottom: 10px;
+            text-align: center; 
+        }
+
+        .contact-info p {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 30px; 
+            text-align: center; 
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px; 
+            color: #333;
+            font-size: 1.1em;        }
+
+        .info-item i {
+            font-size: 1.4em; 
+            color: #0F4C5C;
+            width: 30px;
+            text-align: center;
+        }
+		#email-address:hover {
+		            text-decoration: underline;
+		        }
+
+        
+
+	</style>
+</head>
+
+<body>
+    <nav>
+		<div class="nav-container">
+			<a th:href="@{/home}" class="logo">
+				<img th:src="@{/immagini/Logo_Senza_Scritta.png}" alt="Logo">
+			</a>
+			<div class="nav-title">
+				<h2>
+					InfoTirocini.com
+				</h2>
+			</div>
+			<div class="user-menu">
+				<div class="user-avatar" onclick="toggleUserDropdown()">
+					<span th:if="${utente == null or utente.profileImageUrl == null or #strings.equals(utente.profileImageUrl, '/immagini/icona.png')}" class="user-avatar-icon" id="navAvatarIcon">👤</span>
+					<img th:unless="${utente == null or utente.profileImageUrl == null or #strings.equals(utente.profileImageUrl, '/immagini/icona.png')}" th:src="${utente.profileImageUrl}" id="navAvatarImg">
+				</div>
+				<div class="user-dropdown" id="userDropdown" th:if="${utente != null}">
+					<div class="dropdown-header">
+						<div class="dropdown-avatar">
+                            <span th:if="${utente.profileImageUrl == null or #strings.equals(utente.profileImageUrl, '/immagini/icona.png')}" class="dropdown-avatar-icon" id="dropdownAvatarIcon">👤</span>
+							<img th:unless="${utente.profileImageUrl == null or #strings.equals(utente.profileImageUrl, '/immagini/icona.png')}" th:src="${utente.profileImageUrl}" id="dropdownAvatarImg">
+						</div>
+						<div class="user-name" th:text="${utente.nome} + ' ' + ${utente.cognome}">Nome Cognome</div>
+						<div class="user-email" th:text="${utente.mail}">email@example.com</div>
+					</div>
+					<ul class="dropdown-menu">
+						<li>
+							<a th:href="@{/profilo}">
+								<span class="icon">👤</span>
+								<span>Il Mio Profilo</span>
+							</a>
+						</li>
+						<li>
+						    <a th:href="@{/profilo(edit='true')}"> <span class="icon">✏️</span>
+						        <span>Modifica Profilo</span>
+						    </a>
+						</li>
+                        <li>
+							<a th:href="@{/contatti}">
+								<span class="icon">⚠️</span>
+								<span>Contattaci</span>
+							</a>
+						</li>
+					</ul>
+					<div class="dropdown-divider"></div>
+					<ul class="dropdown-menu">
+						<li>
+							<form th:action="@{/logout}" method="POST" style="margin: 0;">
+								<button type="submit" class="logout-btn-as-link">
+									<span class="icon">🚪</span>
+									<span>Esci</span>
+								</button>
+							</form>
+						</li>
+					</ul>
+				</div>
+                 <div th:unless="${utente != null}">
+                     <a th:href="@{/accesso}" style="color: #0F4C5C; text-decoration: none; font-weight: bold;">Accedi</a>
+                 </div>
+			</div>
+		</div>
+	</nav>
+
+    <div class="content-wrapper">
+		<div class="container">
+			<h1>Contattaci</h1>
+
+            <div class="contact-container">
+                <div class="contact-info" style="flex: 1 1 100%;"> <h2>Informazioni</h2>
+                    <p>Siamo felici di aiutarti! Che tu sia uno studente alla ricerca del tirocinio perfetto, un'azienda interessata a pubblicare nuove opportunità, o semplicemente abbia bisogno di chiarimenti sul funzionamento della piattaforma Info Tirocini, non esitare a contattarci. Trovi qui sotto i nostri recapiti per ricevere supporto o inviarci il tuo feedback</p>
+					<div class="info-item">
+					    <i class="fas fa-envelope"></i>
+					    <span id="email-address" onclick="copyEmailToClipboard(this)" style="cursor: pointer;" title="Clicca per copiare">
+					        info@infotirocini.com
+					    </span>
+					    <span id="copy-feedback" style="font-size: 0.8em; color: green; margin-left: 10px; display: none;">Copiato!</span>
+					</div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+39 012 3456789</span>
+                    </div>
+                     <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Via del Corso, 1 - 00100 Roma, Italia</span>
+                    </div>
+                </div>
+            </div> </div> </div> <script>
+		function toggleUserDropdown() {
+			const dropdown = document.getElementById('userDropdown');
+            if (dropdown) {
+			    dropdown.classList.toggle('active');
+            }
+		}
+
+		document.addEventListener('click', (e) => {
+			const userMenu = document.querySelector('.user-menu');
+			const dropdown = document.getElementById('userDropdown');
+			if (userMenu && dropdown && !userMenu.contains(e.target) && dropdown.classList.contains('active')) {
+				dropdown.classList.remove('active');
+			}
+		});
+
+         document.addEventListener('DOMContentLoaded', () => {
+             const navAvatarImg = document.getElementById('navAvatarImg');
+             const navAvatarIcon = document.getElementById('navAvatarIcon');
+             if (navAvatarImg && navAvatarImg.getAttribute('src') && navAvatarImg.getAttribute('src') !== '/immagini/icona.png') {
+                 if(navAvatarIcon) navAvatarIcon.style.display = 'none';
+                 navAvatarImg.style.display = 'block';
+             }
+
+             const dropdownAvatarImg = document.getElementById('dropdownAvatarImg');
+             const dropdownAvatarIcon = document.getElementById('dropdownAvatarIcon');
+              if (dropdownAvatarImg && dropdownAvatarImg.getAttribute('src') && dropdownAvatarImg.getAttribute('src') !== '/immagini/icona.png') {
+                 if(dropdownAvatarIcon) dropdownAvatarIcon.style.display = 'none';
+                 dropdownAvatarImg.style.display = 'block';
+             }
+         });
+		 
+		 function copyEmailToClipboard(element) {
+		         const email = element.textContent.trim();
+		         const feedbackSpan = document.getElementById('copy-feedback');
+
+		         navigator.clipboard.writeText(email).then(() => {
+		           
+		             if(feedbackSpan) {
+		                 feedbackSpan.style.display = 'inline'; 
+		                 setTimeout(() => {
+		                     feedbackSpan.style.display = 'none'; 
+		                 }, 2000); 
+		             }
+		             console.log('Email copiata:', email);
+		         }).catch(err => {
+		             console.error('Errore nel copiare l\'email: ', err);
+		             alert('Impossibile copiare l\'email. Potrebbe essere un problema di permessi del browser.');
+		         });
+		     }
+		 
+	</script>
+</body>
+
+</html>

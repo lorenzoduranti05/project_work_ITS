@@ -6,10 +6,13 @@ import com.example.tirocini.model.Utente;
 import com.example.tirocini.repository.CandidaturaRepository;
 import com.example.tirocini.repository.UtenteRepository;
 import com.example.tirocini.service.UtenteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,22 +41,25 @@ public class ProfiloController {
             return "redirect:/accesso?error=unauthorized";
         }
 
-        // Ricarica l'utente dal DB per avere l'URL immagine aggiornato
-        Utente utente = utenteRepository.findById(principal.getId())
-                .orElse(principal); // Usa principal come fallback
+        // --- Inizio Modifica ---
+        // Controlla il ruolo dell'utente
+        if ("ADMIN".equals(principal.getRuolo())) {
+            // Se è ADMIN, reindirizza al profilo admin
+            return "redirect:/admin/profilo";
+        }
+        // --- Fine Modifica ---
 
-        // Se non c'è un DTO flash (da un errore precedente), crea uno nuovo
+        // Se non è ADMIN, prosegui con la logica per il profilo utente normale
+        Utente utente = utenteRepository.findById(principal.getId()).orElse(principal);
+        model.addAttribute("utente", utente);
+
         if (!model.containsAttribute("profiloDTO")) {
             ProfiloDTO dto = new ProfiloDTO();
             dto.setNome(utente.getNome());
             dto.setCognome(utente.getCognome());
             dto.setMail(utente.getMail());
-            // Non pre-popolare campi password
             model.addAttribute("profiloDTO", dto);
         }
-
-        model.addAttribute("utente", utente); // Passa l'utente completo (con URL immagine)
-
         try {
             List<Candidatura> tutteCandidature = candidaturaRepository.findByUtenteId(utente.getId());
             List<Candidatura> candidatureInviate = tutteCandidature.stream()
@@ -74,15 +80,20 @@ public class ProfiloController {
             model.addAttribute("rifiutateCount", candidatureRifiutate.size());
         } catch (Exception e) {
              model.addAttribute("errorMessage", "Errore nel caricamento delle candidature.");
+             model.addAttribute("inviateCount", 0);
+             model.addAttribute("accettateCount", 0);
+             model.addAttribute("rifiutateCount", 0);
         }
 
-        return "Profilo";
+        return "Profilo"; // Restituisce il template Profilo.html per gli utenti normali
     }
+
 
     @PostMapping("/profilo/aggiorna")
     public String aggiornaProfilo(
-            @ModelAttribute("profiloDTO") ProfiloDTO dto,
-            @RequestParam(value = "profileImageFile", required = false) MultipartFile profileImageFile, // Aggiunto parametro per il file
+            @Valid @ModelAttribute("profiloDTO") ProfiloDTO dto,
+            BindingResult bindingResult,
+            @RequestParam(value = "profileImageFile", required = false) MultipartFile profileImageFile,
             @AuthenticationPrincipal Utente utente,
             RedirectAttributes redirectAttributes) {
 
@@ -90,16 +101,37 @@ public class ProfiloController {
             return "redirect:/accesso";
         }
 
+        boolean vuoleCambiarePassword = dto.getPassword() != null && !dto.getPassword().isBlank();
+
+        if (bindingResult.hasErrors()) {
+             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.profiloDTO", bindingResult);
+             redirectAttributes.addFlashAttribute("profiloDTO", dto);
+             return "redirect:/profilo";
+        }
+
+        if (vuoleCambiarePassword) {
+            if (dto.getPassword().length() < 6) {
+                 bindingResult.addError(new FieldError("profiloDTO", "password", "La nuova password deve avere almeno 6 caratteri."));
+             }
+            if (dto.getConfermaPassword() == null || dto.getConfermaPassword().isBlank() || !dto.getPassword().equals(dto.getConfermaPassword())) {
+                bindingResult.addError(new FieldError("profiloDTO", "confermaPassword", "Le nuove password non coincidono o la conferma è mancante."));
+            }
+
+            if (bindingResult.hasErrors()) {
+                 redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.profiloDTO", bindingResult);
+                 redirectAttributes.addFlashAttribute("profiloDTO", dto);
+                 return "redirect:/profilo";
+             }
+        }
+
         try {
-            // Passa il file al service
             utenteService.aggiornaProfilo(utente.getId(), dto, profileImageFile);
             redirectAttributes.addFlashAttribute("successMessage", "Profilo aggiornato con successo!");
         } catch (RuntimeException ex) {
-            // Se c'è un errore, rimanda indietro il DTO compilato e il messaggio d'errore
             redirectAttributes.addFlashAttribute("profiloDTO", dto);
             redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
         }
 
-        return "redirect:/profilo"; // Ricarica la pagina del profilo
+        return "redirect:/profilo";
     }
 }

@@ -5,7 +5,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-	<title>Profilo Aggiornato</title>
+	<title>Info Tirocini - Profilo</title>
+	<link rel="icon" th:href="@{/immagini/Logo_Senza_Scritta.png}">
 	<style>
 		:root {
 			--color-petrolio-scuro: #0F3B5C;
@@ -107,16 +108,36 @@
 		.card.stat-card {
 			cursor: pointer;
 			overflow: hidden;
-			max-height: 45%;
+			padding-top: 15px;
+			padding-bottom: 15px;
+		}
+
+		.card-header {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 8px;
+			position: relative;
+		}
+
+		.expand-icon {
+			font-size: 0.8em;
+			color: var(--color-petrolio-scuro);
+			transition: transform 0.3s ease;
+		}
+
+		.card.stat-card.active .expand-icon {
+			transform: rotate(180deg);
 		}
 
 		.card.stat-card h3 {
-			margin: 10px;
+			margin: 0;
 		}
 
 		.number {
 			color: var(--color-petrolio-scuro);
 			font-size: xx-large;
+			margin-top: 5px;
 		}
 
 		.number a {
@@ -195,8 +216,8 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-            position: relative;
-            overflow: hidden;
+			position: relative;
+			overflow: hidden;
 		}
 
 		.contact-item {
@@ -222,53 +243,61 @@
 		}
 
 		.modal-overlay {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.6);
-            justify-content: center;
-            align-items: center;
-        }
+			display: none;
+			position: fixed;
+			z-index: 1000;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.6);
+			justify-content: center;
+			align-items: center;
+		}
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            position: relative;
-			box-shadow: 0 5px 25px rgba(0,0,0,0.3);
-        }
+		.modal-content {
+			background-color: #fefefe;
+			margin: auto;
+			padding: 30px;
+			border-radius: 15px;
+			width: 90%;
+			max-width: 500px;
+			position: relative;
+			box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+		}
 
-        .modal-close-btn {
-            color: #aaa;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+		.modal-close-btn {
+			color: #aaa;
+			position: absolute;
+			top: 10px;
+			right: 20px;
+			font-size: 28px;
+			font-weight: bold;
+			cursor: pointer;
+		}
 
-        .modal-close-btn:hover,
-        .modal-close-btn:focus {
-            color: black;
-        }
+		.modal-close-btn:hover,
+		.modal-close-btn:focus {
+			color: black;
+		}
 
 		.modal-content h2 {
 			color: var(--color-petrolio-scuro);
 			text-align: center;
 			margin-top: 0;
+			margin-bottom: 20px;
 		}
 
 		.form-group {
 			margin-bottom: 15px;
+			position: relative;
+			padding-bottom: 1.5em;
+		}
+
+		.form-group:last-of-type {
+			padding-bottom: 0;
+			margin-bottom: 10px;
 		}
 
 		.form-group label {
@@ -282,12 +311,14 @@
 		.form-group input[type="email"],
 		.form-group input[type="password"] {
 			width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            box-sizing: border-box;
+			padding: 12px;
+			border: 2px solid #ddd;
+			border-radius: 8px;
+			font-size: 14px;
+			box-sizing: border-box;
+			padding-right: 40px;
 		}
+
 		.form-group input[type="file"] {
 			display: block;
 			width: 100%;
@@ -299,22 +330,21 @@
 			margin-top: 5px;
 		}
 
-
 		.form-group input:focus {
-            border-color: var(--color-petrolio-scuro);
-            outline: none;
-        }
+			border-color: var(--color-petrolio-scuro);
+			outline: none;
+		}
 
 		.modal-button {
 			width: 100%;
-            padding: 12px;
-            background: var(--color-petrolio-scuro);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
+			padding: 12px;
+			background: var(--color-petrolio-scuro);
+			color: white;
+			border: none;
+			border-radius: 8px;
+			font-size: 16px;
+			cursor: pointer;
+			margin-top: 10px;
 		}
 
 		.modal-button:hover {
@@ -328,39 +358,29 @@
 			font-size: 1.1em;
 			text-align: center;
 		}
+
 		.alert-success {
 			color: #155724;
-    		background-color: #d4edda;
-    		border-color: #c3e6cb;
+			background-color: #d4edda;
+			border-color: #c3e6cb;
 		}
+
 		.alert-danger {
 			color: #721c24;
-    		background-color: #f8d7da;
-    		border-color: #f5c6cb;
+			background-color: #f8d7da;
+			border-color: #f5c6cb;
 		}
 
-        .upload-overlay-text {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(15, 59, 92, 0.8);
-            color: white;
-            text-align: center;
-            padding: 5px 0;
-            font-size: 11px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
+		.error-message {
+			color: red;
+			font-size: 0.9em;
+			display: block;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+		}
 
-        .profile-icon:hover .upload-overlay-text {
-            opacity: 1;
-        }
-
-        #profileImageInput {
-             /* Non più nascosto, gestito nel modal */
-        }
 		#imagePreview {
 			max-width: 100px;
 			max-height: 100px;
@@ -368,6 +388,22 @@
 			display: none;
 			border-radius: 50%;
 			object-fit: cover;
+		}
+
+		.password-toggle-icon {
+			position: absolute;
+			top: calc(50% + 8px);
+			right: 12px;
+			transform: translateY(-50%);
+			cursor: pointer;
+			user-select: none;
+			font-size: 1.2rem;
+			color: #aaa;
+			z-index: 2;
+		}
+
+		.password-toggle-icon:hover {
+			color: #0F4C5C;
 		}
 
 		@media (max-width: 800px) {
@@ -403,6 +439,7 @@
 				width: 100%;
 				max-width: 350px;
 			}
+			
 		}
 	</style>
 </head>
@@ -410,96 +447,83 @@
 <body>
 	<div class="navbar">
 		<a th:href="@{/home}" class="back-arrow"><i class="fas fa-arrow-left"></i></a>
-
 		<a th:href="@{/home}" class="logo-link">
 			<img class="logo" th:src="@{/immagini/Logo_Con_Scritta.png}" alt="Logo InfoTirocini">
 		</a>
-
 		Profilo
 	</div>
 
 	<div style="max-width: 800px; margin: 0 auto 20px auto; padding: 0 20px;">
 		<div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
-		<div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 	</div>
 
 	<div class="top-dashboard">
 		<div class="profile-card">
 			<div class="profile-role-container">
-				<h2 class="profile-role" th:text="${utente.ruolo == 'USER' ? 'Il Tuo Profilo' : utente.ruolo}">Il Tuo Profilo</h2>
+				<h2 class="profile-role" th:text="${utente.ruolo == 'USER' ? 'Il Tuo Profilo' : utente.ruolo}">Il Tuo
+					Profilo</h2>
 				<button class="edit-profile-button" title="Modifica Profilo" id="openModalBtn">
 					<img th:src="@{/immagini/modifica12.png}" alt="Modifica" style="width: 24px; height: 24px;">
 				</button>
 			</div>
-            <div class="profile-icon" id="profileIconContainer">
-                 <img th:src="${utente.profileImageUrl != null ? utente.profileImageUrl : '/immagini/icona.png'}"
-                      alt="Avatar" id="profileAvatar"
-                      style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
-                 </div>
+			<div class="profile-icon" id="profileIconContainer">
+				<img th:src="${utente.profileImageUrl != null ? utente.profileImageUrl : '/immagini/icona.png'}"
+					alt="Avatar" id="profileAvatar"
+					style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+			</div>
 			<div class="contact-item">
 				<br>
-				<div>
-					<span class="contact-label">Nome: </span><br>
-					<span th:text="${utente.nome}">nome prova</span>
-				</div>
+				<div><span class="contact-label">Nome: </span><br><span th:text="${utente.nome}">nome prova</span></div>
 				<br>
-				<div>
-					<span class="contact-label">Cognome: </span><br>
-					<span th:text="${utente.cognome}">cognome prova</span>
-				</div>
+				<div><span class="contact-label">Cognome: </span><br><span th:text="${utente.cognome}">cognome
+						prova</span></div>
 				<br>
-				<div>
-					<span class="contact-label">Email: </span><br>
-					<span th:text="${utente.mail}">studente.esempio@dominio.it</span>
-				</div>
+				<div><span class="contact-label">Email: </span><br><span
+						th:text="${utente.mail}">studente.esempio@dominio.it</span></div>
 				<br>
-				<div>
-					<span class="contact-label">Password: </span><br>
-					<span>********</span>
-				</div>
+				<div><span class="contact-label">Password: </span><br><span>********</span></div>
 			</div>
 		</div>
 
 		<div class="top-row">
 			<div class="stats-container">
-
 				<div class="card stat-card">
-					<h3>Candidature Inviate</h3>
-					<div class="number">
-						<a th:text="${inviateCount}">0</a> </div>
+					<div class="card-header">
+						<h3>Candidature Inviate</h3>
+						<span class="expand-icon"><i class="fas fa-chevron-down"></i></span>
+					</div>
+					<div class="number"><a th:text="${inviateCount}">0</a></div>
 					<div class="stat-dropdown">
-						<div th:each="c : ${candidatureInviate}" class="stat-dropdown-item"> <span th:text="${c.lavoro?.nome}">Nome Lavoro</span> </div>
+						<div th:each="c : ${candidatureInviate}" class="stat-dropdown-item"><span
+								th:text="${c.lavoro?.nome}">Nome Lavoro</span></div>
 						<div th:if="${inviateCount == 0}" class="stat-dropdown-item"
-							style="text-align: center; color: #ccc;">
-							Nessuna candidatura inviata. </div>
+							style="text-align: center; color: #ccc;">Nessuna candidatura inviata.</div>
 					</div>
 				</div>
-
 				<div class="card stat-card">
-					<h3>Candidature Accettate</h3>
-					<div class="number">
-						<a th:text="${accettateCount}">0</a> </div>
+					<div class="card-header">
+						<h3>Candidature Accettate</h3>
+						<span class="expand-icon"><i class="fas fa-chevron-down"></i></span>
+					</div>
+					<div class="number"><a th:text="${accettateCount}">0</a></div>
 					<div class="stat-dropdown">
-						<div th:each="c : ${candidatureAccettate}" class="stat-dropdown-item">
-							<span th:text="${c.lavoro?.nome}">Nome Lavoro</span>
-						</div>
+						<div th:each="c : ${candidatureAccettate}" class="stat-dropdown-item"><span
+								th:text="${c.lavoro?.nome}">Nome Lavoro</span></div>
 						<div th:if="${accettateCount == 0}" class="stat-dropdown-item"
-							style="text-align: center; color: #ccc;">
-							Nessuna candidatura accettata. </div>
+							style="text-align: center; color: #ccc;">Nessuna candidatura accettata.</div>
 					</div>
 				</div>
-
 				<div class="card stat-card">
-					<h3>Candidature Rifiutate</h3>
-					<div class="number">
-						<a th:text="${rifiutateCount}">0</a> </div>
+					<div class="card-header">
+						<h3>Candidature Rifiutate</h3>
+						<span class="expand-icon"><i class="fas fa-chevron-down"></i></span>
+					</div>
+					<div class="number"><a th:text="${rifiutateCount}">0</a></div>
 					<div class="stat-dropdown">
-						<div th:each="c : ${candidatureRifiutate}" class="stat-dropdown-item">
-							<span th:text="${c.lavoro?.nome}">Nome Lavoro</span>
-						</div>
+						<div th:each="c : ${candidatureRifiutate}" class="stat-dropdown-item"><span
+								th:text="${c.lavoro?.nome}">Nome Lavoro</span></div>
 						<div th:if="${rifiutateCount == 0}" class="stat-dropdown-item"
-							style="text-align: center; color: #ccc;">
-							Nessuna candidatura rifiutata. </div>
+							style="text-align: center; color: #ccc;">Nessuna candidatura rifiutata.</div>
 					</div>
 				</div>
 			</div>
@@ -511,43 +535,69 @@
 			<span class="modal-close-btn" id="closeModalBtn">&times;</span>
 			<h2>Modifica Profilo</h2>
 
-			<form th:action="@{/profilo/aggiorna}" th:object="${profiloDTO}" method="POST" id="editProfileForm" enctype="multipart/form-data">
+			<div th:if="${errorMessage != null}" class="alert alert-danger" id="general-error-message"
+				th:text="${errorMessage}"></div>
+
+			<form th:action="@{/profilo/aggiorna}" th:object="${profiloDTO}" method="POST" id="editProfileForm"
+				enctype="multipart/form-data">
 				<div class="form-group">
 					<label for="nome">Nome</label>
 					<input id="nome" type="text" th:field="*{nome}" required>
+					<span th:if="${#fields.hasErrors('nome')}" class="error-message" th:errors="*{nome}"></span>
 				</div>
 				<div class="form-group">
 					<label for="cognome">Cognome</label>
 					<input id="cognome" type="text" th:field="*{cognome}" required>
+					<span th:if="${#fields.hasErrors('cognome')}" class="error-message" th:errors="*{cognome}"></span>
 				</div>
 				<div class="form-group">
 					<label for="mail">Email</label>
 					<input id="mail" type="email" th:field="*{mail}" required>
+					<span th:if="${#fields.hasErrors('mail')}" class="error-message" th:errors="*{mail}"></span>
+					<span th:if="${errorMessage != null and #strings.contains(errorMessage, 'Email già in uso')}"
+						class="error-message">Email già in uso da un altro account.</span>
 				</div>
 
-                 <div class="form-group">
-                    <label for="profileImageInput">Immagine Profilo (opzionale)</label>
-                    <input type="file" id="profileImageInput" name="profileImageFile" accept="image/*">
-                    <img id="imagePreview" src="#" alt="Anteprima immagine"/>
-                 </div>
+				<div class="form-group">
+					<label for="profileImageInput">Immagine Profilo (opzionale)</label>
+					<input type="file" id="profileImageInput" name="profileImageFile" accept="image/*">
+					<img id="imagePreview" src="#" alt="Anteprima immagine" />
+					<input type="hidden" id="imageDataUrl" th:field="*{imageDataUrl}">
+				</div>
 
 				<hr style="margin: 20px 0; border: 1px solid #eee;">
 
 				<div class="form-group">
 					<label for="password">Nuova Password</label>
-					<input id="password" type="password" th:field="*{password}" placeholder="Lascia vuoto per non modificare">
+					<input id="password" type="password" th:field="*{password}"
+						placeholder="Lascia vuoto per non modificare">
+					<span class="password-toggle-icon" onclick="togglePasswordVisibility('password')"><i
+							class="fa-solid fa-eye"></i></span>
+					<span th:if="${#fields.hasErrors('password')}" class="error-message" th:errors="*{password}"></span>
 				</div>
 				<div class="form-group">
 					<label for="confermaPassword">Conferma Nuova Password</label>
-					<input id="confermaPassword" type="password" th:field="*{confermaPassword}" placeholder="Ripeti la nuova password">
-					<span id="passwordMatchError" style="color: red; font-size: 0.9em; display: none;">Le nuove password non coincidono.</span>
+					<input id="confermaPassword" type="password" th:field="*{confermaPassword}"
+						placeholder="Ripeti la nuova password">
+					<span class="password-toggle-icon" onclick="togglePasswordVisibility('confermaPassword')"><i
+							class="fa-solid fa-eye"></i></span>
+					<span id="passwordMatchError" class="error-message" style="display: none;">Le nuove password non
+						coincidono.</span>
+					<span th:if="${#fields.hasErrors('confermaPassword')}" class="error-message"
+						th:errors="*{confermaPassword}"></span>
 				</div>
 
 				<hr style="margin: 20px 0; border: 1px solid #eee;">
 
 				<div class="form-group">
 					<label for="passwordAttuale">Password Attuale (Obbligatoria)</label>
-					<input id="passwordAttuale" type="password" th:field="*{passwordAttuale}" required placeholder="Inserisci la tua password attuale">
+					<input id="passwordAttuale" type="password" th:field="*{passwordAttuale}" required
+						placeholder="Inserisci la tua password attuale">
+					<span class="password-toggle-icon" onclick="togglePasswordVisibility('passwordAttuale')"><i
+							class="fa-solid fa-eye"></i></span>
+					<span th:if="${#fields.hasErrors('passwordAttuale')}" class="error-message"
+						th:errors="*{passwordAttuale}"></span>
+					
 				</div>
 
 				<button type="submit" class="modal-button">Salva Modifiche</button>
@@ -565,122 +615,149 @@
 		});
 
 		var modal = document.getElementById("editProfileModal");
-        var openBtn = document.getElementById("openModalBtn");
-        var closeBtn = document.getElementById("closeModalBtn");
+		var openBtn = document.getElementById("openModalBtn");
+		var closeBtn = document.getElementById("closeModalBtn");
 		var form = document.getElementById("editProfileForm");
-        var newPasswordInput = document.getElementById("password");
-        var confirmPasswordInput = document.getElementById("confermaPassword");
-        var passwordMatchError = document.getElementById("passwordMatchError");
-        var profileImageInput = document.getElementById('profileImageInput');
-        var imagePreview = document.getElementById('imagePreview');
+		var newPasswordInput = document.getElementById("password");
+		var confirmPasswordInput = document.getElementById("confermaPassword");
+		var passwordMatchError = document.getElementById("passwordMatchError");
+		var profileImageInput = document.getElementById('profileImageInput');
+		var imagePreview = document.getElementById('imagePreview');
+		var imageDataUrlInput = document.getElementById('imageDataUrl');
 
 		function openEditModal() {
-             // Resetta campi password e errori
-             newPasswordInput.value = '';
-             confirmPasswordInput.value = '';
-             document.getElementById('passwordAttuale').value = '';
-             passwordMatchError.style.display = 'none';
+			newPasswordInput.value = '';
+			confirmPasswordInput.value = '';
+			document.getElementById('passwordAttuale').value = '';
+			profileImageInput.value = '';
+			passwordMatchError.style.display = 'none';
+			imagePreview.style.display = 'none';
+			imagePreview.src = '#';
+			if (imageDataUrlInput) {
+				imageDataUrlInput.value = '';
+			}
+			if (modal) {
+				modal.style.display = "flex";
+			}
+		}
 
-             // Resetta input file e anteprima
-             profileImageInput.value = ''; // Cancella selezione file precedente
-             imagePreview.style.display = 'none';
-             imagePreview.src = '#';
+		if (openBtn) {
+			openBtn.onclick = function (event) {
+				event.preventDefault();
+				openEditModal();
+			}
+		}
 
-             if (modal) {
-                  modal.style.display = "flex";
-             }
-         }
-
-         if (openBtn) {
-             openBtn.onclick = function(event) {
-                 event.preventDefault();
-                 openEditModal();
-             }
-         }
-
-
-        if (closeBtn) {
-            closeBtn.onclick = function() {
-                if (modal) {
-                     modal.style.display = "none";
-                }
-            }
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                if (modal) {
-                     modal.style.display = "none";
-                }
-            }
-        }
-
-        function validatePasswordMatch() {
-            if (newPasswordInput.value !== confirmPasswordInput.value && newPasswordInput.value !== '') {
-                passwordMatchError.style.display = 'block';
-                return false;
-            } else {
-                passwordMatchError.style.display = 'none';
-                return true;
-            }
-        }
-
-        if (newPasswordInput && confirmPasswordInput) {
-	        newPasswordInput.addEventListener('keyup', validatePasswordMatch);
-	        confirmPasswordInput.addEventListener('keyup', validatePasswordMatch);
-        }
-
-        if (form) {
-	        form.addEventListener('submit', function(event) {
-	            if (newPasswordInput.value !== '' && !validatePasswordMatch()) {
-	                event.preventDefault();
-	                alert("Le nuove password inserite non coincidono. Controlla e riprova.");
-	            }
-	             // Non serve FormData qui perché usiamo il submit standard del form HTML
-	        });
-        }
-
-
-		document.addEventListener("DOMContentLoaded", function() {
-			var errorMessage = document.querySelector(".alert-danger");
-			// Se c'è un messaggio di errore (es. da redirectAttributes), apri il modale
-			if (errorMessage && errorMessage.textContent.trim() !== "") {
-				// Assicurati che non ci sia anche un messaggio di successo (che avrebbe priorità)
-				if (!document.querySelector(".alert-success")) {
-					 openEditModal();
+		if (closeBtn) {
+			closeBtn.onclick = function () {
+				if (modal) {
+					modal.style.display = "none";
 				}
 			}
+		}
 
-			// Gestione parametro URL per aprire modale (es. da link nel menu)
+		window.onclick = function (event) {
+			if (event.target == modal) {
+				if (modal) {
+					modal.style.display = "none";
+				}
+			}
+		}
+
+		function validatePasswordMatch() {
+			if (newPasswordInput.value !== confirmPasswordInput.value && (newPasswordInput.value !== '' || confirmPasswordInput.value !== '')) {
+				passwordMatchError.style.display = 'block';
+				return false;
+			} else {
+				passwordMatchError.style.display = 'none';
+				return true;
+			}
+		}
+
+		if (newPasswordInput && confirmPasswordInput) {
+			newPasswordInput.addEventListener('keyup', validatePasswordMatch);
+			confirmPasswordInput.addEventListener('keyup', validatePasswordMatch);
+		}
+
+		if (form) {
+			form.addEventListener('submit', function (event) {
+				if (!validatePasswordMatch()) {
+					event.preventDefault();
+				}
+			});
+		}
+
+		document.addEventListener("DOMContentLoaded", function () {
+			const generalErrorDiv = document.getElementById('general-error-message');
+			const hasGeneralError = generalErrorDiv && generalErrorDiv.textContent.trim() !== "";
+			const fieldErrorSpans = document.querySelectorAll('.form-group .error-message');
+			let hasFieldErrors = false;
+			fieldErrorSpans.forEach(span => {
+				if (span.id !== 'passwordMatchError' && span.textContent.trim() !== '') {
+					hasFieldErrors = true;
+					span.style.display = 'block';
+				}
+			});
+
+			if (imageDataUrlInput && imageDataUrlInput.value && imagePreview) {
+				imagePreview.src = imageDataUrlInput.value;
+				imagePreview.style.display = 'block';
+			} else if (imagePreview) {
+				imagePreview.style.display = 'none';
+			}
+
+			if ((hasGeneralError || hasFieldErrors) && !document.querySelector(".alert-success")) {
+				if (modal) {
+					modal.style.display = "flex";
+				}
+				if (hasGeneralError) generalErrorDiv.style.display = 'block';
+				validatePasswordMatch();
+			}
+
 			const urlParams = new URLSearchParams(window.location.search);
-	        if (urlParams.has('edit') && urlParams.get('edit') === 'true') {
-	            openEditModal();
-	            // Rimuovi il parametro dall'URL per non riaprire al refresh
-	            const newUrl = window.location.pathname;
-	            window.history.replaceState({}, document.title, newUrl);
-	        }
+			if (urlParams.has('edit') && urlParams.get('edit') === 'true') {
+				openEditModal();
+				const newUrl = window.location.pathname;
+				window.history.replaceState({}, document.title, newUrl);
+			}
 		});
 
+		if (profileImageInput && imagePreview && imageDataUrlInput) {
+			profileImageInput.addEventListener('change', function (event) {
+				const file = event.target.files[0];
+				if (file) {
+					const reader = new FileReader();
+					reader.onload = function (e) {
+						imagePreview.src = e.target.result;
+						imagePreview.style.display = 'block';
+						imageDataUrlInput.value = e.target.result;
+					}
+					reader.readAsDataURL(file);
+				} else {
+					imagePreview.src = '#';
+					imagePreview.style.display = 'none';
+					imageDataUrlInput.value = '';
+				}
+			});
+		}
 
-        // Script per l'anteprima dell'immagine nel modale
-        if (profileImageInput && imagePreview) {
-	        profileImageInput.addEventListener('change', function(event) {
-	            const file = event.target.files[0];
-	            if (file) {
-	                const reader = new FileReader();
-	                reader.onload = function(e) {
-	                    imagePreview.src = e.target.result;
-	                    imagePreview.style.display = 'block'; // Mostra l'anteprima
-	                }
-	                reader.readAsDataURL(file);
-	            } else {
-	                // Se l'utente annulla la selezione
-	                imagePreview.style.display = 'none';
-	                imagePreview.src = '#';
-	            }
-	        });
-        }
+		function togglePasswordVisibility(inputId) {
+			const input = document.getElementById(inputId);
+			const iconContainer = input.parentElement.querySelector('.password-toggle-icon');
+			const icon = iconContainer ? iconContainer.querySelector('i') : null;
+			if (!input || !icon) return;
 
+			if (input.type === "password") {
+				input.type = "text";
+				icon.classList.remove('fa-eye');
+				icon.classList.add('fa-eye-slash');
+			} else {
+				input.type = "password";
+				icon.classList.remove('fa-eye-slash');
+				icon.classList.add('fa-eye');
+			}
+		}
 	</script>
 </body>
+
 </html>

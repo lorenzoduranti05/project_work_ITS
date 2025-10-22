@@ -4,7 +4,8 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Dashboard Articoli</title>
+	<title>Info Tirocini - Dashboard</title>
+	<link rel="icon" th:href="@{/immagini/Logo_Senza_Scritta.png}">
 	<style>
 		* {
 			margin: 0;
@@ -581,44 +582,51 @@
 				</h2>
 			</div>
 			<div class="user-menu">
-				<div class="user-avatar" onclick="toggleUserDropdown()">
-					<span class="user-avatar-icon" id="navAvatarIcon">👤</span>
-					<img id="navAvatarImg" style="display: none;">
-				</div>
-				<div class="user-dropdown" id="userDropdown">
-					<div class="dropdown-header">
-						<div class="dropdown-avatar">
-							<span class="dropdown-avatar-icon" id="dropdownAvatarIcon">👤</span>
-							<img id="dropdownAvatarImg" style="display: none;">
-						</div>
-						<div class="user-name" th:text="${utente.nome} + ' ' + ${utente.cognome}">Mario Rossi</div>
-						<div class="user-email" th:text="${utente.mail}">mario.rossi@email.com</div>
-					</div>
-					<ul class="dropdown-menu">
-						<li>
-							<a th:href="@{/profilo}">
-								<span class="icon">👤</span>
-								<span>Il Mio Profilo</span>
-							</a>
-						</li>
-						<li>
-						    <a th:href="@{/profilo(edit='true')}"> <span class="icon">✏️</span>
-						        <span>Modifica Profilo</span>
-						    </a>
-						</li>
-					</ul>
-					<div class="dropdown-divider"></div>
-					<ul class="dropdown-menu">
-						<li>
-							<form th:action="@{/logout}" method="POST" style="margin: 0;">
-								<button type="submit" class="logout-btn-as-link">
-									<span class="icon">🚪</span>
-									<span>Esci</span>
-								</button>
-							</form>
-						</li>
-					</ul>
-				</div>
+			    <div class="user-avatar" onclick="toggleUserDropdown()">
+			        <span th:if="${utente == null or utente.profileImageUrl == null or #strings.equals(utente.profileImageUrl, '/immagini/icona.png')}" class="user-avatar-icon" id="navAvatarIcon">👤</span>
+			        <img th:unless="${utente == null or utente.profileImageUrl == null or #strings.equals(utente.profileImageUrl, '/immagini/icona.png')}" th:src="${utente.profileImageUrl}" id="navAvatarImg" style="display: none;"> </div>
+			    <div class="user-dropdown" id="userDropdown" th:if="${utente != null}">
+			        <div class="dropdown-header">
+			            <div class="dropdown-avatar">
+			                <span th:if="${utente.profileImageUrl == null or #strings.equals(utente.profileImageUrl, '/immagini/icona.png')}" class="dropdown-avatar-icon" id="dropdownAvatarIcon">👤</span>
+			                <img th:unless="${utente.profileImageUrl == null or #strings.equals(utente.profileImageUrl, '/immagini/icona.png')}" th:src="${utente.profileImageUrl}" id="dropdownAvatarImg" style="display: none;"> </div>
+			            <div class="user-name" th:text="${utente.nome} + ' ' + ${utente.cognome}">Mario Rossi</div>
+			            <div class="user-email" th:text="${utente.mail}">mario.rossi@email.com</div>
+			        </div>
+			        <ul class="dropdown-menu">
+			            <li>
+			                <a th:href="@{/profilo}">
+			                    <span class="icon">👤</span>
+			                    <span>Il Mio Profilo</span>
+			                </a>
+			            </li>
+			            <li>
+			                <a th:href="@{/profilo(edit='true')}"> <span class="icon">✏️</span>
+			                    <span>Modifica Profilo</span>
+			                </a>
+			            </li>
+			            <li>
+			                <a th:href="@{/contatti}">
+			                    <span class="icon">⚠️</span>
+			                    <span>Contattaci</span>
+			                </a>
+			            </li>
+			        </ul>
+			        <div class="dropdown-divider"></div>
+			        <ul class="dropdown-menu">
+			            <li>
+			                <form th:action="@{/logout}" method="POST" style="margin: 0;">
+			                    <button type="submit" class="logout-btn-as-link">
+			                        <span class="icon">🚪</span>
+			                        <span>Esci</span>
+			                    </button>
+			                </form>
+			            </li>
+			        </ul>
+			    </div>
+			     <div th:unless="${utente != null}">
+			         <a th:href="@{/accesso}" style="color: #0F4C5C; text-decoration: none; font-weight: bold;">Accedi</a>
+			     </div>
 			</div>
 		</div>
 	</nav>
@@ -815,6 +823,22 @@
 				showToast('Errore di connessione con il server.', false);
 			}
 		}
+		document.addEventListener('DOMContentLoaded', () => {
+		        const navAvatarImg = document.getElementById('navAvatarImg');
+		        const navAvatarIcon = document.getElementById('navAvatarIcon');
+
+		        if (navAvatarImg && navAvatarImg.getAttribute('src') && navAvatarImg.getAttribute('src') !== '/immagini/icona.png') {
+		            if(navAvatarIcon) navAvatarIcon.style.display = 'none';
+		            navAvatarImg.style.display = 'block'; 
+		        }
+
+		        const dropdownAvatarImg = document.getElementById('dropdownAvatarImg');
+		        const dropdownAvatarIcon = document.getElementById('dropdownAvatarIcon');
+		         if (dropdownAvatarImg && dropdownAvatarImg.getAttribute('src') && dropdownAvatarImg.getAttribute('src') !== '/immagini/icona.png') {
+		            if(dropdownAvatarIcon) dropdownAvatarIcon.style.display = 'none'; 
+		            dropdownAvatarImg.style.display = 'block'; 
+		        }
+		    });
 	</script>
 </body>
 

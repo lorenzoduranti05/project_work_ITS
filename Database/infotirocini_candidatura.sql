@@ -33,7 +33,7 @@ CREATE TABLE `candidatura` (
   KEY `utente_id` (`utente_id`),
   CONSTRAINT `candidatura_ibfk_1` FOREIGN KEY (`lavoro_id`) REFERENCES `lavoro` (`id`),
   CONSTRAINT `candidatura_ibfk_2` FOREIGN KEY (`utente_id`) REFERENCES `utente` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `candidatura` (
 
 LOCK TABLES `candidatura` WRITE;
 /*!40000 ALTER TABLE `candidatura` DISABLE KEYS */;
-INSERT INTO `candidatura` VALUES (1,'2025-10-21 10:54:32','Inviata',2,11),(2,'2025-10-21 11:55:28','Inviata',1,9),(3,'2025-10-21 12:16:22','Inviata',2,9),(4,'2025-10-21 14:00:00','Accettata',3,9),(5,'2025-10-21 14:01:00','Rifiutata',4,9),(6,'2025-10-21 15:44:53','Inviata',5,9),(7,'2025-10-21 16:22:00','Inviata',6,9),(8,'2025-10-22 09:29:32','Inviata',3,11);
+INSERT INTO `candidatura` VALUES (1,'2025-10-21 10:54:32','Inviata',2,11),(2,'2025-10-21 11:55:28','Inviata',1,9),(3,'2025-10-21 12:16:22','Inviata',2,9),(4,'2025-10-21 14:00:00','Accettata',3,9),(5,'2025-10-21 14:01:00','Rifiutata',4,9),(6,'2025-10-21 15:44:53','Inviata',5,9),(7,'2025-10-21 16:22:00','Inviata',6,9),(8,'2025-10-22 09:29:32','Accettata',3,11),(9,'2025-10-22 12:10:53','Inviata',3,13),(10,'2025-10-22 12:11:03','Inviata',4,13),(11,'2025-10-22 12:11:20','Inviata',2,13),(12,'2025-10-22 12:11:32','accettata',1,13),(13,'2025-10-22 16:29:08','Accettata',1,16),(14,'2025-10-22 16:30:18','Accettata',5,16);
 /*!40000 ALTER TABLE `candidatura` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-22  9:34:46
+-- Dump completed on 2025-10-22 17:18:03

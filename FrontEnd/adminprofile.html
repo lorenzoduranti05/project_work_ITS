@@ -85,8 +85,8 @@
             flex-shrink: 0;
             /* Bordo molto più visibile */
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            border: 3px solid rgba(250, 250, 250, 0.8); /* Bordo bianco più spesso e opaco */
-            outline: 2px solid rgba(240, 184, 166, 0.5); /* Doppio bordo con colore arancio */
+            border: 3px solid rgba(250, 250, 250, 0.8);
+            outline: 2px solid rgba(240, 184, 166, 0.5);
             outline-offset: -5px;
         }
 
@@ -141,8 +141,8 @@
             height: fit-content;
             /* Bordo molto più visibile */
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            border: 3px solid rgba(250, 250, 250, 0.8); /* Bordo bianco più spesso e opaco */
-            outline: 2px solid rgba(240, 184, 166, 0.5); /* Doppio bordo con colore arancio */
+            border: 3px solid rgba(250, 250, 250, 0.8);
+            outline: 2px solid rgba(240, 184, 166, 0.5);
             outline-offset: -5px;
         }
 
@@ -184,18 +184,21 @@
             color: var(--color-testo);
         }
 
-        .stat-list .colonna div {
+        .stat-list .colonna .cell {
             padding: 8px 0;
             border-bottom: 1px solid #FAFAFA33;
+            min-height: 32px; /* Altezza minima per uniformare le celle */
+            display: flex;
+            align-items: center; /* Centra verticalmente il contenuto */
         }
 
-        .stat-list .colonna div:first-child {
+        .stat-list .colonna .cell:first-child {
             font-weight: bold;
             border-bottom: 2px solid #FAFAFA;
             margin-bottom: 5px;
         }
 
-        .stat-list .colonna div:last-child {
+        .stat-list .colonna .cell:last-child {
             border-bottom: none;
         }
 
@@ -204,6 +207,7 @@
             justify-content: center;
             align-items: center;
             gap: 6px;
+            width: 100%; /* Occupa tutta la larghezza della cella */
         }
 
         .btn {
@@ -254,7 +258,7 @@
             border-radius: 8px;
             padding: 15px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            border: 2px solid rgba(250, 250, 250, 0.6); /* Bordo più visibile anche qui */
+            border: 2px solid rgba(250, 250, 250, 0.6);
             color: var(--color-testo);
             display: flex;
             flex-direction: column;
@@ -418,42 +422,48 @@
                     <!-- Vista Desktop con tabella -->
                     <div class="stat-list">
                         <div class="colonna">
-                            <div>ID Azienda</div>
-                            <div>AZ001</div>
-                            <div>AZ002</div>
-                            <div>AZ003</div>
+                            <div class="cell">ID Azienda</div>
+                            <div class="cell">AZ001</div>
+                            <div class="cell">AZ002</div>
+                            <div class="cell">AZ003</div>
                         </div>
                         <div class="colonna">
-                            <div>Nome Azienda</div>
-                            <div>Azienda Alpha</div>
-                            <div>Azienda Beta</div>
-                            <div>Azienda Gamma</div>
+                            <div class="cell">Nome Azienda</div>
+                            <div class="cell">Azienda Alpha</div>
+                            <div class="cell">Azienda Beta</div>
+                            <div class="cell">Azienda Gamma</div>
                         </div>
                         <div class="colonna">
-                            <div>ID User</div>
-                            <div>USR001</div>
-                            <div>USR002</div>
-                            <div>USR003</div>
+                            <div class="cell">ID User</div>
+                            <div class="cell">USR001</div>
+                            <div class="cell">USR002</div>
+                            <div class="cell">USR003</div>
                         </div>
                         <div class="colonna">
-                            <div>Nome user</div>
-                            <div>Mario Rossi</div>
-                            <div>Laura Bianchi</div>
-                            <div>Giuseppe Verdi</div>
+                            <div class="cell">Nome user</div>
+                            <div class="cell">Mario Rossi</div>
+                            <div class="cell">Laura Bianchi</div>
+                            <div class="cell">Giuseppe Verdi</div>
                         </div>
                         <div class="colonna">
-                            <div>Azioni</div>
-                            <div class="bottoni-affiancati">
-                                <button class="btn btn-accetta">Accetta</button>
-                                <button class="btn btn-rifiuta">Rifiuta</button>
+                            <div class="cell">Azioni</div>
+                            <div class="cell">
+                                <div class="bottoni-affiancati">
+                                    <button class="btn btn-accetta">Accetta</button>
+                                    <button class="btn btn-rifiuta">Rifiuta</button>
+                                </div>
                             </div>
-                            <div class="bottoni-affiancati">
-                                <button class="btn btn-accetta">Accetta</button>
-                                <button class="btn btn-rifiuta">Rifiuta</button>
+                            <div class="cell">
+                                <div class="bottoni-affiancati">
+                                    <button class="btn btn-accetta">Accetta</button>
+                                    <button class="btn btn-rifiuta">Rifiuta</button>
+                                </div>
                             </div>
-                            <div class="bottoni-affiancati">
-                                <button class="btn btn-accetta">Accetta</button>
-                                <button class="btn btn-rifiuta">Rifiuta</button>
+                            <div class="cell">
+                                <div class="bottoni-affiancati">
+                                    <button class="btn btn-accetta">Accetta</button>
+                                    <button class="btn btn-rifiuta">Rifiuta</button>
+                                </div>
                             </div>
                         </div>
                     </div>

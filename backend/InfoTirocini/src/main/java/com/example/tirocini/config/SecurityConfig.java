@@ -63,10 +63,10 @@ public class SecurityConfig {
                 Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
                 for (GrantedAuthority grantedAuthority : authorities) {
                     if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
-                        return "/admin/dashboard"; // Reindirizza admin a dashboard
+                        return "/admin/dashboard"; 
                     }
                 }
-                return "/home"; // Reindirizza user a home
+                return "/home"; 
             }
         };
     }
@@ -84,7 +84,7 @@ public class SecurityConfig {
                 .loginPage("/accesso")
                 .loginProcessingUrl("/perform_login")
                 .usernameParameter("mail")
-                .successHandler(customAuthenticationSuccessHandler()) // Usa handler personalizzato
+                .successHandler(customAuthenticationSuccessHandler()) 
                 .failureUrl("/accesso?error=true")
                 .permitAll()
         )

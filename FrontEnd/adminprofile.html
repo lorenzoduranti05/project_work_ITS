@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="it">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profilo Aggiornato</title>
+    <title>Profilo Admin</title>
     <style>
         :root {
             --color-petrolio-scuro: #0F3B5C;
@@ -67,60 +66,116 @@
 
         .top-dashboard {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             align-items: stretch;
-            justify-content: flex-start;
-            flex-wrap: wrap;
-            padding: 0 20px 20px 20px;
+            justify-content: space-between;
+            padding: 0 30px 30px 30px;
             height: calc(100% - 90px);
         }
 
         .profile-card {
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 40px 20px;
             background-color: var(--color-petrolio-scuro);
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            position: sticky;
-            top: 20px;
-            align-self: flex-start;
-            height: 80%;
+            width: 280px;
+            height: fit-content;
+            flex-shrink: 0;
+            /* Bordo molto più visibile */
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            border: 3px solid rgba(250, 250, 250, 0.8); /* Bordo bianco più spesso e opaco */
+            outline: 2px solid rgba(240, 184, 166, 0.5); /* Doppio bordo con colore arancio */
+            outline-offset: -5px;
         }
 
-        .top-row {
-            flex: 1;
+        .profile-role-container {
+            text-align: center;
             display: flex;
-            height: 100%;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+
+        .profile-role {
+            color: #fafafa;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 1em;
+            text-align: left;
+            margin-bottom: 20px;
+            word-break: break-word;
+        }
+
+        .contact-label {
+            font-weight: bold;
+            color: #fafafa;
+            font-size: small;
+        }
+
+        .contact-item span {
+            color: #FAFAFA;
         }
 
         .stats-container {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            flex: 1;
-            height: 100%;
+            min-width: 0;
         }
 
         .card.stat-card {
-            background-color: #fafafa;
-            border-radius: 8px;
-            padding: 10px;
+            background-color: var(--color-petrolio-scuro);
+            border-radius: 12px;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
-            height: 92%;
+            height: fit-content;
+            /* Bordo molto più visibile */
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            border: 3px solid rgba(250, 250, 250, 0.8); /* Bordo bianco più spesso e opaco */
+            outline: 2px solid rgba(240, 184, 166, 0.5); /* Doppio bordo con colore arancio */
+            outline-offset: -5px;
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .card-header h3 {
+            color: #fafafa;
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .table-wrapper {
+            background-color: #fafafa;
+            border-radius: 10px;
+            padding: 3px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .stat-list {
             background-color: var(--color-petrolio-scuro);
             border-radius: 8px;
             padding: 15px 20px;
-            flex: 1;
             overflow-y: auto;
-            margin-top: 10px;
+            overflow-x: auto;
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(5, minmax(100px, 1fr));
             gap: 10px;
+            max-height: 400px;
         }
 
         .stat-list .colonna {
@@ -130,8 +185,14 @@
         }
 
         .stat-list .colonna div {
-            padding: 4px 0;
-            border-bottom: 1px solid #FAFAFA;
+            padding: 8px 0;
+            border-bottom: 1px solid #FAFAFA33;
+        }
+
+        .stat-list .colonna div:first-child {
+            font-weight: bold;
+            border-bottom: 2px solid #FAFAFA;
+            margin-bottom: 5px;
         }
 
         .stat-list .colonna div:last-child {
@@ -148,149 +209,52 @@
         .btn {
             border: none;
             border-radius: 4px;
-            padding: 2px 6px;
+            padding: 4px 8px;
             font-weight: 600;
             font-size: 0.75em;
             cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .profile-role-container {
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
+        .btn-accetta {
+            background-color: #4CAF50;
+            color: white;
         }
 
-        .profile-role {
-            color: #fafafa;
-            font-size: 1.5em;
-            font-weight: bold;
+        .btn-accetta:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
         }
 
-        .role-button {
-            background: none;
-            border: none;
-            padding: 0;
-            cursor: pointer;
-            transition: transform 0.2s;
+        .btn-rifiuta {
+            background-color: #f44336;
+            color: white;
         }
 
-        .role-button img {
-            width: 24px;
-            height: 24px;
+        .btn-rifiuta:hover {
+            background-color: #da190b;
+            transform: scale(1.05);
         }
 
-        .role-button:hover {
-            transform: scale(1.2);
-        }
+        /* --- CSS PER LA VISTA MOBILE --- */
 
-        .profile-icon {
-            background-color: var(--color-petrolio-scuro);
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .contact-item {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            font-size: 1.1em;
-            text-align: left;
-        }
-
-        .contact-label {
-            font-weight: bold;
-            color: #fafafa;
-            font-size: small;
-        }
-
-        .contact-item span {
-            color: #FAFAFA;
-        }
-
-        .popup-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            color: #0F3B5C;
-        }
-
-        .popup {
-            background: #FAFAFA;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            min-width: 300px;
-
-        }
-
-        .popup h3 {
-            margin-bottom: 20px;
-        }
-
-        .popup button {
-            margin: 0 10px;
-            padding: 6px 12px;
-            font-weight: bold;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-
-        }
-
-        .btn-si {
-            background-color: #e9b8a6;
-            color: #FAFAFA;
-        }
-
-        .btn-no {
-            background-color: #0F3B5C;
-            color: #fafafa;
-        }
-
-        /* --- CSS AGGIUNTO PER LA VISTA MOBILE --- */
-
-        /* Contenitore per le card mobili (nascosto di default) */
         .stat-list-mobile {
             display: none;
-            /* Nascosto su desktop */
-
-            /* Stili presi da .stat-list per coerenza */
             background-color: var(--color-petrolio-scuro);
             border-radius: 8px;
             padding: 15px 20px;
-            flex: 1;
             overflow-y: auto;
-            margin-top: 10px;
-
-            /* Stili dalla media query per .stat-list */
             flex-direction: column;
             gap: 15px;
+            max-height: 400px;
         }
 
-        /* Stile della card singola in vista mobile */
         .candidatura-card {
-            /* Stili dalla media query per .stat-list .colonna */
             background-color: #0f3b5c;
             border-radius: 8px;
             padding: 15px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            border: 1px solid #fafafa33;
-
-            /* Stili aggiuntivi per il layout della card */
+            border: 2px solid rgba(250, 250, 250, 0.6); /* Bordo più visibile anche qui */
             color: var(--color-testo);
             display: flex;
             flex-direction: column;
@@ -299,11 +263,9 @@
 
         .candidatura-card>div {
             padding: 6px 0;
-            /* Aggiungo una linea di separazione per chiarezza */
             border-bottom: 1px solid #fafafa33;
         }
 
-        /* Rimuovo la linea all'ultimo elemento (che sono i bottoni) */
         .candidatura-card>div:last-of-type {
             border-bottom: none;
         }
@@ -314,25 +276,34 @@
             border-top: 1px solid #fafafa33;
         }
 
-        /* --- FINE CSS AGGIUNTO --- */
+        /* Media query per schermi medi */
+        @media (max-width: 1024px) {
+            .profile-card {
+                width: 240px;
+                padding: 30px 15px;
+            }
+            
+            .contact-item {
+                font-size: 0.9em;
+            }
 
+            .top-dashboard {
+                padding: 0 20px 20px 20px;
+                gap: 20px;
+            }
+        }
 
-        @media (max-width: 1200px) {
+        @media (max-width: 900px) {
             .top-dashboard {
                 flex-direction: column;
                 align-items: center;
+                height: auto;
             }
 
             .profile-card {
                 width: 90%;
                 max-width: 400px;
                 margin-bottom: 20px;
-                height: auto;
-                position: static;
-            }
-
-            .top-row {
-                width: 100%;
             }
 
             .stats-container {
@@ -340,69 +311,185 @@
                 max-width: 700px;
             }
         }
+
+        @media (max-width: 768px) {
+            .stat-list {
+                display: none;
+            }
+
+            .stat-list-mobile {
+                display: flex;
+            }
+
+            .navbar {
+                font-size: 1.2em;
+                padding: 8px;
+            }
+
+            .back-arrow {
+                font-size: 1.5em;
+                left: 10px;
+            }
+
+            .admin-badge {
+                font-size: 0.6em;
+                padding: 3px 10px;
+            }
+
+            .profile-card,
+            .card.stat-card {
+                padding: 20px 15px;
+            }
+
+            .top-dashboard {
+                padding: 0 15px 15px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .bottoni-affiancati {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 6px 12px;
+            }
+
+            .profile-card {
+                width: 100%;
+            }
+
+            .stats-container {
+                width: 100%;
+            }
+
+            .contact-item {
+                font-size: 1em;
+            }
+
+            .card-header h3,
+            .profile-role {
+                font-size: 1.2em;
+            }
+        }
     </style>
 </head>
-
 <body>
     <div class="navbar">
-        <a href="pagina_precedente.html" class="back-arrow">←</a>
-        <a href="home.html"><img src="logo2.png" alt="logo"></a>
-        Profilo
-        <span class="admin-badge">ADMIN</span>
+        <a href="#" class="back-arrow">←</a>
+        <span>ADMIN</span>
+        <span class="admin-badge">Admin</span>
     </div>
 
     <div class="top-dashboard">
+        <!-- Card Profilo Admin a sinistra -->
         <div class="profile-card">
             <div class="profile-role-container">
-                <h2 class="profile-role">Admin</h2>
-                <button class="role-button" title="Modifica ruolo">
-                    <img src="modifica12.png" alt="Modifica">
-                </button>
-            </div>
-            <div class="profile-icon">
-                <img src="icona.png" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%;">
+                <div class="profile-role">Profilo Admin</div>
             </div>
             <div class="contact-item">
-                <div><span class="contact-label">Nome: </span><span>nome prova</span></div>
-                <div><span class="contact-label">Cognome: </span><span>cognome prova</span></div>
-                <div><span class="contact-label">Email: </span><span>studente.esempio@dominio.it</span></div>
-                <div><span class="contact-label">Password: </span><span>Prova</span></div>
+                <span class="contact-label">Nome:</span>
+                <span>nome prova</span>
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">Cognome:</span>
+                <span>cognome prova</span>
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">Email:</span>
+                <span>studente.esempio@dominio.it</span>
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">Password:</span>
+                <span>Prova</span>
             </div>
         </div>
 
-        <div class="top-row">
-            <div class="stats-container">
-                <div class="card stat-card">
+        <!-- Card Gestione Candidature a destra -->
+        <div class="stats-container">
+            <div class="card stat-card">
+                <div class="card-header">
+                    <h3>Gestione Candidature</h3>
+                </div>
+                
+                <div class="table-wrapper">
+                    <!-- Vista Desktop con tabella -->
                     <div class="stat-list">
-
                         <div class="colonna">
-                            <div><b>ID Azienda</b></div>
-                            <div th:each="cand : ${candidature}" th:text="${cand.lavoro?.azienda?.id}"></div>
+                            <div>ID Azienda</div>
+                            <div>AZ001</div>
+                            <div>AZ002</div>
+                            <div>AZ003</div>
+                        </div>
+                        <div class="colonna">
+                            <div>Nome Azienda</div>
+                            <div>Azienda Alpha</div>
+                            <div>Azienda Beta</div>
+                            <div>Azienda Gamma</div>
+                        </div>
+                        <div class="colonna">
+                            <div>ID User</div>
+                            <div>USR001</div>
+                            <div>USR002</div>
+                            <div>USR003</div>
+                        </div>
+                        <div class="colonna">
+                            <div>Nome user</div>
+                            <div>Mario Rossi</div>
+                            <div>Laura Bianchi</div>
+                            <div>Giuseppe Verdi</div>
+                        </div>
+                        <div class="colonna">
+                            <div>Azioni</div>
+                            <div class="bottoni-affiancati">
+                                <button class="btn btn-accetta">Accetta</button>
+                                <button class="btn btn-rifiuta">Rifiuta</button>
+                            </div>
+                            <div class="bottoni-affiancati">
+                                <button class="btn btn-accetta">Accetta</button>
+                                <button class="btn btn-rifiuta">Rifiuta</button>
+                            </div>
+                            <div class="bottoni-affiancati">
+                                <button class="btn btn-accetta">Accetta</button>
+                                <button class="btn btn-rifiuta">Rifiuta</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vista Mobile con card -->
+                    <div class="stat-list-mobile">
+                        <div class="candidatura-card">
+                            <div><strong>ID Azienda:</strong> AZ001</div>
+                            <div><strong>Nome Azienda:</strong> Azienda Alpha</div>
+                            <div><strong>ID User:</strong> USR001</div>
+                            <div><strong>Nome user:</strong> Mario Rossi</div>
+                            <div class="bottoni-affiancati">
+                                <button class="btn btn-accetta">Accetta</button>
+                                <button class="btn btn-rifiuta">Rifiuta</button>
+                            </div>
                         </div>
 
-                        <div class="colonna">
-                            <div><b>Nome Azienda</b></div>
-                            <div th:each="cand : ${candidature}" th:text="${cand.lavoro?.azienda?.nome}"></div>
+                        <div class="candidatura-card">
+                            <div><strong>ID Azienda:</strong> AZ002</div>
+                            <div><strong>Nome Azienda:</strong> Azienda Beta</div>
+                            <div><strong>ID User:</strong> USR002</div>
+                            <div><strong>Nome user:</strong> Laura Bianchi</div>
+                            <div class="bottoni-affiancati">
+                                <button class="btn btn-accetta">Accetta</button>
+                                <button class="btn btn-rifiuta">Rifiuta</button>
+                            </div>
                         </div>
 
-                        <div class="colonna">
-                            <div><b>ID User</b></div>
-                            <div th:each="cand : ${candidature}" th:text="${cand.utente?.id}"></div>
-                        </div>
-
-                        <div class="colonna">
-                            <div><b>Nome user</b></div>
-                            <div th:each="cand : ${candidature}"
-                                th:text="${cand.utente?.nome} + ' ' + ${cand.utente?.cognome}"></div>
-                        </div>
-
-                        <div class="colonna">
-                            <div style="text-align: center;"><b>Funzionalità</b></div>
-                            <div class="bottoni-affiancati" th:each="cand : ${candidature}">
-                                <button class="btn" style="background-color:#FAFAFA; color:#0F3B5C;"
-                                    onclick="showPopup('Sei sicuro di accettare?')">Accetta</button>
-                                <button class="btn" style="background-color:#0F3B5C; color:#FAFAFA;"
-                                    onclick="showPopup('Sei sicuro di rifiutare?')">Rifiuta</button>
+                        <div class="candidatura-card">
+                            <div><strong>ID Azienda:</strong> AZ003</div>
+                            <div><strong>Nome Azienda:</strong> Azienda Gamma</div>
+                            <div><strong>ID User:</strong> USR003</div>
+                            <div><strong>Nome user:</strong> Giuseppe Verdi</div>
+                            <div class="bottoni-affiancati">
+                                <button class="btn btn-accetta">Accetta</button>
+                                <button class="btn btn-rifiuta">Rifiuta</button>
                             </div>
                         </div>
                     </div>
@@ -410,25 +497,5 @@
             </div>
         </div>
     </div>
-
-    <div class="popup-overlay" id="popupOverlay">
-        <div class="popup" id="popup">
-            <h3 id="popupText"></h3>
-            <button class="btn-si" onclick="redirect()">Sì</button>
-            <button class="btn-no" onclick="redirect()">No</button>
-        </div>
-    </div>
-
-    <script>
-        function showPopup(text) {
-            document.getElementById('popupText').innerText = text;
-            document.getElementById('popupOverlay').style.display = 'flex';
-        }
-
-        function redirect() {
-            window.location.href = 'adminprofile.html';
-        }
-    </script>
 </body>
-
 </html>

@@ -9,9 +9,7 @@
         :root {
             --color-petrolio-scuro: #0F3B5C;
             --color-arancio-chiaro: #F0B8A6;
-            --color-sfondo-card: #FAFAFA;
-            --color-bordo-card: #E0E0E0;
-            --color-testo: #333333;
+            --color-testo: #FAFAFA;
         }
 
         html,
@@ -19,7 +17,6 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            overflow-x: hidden;
             font-family: Arial, sans-serif;
         }
 
@@ -75,6 +72,7 @@
             justify-content: flex-start;
             flex-wrap: wrap;
             padding: 0 20px 20px 20px;
+            height: calc(100% - 90px);
         }
 
         .profile-card {
@@ -87,12 +85,13 @@
             position: sticky;
             top: 20px;
             align-self: flex-start;
-            height: 404px;
+            height: 87.6%;
         }
 
         .top-row {
             flex: 1;
             display: flex;
+            height: 100%;
         }
 
         .stats-container {
@@ -100,66 +99,65 @@
             flex-direction: column;
             gap: 20px;
             flex: 1;
-        }
-
-        .card {
-            background-color: #fafafa;
-            border-radius: 8px;
-            padding: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            position: relative;
+            height: 100%;
         }
 
         .card.stat-card {
-            cursor: pointer;
-            overflow: hidden;
-            max-height: 100%;
+            background-color: #fafafa;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .card.stat-card h3 {
-            margin: 10px;
-        }
-
-        .number {
-            color: var(--color-petrolio-scuro);
-            font-size: xx-large;
-        }
-
-        .number a {
-            text-decoration: none;
-            color: inherit;
-            display: inline-block;
-        }
-
-        .stat-dropdown {
-            margin-top: 10px;
-            position: static;
-            left: auto;
-            right: auto;
-            z-index: 10;
-            background-color: #0F3B5C;
-            border-radius: 8px;
-            max-height: 0;
-            overflow: hidden;
+            margin: 10px 0;
+            flex-shrink: 0;
             text-align: center;
-            width: 100%;
-            box-sizing: border-box;
-            transition: max-height 0.3s ease, padding 0.3s ease;
         }
 
-        .card.stat-card.active .stat-dropdown {
-            max-height: 150px;
-            overflow-y: auto;
+        .stat-list {
+            background-color: var(--color-petrolio-scuro);
+            border-radius: 8px;
             padding: 15px 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) inset;
+            flex: 1;
+            overflow-y: auto;
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
         }
 
-        .stat-dropdown-item {
-            text-align: left;
-            margin: 0.5rem;
-            color: #fafafa;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        .stat-list .colonna {
+            display: flex;
+            flex-direction: column;
+            color: var(--color-testo);
+        }
+
+        .stat-list .colonna div {
+            padding: 4px 0;
+            border-bottom: 1px solid #FAFAFA;
+        }
+
+        .stat-list .colonna div:last-child {
+            border-bottom: none;
+        }
+
+        .bottoni-affiancati {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-weight: 600;
+            font-size: 0.75em;
+            cursor: pointer;
         }
 
         .profile-role-container {
@@ -209,14 +207,12 @@
             flex-direction: column;
             gap: 5px;
             font-size: 1.1em;
-            color: var(--color-testo);
             text-align: left;
         }
 
         .contact-label {
             font-weight: bold;
             color: #fafafa;
-            min-width: 120px;
             font-size: small;
         }
 
@@ -238,66 +234,101 @@
                 position: static;
             }
 
-            .top-row {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-            }
-
-            .stats-container {
-                width: 100%;
-                max-width: 400px;
+            .stat-list {
                 display: flex;
                 flex-direction: column;
-                gap: 20px;
-                align-items: center;
+                gap: 15px;
             }
 
-            .card.stat-card {
-                width: 100%;
-                max-width: 350px;
+            .stat-list .colonna {
+                background-color: #0f3b5c;
+                border-radius: 8px;
+                padding: 15px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+                border: 1px solid #fafafa33;
+            }
+
+            .stat-list .colonna div {
+                border-bottom: none;
+                padding: 6px 0;
+            }
+
+            .bottoni-affiancati {
+                margin-top: 10px;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="navbar"> <a href="pagina_precedente.html" class="back-arrow">←</a> <a href="home.html"><img
-                src="logo2.png" alt="logo"></a> Profilo <span class="admin-badge">ADMIN</span></div>
+    <div class="navbar">
+        <a href="pagina_precedente.html" class="back-arrow">←</a>
+        <a href="home.html"><img src="logo2.png" alt="logo"></a>
+        Profilo
+        <span class="admin-badge">ADMIN</span>
     </div>
+
     <div class="top-dashboard">
         <div class="profile-card">
             <div class="profile-role-container">
-                <h2 class="profile-role">Studente</h2> <button class="role-button" title="Modifica ruolo"> <img
-                        src="modifica12.png" alt="Modifica"> </button>
+                <h2 class="profile-role">Admin</h2>
+                <button class="role-button" title="Modifica ruolo">
+                    <img src="modifica12.png" alt="Modifica">
+                </button>
             </div>
-            <div class="profile-icon"> <img src="icona.png" alt="Avatar"
-                    style="width: 100px; height: 100px; border-radius: 50%;"> </div>
-            <div class="contact-item"> <br>
-                <div><span class="contact-label">Nome: </span><br><span>nome prova</span></div> <br>
-                <div><span class="contact-label">Cognome: </span><br><span>cognome prova</span></div> <br>
-                <div><span class="contact-label">Email: </span><br><span>studente.esempio@dominio.it</span></div> <br>
-                <div><span class="contact-label">Password: </span><br><span>Prova</span></div>
+            <div class="profile-icon">
+                <img src="icona.png" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%;">
+            </div>
+            <div class="contact-item">
+                <div><span class="contact-label">Nome: </span><span>nome prova</span></div>
+                <div><span class="contact-label">Cognome: </span><span>cognome prova</span></div>
+                <div><span class="contact-label">Email: </span><span>studente.esempio@dominio.it</span></div>
+                <div><span class="contact-label">Password: </span><span>Prova</span></div>
             </div>
         </div>
+
         <div class="top-row">
             <div class="stats-container">
                 <div class="card stat-card">
-                    <h3>Candidature Inviate</h3>
-                    <div class="number"><a>4</a></div>
-                    <div class="stat-dropdown">
-                        <div class="stat-dropdown-item">Tirocini</div>
-                        <div class="stat-dropdown-item">Lavoro Part-Time</div>
-                        <div class="stat-dropdown-item">Borse di Studio</div>
-                        <div class="stat-dropdown-item">Tirocini</div>
-                        <div class="stat-dropdown-item">Lavoro Part-Time</div>
-                        <div class="stat-dropdown-item">Borse di Studio</div>
+                    <div class="stat-list">
+
+                        <div class="colonna">
+                            <div>ID Azienda</div>
+                            <div th:each="cand : ${candidature}" th:text="${cand.lavoro?.azienda?.id}">
+                            </div>
+                        </div>
+
+                        <div class="colonna">
+                            <div>Nome Azienda</div>
+                            <div th:each="cand : ${candidature}" th:text="${cand.lavoro?.azienda?.nome}">
+                            </div>
+                        </div>
+
+                        <div class="colonna">
+                            <div>ID User</div>
+                            <div th:each="cand : ${candidature}" th:text="${cand.utente?.id}">
+                            </div>
+                        </div>
+
+                        <div class="colonna">
+                            <div>Nome user</div>
+                            <div th:each="cand : ${candidature}"
+                                th:text="${cand.utente?.nome} + ' ' + ${cand.utente?.cognome}">
+                            </div>
+                        </div>
+
+                        <div class="colonna">
+                            <div>Funzionalità</div>
+                            <div class="bottoni-affiancati" th:each="cand : ${candidature}">
+                                <button class="btn" style="background-color:#F0B8A6; color:#0F3B5C;">Accetta</button>
+                                <button class="btn" style="background-color:#0F3B5C; color:#FAFAFA;">Elimina</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script> const statCards = document.querySelectorAll('.stat-card'); statCards.forEach((card, index) => { if (index === 0) card.classList.add('active'); card.addEventListener('click', () => { statCards.forEach(c => { if (c !== card) c.classList.remove('active') }); card.classList.toggle('active'); }); }); </script>
 </body>
 
 </html>

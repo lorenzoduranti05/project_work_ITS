@@ -65,7 +65,7 @@ public class UtenteService {
         String passwordHash = passwordEncoder.encode(dto.getPassword());
         nuovoUtente.setPassword(passwordHash);
         nuovoUtente.setRuolo("USER");
-        nuovoUtente.setProfileImageUrl("/immagini-profilo/icona.png");
+        nuovoUtente.setProfileImageUrl("/immagini/icona.png");
         Utente salvato = utenteRepository.save(nuovoUtente);
         RispostaLoginDTO risposta = new RispostaLoginDTO();
         risposta.setId(salvato.getId());

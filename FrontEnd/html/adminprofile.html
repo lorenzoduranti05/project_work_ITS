@@ -4,300 +4,1138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profilo Aggiornato</title>
+    <title>Dashboard Admin</title>
     <style>
-        :root {
-            --color-petrolio-scuro: #0F3B5C;
-            --color-arancio-chiaro: #F0B8A6;
-            --color-sfondo-card: #FAFAFA;
-            --color-bordo-card: #E0E0E0;
-            --color-testo: #333333;
-        }
-
-        html,
-        body {
+        * {
             margin: 0;
             padding: 0;
-            height: 100%;
-            overflow-x: hidden;
-            font-family: Arial, sans-serif;
+            box-sizing: border-box;
         }
 
         body {
-            background: linear-gradient(135deg, #0f3b5cd4, #F0B8A6);
-            min-height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
         }
 
-        .navbar {
-            background-color: #fafafa;
+        nav {
+            background: #FFFFF0;
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-title {
+            color: #0F4C5C;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #E9B8A6;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 15px;
-            padding: 10px;
-            font-size: 1.5em;
-            margin-bottom: 15px;
+        }
+
+         .logo img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .user-menu {
             position: relative;
         }
 
-        .navbar img {
-            height: 50px;
-            width: auto;
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .user-avatar:hover {
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            border-radius: 20%;
+            transform: scale(1.05);
+        }
+
+        .user-avatar-icon {
+            font-size: 24px;
+            color: #0F4C5C;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            min-width: 280px;
+            display: none;
+            animation: dropdownSlide 0.3s ease;
+        }
+
+        .user-dropdown.active {
+            display: block;
+        }
+
+        @keyframes dropdownSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-header {
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 15px;
+        }
+
+        .dropdown-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #E9B8A6;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dropdown-avatar-icon {
+            font-size: 40px;
+            color: #0F4C5C;
+        }
+
+        .user-informactions-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #0F4C5C;
+            margin-right: 3%;
         }
 
         .admin-badge {
             background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
             color: white;
             padding: 5px 15px;
-            border-radius: 20px;
+            border-radius: 25px;
             font-size: 0.5em;
-            font-weight: 600;
+            font-weight: 700;
+            margin-top: 3px;
         }
 
-        .back-arrow {
-            position: absolute;
-            left: 20px;
-            font-size: 1.8em;
-            color: var(--color-petrolio-scuro);
+        .user-email {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .dropdown-menu {
+            list-style: none;
+        }
+
+        .dropdown-menu li {
+            margin-bottom: 8px;
+        }
+
+        .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #333;
             text-decoration: none;
-            transition: transform 0.2s;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-size: 1em;
         }
 
-        .back-arrow:hover {
-            transform: scale(1.1);
-            color: #F0B8A6;
+        .dropdown-menu a:hover {
+            background: rgba(233, 184, 166, 0.2);
+            color: #0F4C5C;
         }
 
-        .top-dashboard {
-            display: flex;
-            gap: 20px;
-            align-items: stretch;
-            justify-content: flex-start;
-            flex-wrap: wrap;
-            padding: 0 20px 20px 20px;
+        .dropdown-menu .icon {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
         }
 
-        .profile-card {
-            border-radius: 8px;
+        .dropdown-divider {
+            height: 1px;
+            background: #f0f0f0;
+            margin: 10px 0;
+        }
+
+        .logout-btn {
+            color: #e74c3c !important;
+        }
+
+        .logout-btn:hover {
+            background: rgba(231, 76, 60, 0.1) !important;
+        }
+
+        .content-wrapper {
             padding: 40px 20px;
-            background-color: var(--color-petrolio-scuro);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            position: sticky;
-            top: 20px;
-            align-self: flex-start;
-            height: 404px;
         }
 
-        .top-row {
-            flex: 1;
-            display: flex;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .stats-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            flex: 1;
+        h1 {
+            text-align: center;
+            color: #FFFFF0;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
         }
 
         .card {
-            background-color: #fafafa;
-            border-radius: 8px;
-            padding: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            text-align: center;
+            background: #FFFFF0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #0F4C5C 0%, #1a6b7d 100%);
+            flex-shrink: 0;
+        }
+
+        .card-content {
+            padding: 1.5em;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            /* Nuovo: Centra gli elementi lungo l'asse orizzontale (cross-axis) */
+            align-items: center;
+        }
+
+        .card-category {
+            display: inline-block;
+            background: #E9B8A6;
+            color: #0F4C5C;
+            padding: 0.4em 1.2em;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-bottom: 0.8em;
+            font-weight: 600;
+            align-self: flex-start;
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            margin-bottom: 0.5em;
+            color: #333;
+        }
+
+        .card-excerpt {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1em;
+            flex-grow: 1;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #999;
+            font-size: 0.9em;
+            margin-top: auto;
+            /* Nuovo: Aggiunge spazio sotto card-meta */
+            margin-bottom: 15px;
+            /* Importante: Se il width non è 100%, align-items non lo centra. */
+            width: 100%;
+        }
+
+        .delete-btn {
+            width: 35%;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-size: 0.7em;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: all 0.3s ease;
+            /* Rimuoviamo margin-top: auto; dato che align-items: center in card-content non lo supporta bene per centrare. */
+            /* margin-top: auto; (rimosso) */
+        }
+
+        .delete-btn:hover {
+            background: linear-gradient(to right, #c0392b, #e41c07);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .new-post-btn {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            background-color: #0f4c5c;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(15, 76, 92, 0.3);
+            z-index: 90;
+        }
+
+        .new-post-btn:hover {
+
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(15, 76, 92, 0.4);
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
             position: relative;
         }
 
-        .card.stat-card {
-            cursor: pointer;
-            overflow: hidden;
-            max-height: 100%;
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
-        .card.stat-card h3 {
-            margin: 10px;
+        .modal-body {
+            padding: 40px;
         }
 
-        .number {
-            color: var(--color-petrolio-scuro);
-            font-size: xx-large;
+        .form-group {
+            margin-bottom: 25px;
         }
 
-        .number a {
-            text-decoration: none;
-            color: inherit;
-            display: inline-block;
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1em;
         }
 
-        .stat-dropdown {
-            margin-top: 10px;
-            position: static;
-            left: auto;
-            right: auto;
-            z-index: 10;
-            background-color: #0F3B5C;
-            border-radius: 8px;
-            max-height: 0;
-            overflow: hidden;
-            text-align: center;
+        .form-input,
+        .form-textarea,
+        .form-select {
             width: 100%;
-            box-sizing: border-box;
-            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: all 0.3s ease;
         }
 
-        .card.stat-card.active .stat-dropdown {
-            max-height: 150px;
-            overflow-y: auto;
-            padding: 15px 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) inset;
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #0F4C5C;
+            box-shadow: 0 0 0 3px rgba(15, 76, 92, 0.1);
         }
 
-        .stat-dropdown-item {
-            text-align: left;
-            margin: 0.5rem;
-            color: #fafafa;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
         }
 
-        .profile-role-container {
-            text-align: center;
+        /* --- STILI AGGIUNTI PER I CHECKBOX --- */
+        .checkbox-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-container:focus-within {
+            outline: none;
+            border-color: #0F4C5C;
+            box-shadow: 0 0 0 3px rgba(15, 76, 92, 0.1);
+        }
+
+        .checkbox-item {
             display: flex;
-            justify-content: center;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
-        .profile-role {
-            color: #fafafa;
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-
-        .role-button {
-            background: none;
-            border: none;
-            padding: 0;
+        .checkbox-item input[type="checkbox"] {
+            width: 1.3em;
+            height: 1.3em;
             cursor: pointer;
-            transition: transform 0.2s;
+            accent-color: #0F4C5C;
+            /* Colora il checkbox quando selezionato */
         }
 
-        .role-button img {
-            width: 24px;
-            height: 24px;
+        .checkbox-item label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0;
+            cursor: pointer;
         }
 
-        .role-button:hover {
-            transform: scale(1.2);
+        /* --- FINE STILI AGGIUNTI --- */
+
+        .form-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
         }
 
-        .profile-icon {
-            background-color: var(--color-petrolio-scuro);
+        .form-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-btn-cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .form-btn-cancel:hover {
+            background: #d0d0d0;
+        }
+
+        .form-btn-submit {
+            background: #0F4C5C;
+            color: white;
+        }
+
+        .form-btn-submit:hover {
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(15, 76, 92, 0.3);
+            border-radius: 10px;
+        }
+
+        .modal-title-text {
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: #0F4C5C;
+            text-align: center;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 35px;
+            color: rgb(128, 128, 128);
+            transition: all 0.3s ease;
+            background: none;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            color: #e74c3c;
+            background: none;
+            transform: scale(1.1);
+            border-radius: 0;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0F4C5C;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            display: none;
+            animation: slideIn 0.3s ease;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .toast-icon {
+            font-size: 24px;
+        }
+
+        .toast-text {
+            font-size: 1em;
+        }
+
+        .confirm-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .confirm-modal.active {
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
 
-        .contact-item {
+        .confirm-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+
+        .confirm-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .confirm-title {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .confirm-text {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .confirm-buttons {
             display: flex;
-            flex-direction: column;
-            gap: 5px;
-            font-size: 1.1em;
-            color: var(--color-testo);
-            text-align: left;
+            gap: 15px;
+            justify-content: center;
         }
 
-        .contact-label {
-            font-weight: bold;
-            color: #fafafa;
-            min-width: 120px;
-            font-size: small;
+        .confirm-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .contact-item span {
-            color: #FAFAFA;
+        .confirm-btn-cancel {
+            background: #e0e0e0;
+            color: #333;
         }
 
-        @media (max-width: 800px) {
-            .top-dashboard {
-                flex-direction: column;
-                align-items: center;
+        .confirm-btn-cancel:hover {
+            background: #d0d0d0;
+        }
+
+        .confirm-btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .confirm-btn-delete:hover {
+            background: linear-gradient(to right, #c0392b, #e41c07);
+            border-radius: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #FFFFF0;
+        }
+
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-title {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .empty-state-text {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 600px) {
+            .modal-image {
+                height: 200px;
             }
 
-            .profile-card {
-                width: 90%;
-                max-width: 400px;
-                margin-bottom: 20px;
-                height: auto;
-                position: static;
+            .modal-content {
+                max-height: 95vh;
             }
 
-            .top-row {
-                width: 100%;
-                display: flex;
+            .modal-body {
+                padding: 25px;
+            }
+
+            .modal-title {
+                font-size: 1.8em;
+            }
+
+            .apply-btn {
+                padding: 12px 30px;
+                font-size: 1em;
+            }
+
+            .new-post-btn {
+                /* Trasforma in cerchio */
+                width: 55px;
+                height: 55px;
+                border-radius: 50%;
+                /* Sovrascrive il 50px */
+
+                /* Rimuovi padding/gap della pillola */
+                padding: 0;
+                gap: 0;
+
+                /* Centra l'icona '+' */
                 justify-content: center;
+                font-size: 1.6em;
+                /* Ingrandisci icona */
+
+                /* Avvicina al bordo */
+                right: 20px;
             }
 
-            .stats-container {
-                width: 100%;
-                max-width: 400px;
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-                align-items: center;
+            .new-post-btn:hover {
+                /* Animazione migliore per un cerchio */
+                transform: scale(1.05);
             }
 
-            .card.stat-card {
-                width: 100%;
-                max-width: 350px;
+            /* 2. Nascondi il testo */
+            .new-post-btn-text {
+                display: none;
             }
         }
+
+        /* --- FINE CSS RESPONSIVE --- */
     </style>
 </head>
 
 <body>
-    <div class="navbar"> <a href="pagina_precedente.html" class="back-arrow">←</a> <a href="home.html"><img
-                src="logo2.png" alt="logo"></a> Profilo <span class="admin-badge">ADMIN</span></div>
-    </div>
-    <div class="top-dashboard">
-        <div class="profile-card">
-            <div class="profile-role-container">
-                <h2 class="profile-role">Studente</h2> <button class="role-button" title="Modifica ruolo"> <img
-                        src="modifica12.png" alt="Modifica"> </button>
+    <nav>
+        <div class="nav-container">
+            <div class="logo"><img src="../immagini/Logo_Senza_Scritta.png"></div>
+            <div class="nav-title">
+                <h2>InfoTirocini.com</h2>
             </div>
-            <div class="profile-icon"> <img src="icona.png" alt="Avatar"
-                    style="width: 100px; height: 100px; border-radius: 50%;"> </div>
-            <div class="contact-item"> <br>
-                <div><span class="contact-label">Nome: </span><br><span>nome prova</span></div> <br>
-                <div><span class="contact-label">Cognome: </span><br><span>cognome prova</span></div> <br>
-                <div><span class="contact-label">Email: </span><br><span>studente.esempio@dominio.it</span></div> <br>
-                <div><span class="contact-label">Password: </span><br><span>Prova</span></div>
-            </div>
-        </div>
-        <div class="top-row">
-            <div class="stats-container">
-                <div class="card stat-card">
-                    <h3>Candidature Inviate</h3>
-                    <div class="number"><a>4</a></div>
-                    <div class="stat-dropdown">
-                        <div class="stat-dropdown-item">Tirocini</div>
-                        <div class="stat-dropdown-item">Lavoro Part-Time</div>
-                        <div class="stat-dropdown-item">Borse di Studio</div>
-                        <div class="stat-dropdown-item">Tirocini</div>
-                        <div class="stat-dropdown-item">Lavoro Part-Time</div>
-                        <div class="stat-dropdown-item">Borse di Studio</div>
+            <div class="user-menu">
+                <div class="user-avatar" onclick="toggleUserDropdown()">
+                    <span class="user-avatar-icon">👤</span>
+                </div>
+                <div class="user-dropdown" id="userDropdown">
+                    <div class="dropdown-header">
+                        <div class="dropdown-avatar">
+                            <span class="dropdown-avatar-icon">👤</span>
+                        </div>
+                        <div class="user-informactions-container">
+                            <div class="user-name">Mario Rossi</div>
+                            <span class="admin-badge">ADMIN</span>
+                        </div>
+                        <div class="user-email">mario.rossi@email.com</div>
                     </div>
+                    <ul class="dropdown-menu">
+                        <li><a href="#"><span class="icon">👤</span><span>Il Mio Profilo</span></a></li>
+                        <li><a href="#"><span class="icon">✏️</span><span>Modifica Profilo</span></a></li>
+                    </ul>
+                    <div class="dropdown-divider"></div>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="logout-btn"><span class="icon">🚪</span><span>Esci</span></a></li>
+                    </ul>
                 </div>
             </div>
         </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <div class="container">
+            <h1>Dashboard Admin</h1>
+            <button class="new-post-btn" onclick="openCreateModal()">
+                ➕ Nuovo Annuncio
+            </button>
+            <div class="dashboard" id="dashboard"></div>
+        </div>
     </div>
-    <script> const statCards = document.querySelectorAll('.stat-card'); statCards.forEach((card, index) => { if (index === 0) card.classList.add('active'); card.addEventListener('click', () => { statCards.forEach(c => { if (c !== card) c.classList.remove('active') }); card.classList.toggle('active'); }); }); </script>
+
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <div class="close-btn" onclick="closeCreateModal()">×</div>
+            <div class="modal-body">
+                <h2 class="modal-title-text" id="formTitle">Crea Nuovo Annuncio</h2>
+                <form id="announcementForm" onsubmit="saveAnnouncement(event)">
+
+                    <div class="form-group">
+                        <label class="form-label">Categoria (puoi sceglierne più di una)</label>
+                        <div class="checkbox-container" id="categoryContainer">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-tecnologia" name="category" value="Tecnologia">
+                                <label for="cat-tecnologia">Tecnologia</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-salute" name="category" value="Salute">
+                                <label for="cat-salute">Salute</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-viaggi" name="category" value="Viaggi">
+                                <label for="cat-viaggi">Viaggi</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-business" name="category" value="Business">
+                                <label for="cat-business">Business</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-sport" name="category" value="Sport">
+                                <label for="cat-sport">Sport</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-arte" name="category" value="Arte">
+                                <label for="cat-arte">Arte</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-cucina" name="category" value="Cucina">
+                                <label for="cat-cucina">Cucina</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-moda" name="category" value="Moda">
+                                <label for="cat-moda">Moda</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Titolo</label>
+                        <input type="text" class="form-input" id="title" placeholder="Inserisci il titolo dell'annuncio"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Estratto Breve</label>
+                        <textarea class="form-textarea" id="excerpt"
+                            placeholder="Breve descrizione dell'annuncio (max 150 caratteri)" maxlength="150"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Contenuto Completo</label>
+                        <textarea class="form-textarea" id="content"
+                            placeholder="Scrivi qui il contenuto completo dell'annuncio" style="min-height: 200px;"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Autore</label>
+                        <select class="form-select" id="author" required>
+                            <option value="">Seleziona un autore</option>
+                            <option value="Mario Rossi">Mario Rossi (Admin)</option>
+                            <option value="Marco Rossi">Marco Rossi</option>
+                            <option value="Laura Bianchi">Laura Bianchi</option>
+                            <option value="Giuseppe Verdi">Giuseppe Verdi</option>
+                            <option value="Staff InfoTirocini">Staff InfoTirocini</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tempo di Lettura (minuti)</label>
+                        <input type="number" class="form-input" id="readTime" placeholder="Es: 5" min="1" required>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="button" class="form-btn form-btn-cancel"
+                            onclick="closeCreateModal()">Annulla</button>
+                        <button type="submit" class="form-btn form-btn-submit">Salva Annuncio</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="confirm-modal" id="confirmModal">
+        <div class="confirm-content">
+            <div class="confirm-icon">⚠️</div>
+            <h3 class="confirm-title">Conferma Eliminazione</h3>
+            <p class="confirm-text">Sei sicuro di voler eliminare questo articolo? Questa azione non può essere
+                annullata.</p>
+            <div class="confirm-buttons">
+                <button class="confirm-btn confirm-btn-cancel" onclick="closeConfirmModal()">Annulla</button>
+                <button class="confirm-btn confirm-btn-delete" onclick="confirmDelete()">Elimina</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <span class="toast-icon" id="toastIcon">✅</span>
+            <span class="toast-text" id="toastText">Operazione completata con successo!</span>
+        </div>
+    </div>
+
+    <script>
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (e) => {
+            const userMenu = document.querySelector('.user-menu');
+            const dropdown = document.getElementById('userDropdown');
+            if (!userMenu.contains(e.target) && dropdown.classList.contains('active')) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        let articles = [
+            {
+                id: 1,
+                category: "Tecnologia",
+                title: "Il Futuro dell'Intelligenza Artificiale",
+                excerpt: "L'AI sta rivoluzionando il modo in cui lavoriamo e viviamo...",
+                content: "L'intelligenza artificiale sta trasformando radicalmente il nostro mondo. Dalle auto a guida autonoma agli assistenti virtuali, l'AI è ormai parte integrante della nostra vita quotidiana.",
+                author: "Marco Rossi",
+                date: "15 Ottobre 2025",
+                readTime: "5 min"
+            },
+            {
+                id: 2,
+                category: "Salute",
+                title: "Alimentazione e Benessere",
+                excerpt: "Scopri come una dieta equilibrata può migliorare la tua vita...",
+                content: "Una corretta alimentazione è la base per uno stile di vita sano. Gli esperti concordano sul fatto che una dieta ricca di frutta, verdura e cereali integrali possa ridurre significativamente il rischio di malattie croniche.",
+                author: "Laura Bianchi",
+                date: "14 Ottobre 2025",
+                readTime: "4 min"
+            },
+            {
+                id: 3,
+                category: "Viaggi",
+                title: "Destinazioni Esotiche da Visitare",
+                excerpt: "I luoghi più incredibili per la tua prossima avventura...",
+                content: "Il mondo è pieno di luoghi meravigliosi che aspettano solo di essere scoperti. Dalle spiagge tropicali alle montagne innevate, ogni destinazione offre esperienze uniche e indimenticabili.",
+                author: "Giuseppe Verdi",
+                date: "13 Ottobre 2025",
+                readTime: "6 min"
+            }
+        ];
+
+        let articleToDelete = null;
+        let nextId = 4;
+
+        function createCards() {
+            const dashboard = document.getElementById('dashboard');
+            dashboard.innerHTML = '';
+
+            if (articles.length === 0) {
+                dashboard.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-state-icon">📝</div>
+                        <h2 class="empty-state-title">Nessun Annuncio</h2>
+                        <p class="empty-state-text">Clicca su "Nuovo Annuncio" per creare il tuo primo articolo</p>
+                    </div>
+                `;
+                return;
+            }
+
+            articles.forEach(article => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-image"></div>
+                    <div class="card-content">
+                        <span class="card-category">${article.category}</span>
+                        <h3 class="card-title">${article.title}</h3>
+                        <p class="card-excerpt">${article.excerpt}</p>
+                        <div class="card-meta">
+                            <span>👤 ${article.author}</span>
+                            <span>🕐 ${article.readTime}</span>
+                        </div>
+                        <button class="delete-btn" onclick="openConfirmModal(event, ${article.id})">
+                            🗑️ Elimina
+                        </button>
+                    </div>
+                `;
+
+                dashboard.appendChild(card);
+            });
+        }
+
+        function openCreateModal() {
+            document.getElementById('formTitle').textContent = 'Crea Nuovo Annuncio';
+            document.getElementById('announcementForm').reset();
+            // Resetta anche il bordo del contenitore checkbox
+            document.getElementById('categoryContainer').style.borderColor = '#e0e0e0';
+            document.getElementById('createModal').classList.add('active');
+
+            // AGGIUNGI QUESTA RIGA: Nasconde il bottone
+            document.querySelector('.new-post-btn').style.display = 'none';
+        }
+        function closeCreateModal() {
+            document.getElementById('createModal').classList.remove('active');
+            document.getElementById('announcementForm').reset();
+            // Resetta anche il bordo del contenitore checkbox
+            document.getElementById('categoryContainer').style.borderColor = '#e0e0e0';
+
+            // AGGIUNGI QUESTA RIGA: Mostra di nuovo il bottone
+            // Usiamo 'flex' perché il tuo CSS originale imposta 'display: flex'
+            document.querySelector('.new-post-btn').style.display = 'flex';
+        }
+
+        // --- FUNZIONE JAVASCRIPT MODIFICATA ---
+        function saveAnnouncement(event) {
+            event.preventDefault();
+
+            // Modifica per Categoria (checkbox)
+            const selectedCategories = [];
+            document.querySelectorAll('input[name="category"]:checked').forEach(checkbox => {
+                selectedCategories.push(checkbox.value);
+            });
+
+            // Validazione: controlla che almeno una categoria sia selezionata
+            if (selectedCategories.length === 0) {
+                const categoryContainer = document.getElementById('categoryContainer');
+                categoryContainer.style.borderColor = '#e74c3c'; // Bordo rosso errore
+                showToast('⚠️', 'Per favore, seleziona almeno una categoria.');
+                // Resetta il bordo dopo 3 secondi
+                setTimeout(() => {
+                    categoryContainer.style.borderColor = '#e0e0e0';
+                }, 3000);
+                return; // Interrompi salvataggio
+            }
+            // Unisce le categorie in una stringa (es. "Tecnologia, Viaggi")
+            const category = selectedCategories.join(', ');
+
+            const title = document.getElementById('title').value;
+            const excerpt = document.getElementById('excerpt').value;
+            const content = document.getElementById('content').value;
+
+            // Modifica per Autore (select) - il codice non cambia perché l'ID è lo stesso
+            const author = document.getElementById('author').value;
+            const readTime = document.getElementById('readTime').value;
+
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('it-IT', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            const newArticle = {
+                id: nextId++,
+                category: category, // Salva la stringa con le categorie
+                title: title,
+                excerpt: excerpt,
+                content: content,
+                author: author,
+                date: dateStr,
+                readTime: readTime + ' min'
+            };
+
+            articles.unshift(newArticle);
+            createCards();
+            closeCreateModal(); // Questa funzione resetta già il form e i bordi
+            showToast('✅', 'Annuncio creato con successo!');
+        }
+        // --- FINE FUNZIONE MODIFICATA ---
+
+        function openConfirmModal(event, articleId) {
+            event.stopPropagation();
+            articleToDelete = articleId;
+            document.getElementById('confirmModal').classList.add('active');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.remove('active');
+            articleToDelete = null;
+        }
+
+        function confirmDelete() {
+            if (articleToDelete !== null) {
+                articles = articles.filter(article => article.id !== articleToDelete);
+                createCards();
+                closeConfirmModal();
+                showToast('✅', 'Articolo eliminato con successo!');
+            }
+        }
+
+        function showToast(icon, message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastIcon').textContent = icon;
+            document.getElementById('toastText').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        document.getElementById('createModal').addEventListener('click', (e) => {
+            if (e.target.id === 'createModal') {
+                closeCreateModal();
+            }
+        });
+
+        document.getElementById('confirmModal').addEventListener('click', (e) => {
+            if (e.target.id === 'confirmModal') {
+                closeConfirmModal();
+            }
+        });
+
+        createCards();
+    </script>
 </body>
 
 </html>

@@ -18,7 +18,7 @@ public class Lavoro {
     private String durata;
     private String orari;
     private String descrizione;
-    
+
     @Column(name = "image_url")
     private String imageUrl;
 
@@ -31,9 +31,16 @@ public class Lavoro {
     @JsonManagedReference("lavoro-candidature")
     private List<Candidatura> candidature;
 
+    @ManyToMany
+    @JoinTable(
+        name = "lavoro_competenza",
+        joinColumns = @JoinColumn(name = "lavoro_id"),
+        inverseJoinColumns = @JoinColumn(name = "competenza_id")
+    )
+    @JsonIgnoreProperties("lavori")
+    private List<Competenza> competenze;
 
     public Lavoro() {}
-
 
     public Integer getId() {
         return id;
@@ -90,12 +97,20 @@ public class Lavoro {
     public void setCandidature(List<Candidatura> candidature) {
         this.candidature = candidature;
     }
-    
+
     public String getImageUrl() {
         return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public List<Competenza> getCompetenze() {
+        return competenze;
+    }
+
+    public void setCompetenze(List<Competenza> competenze) {
+        this.competenze = competenze;
     }
 }

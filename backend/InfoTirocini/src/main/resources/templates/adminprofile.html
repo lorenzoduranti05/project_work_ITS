@@ -79,13 +79,14 @@
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <a th:href="@{/home}" class="back-arrow"><i class="fas fa-arrow-left"></i></a>
-        <a th:href="@{/home}"> <img th:src="@{/immagini/Logo_Con_Scritta.png}" alt="Logo" style="height: 50px;"> </a>
-        <span>ADMIN</span>
-        <span class="admin-badge">Admin</span>
-    </div>
-
+	<div class="navbar">
+	        <a th:href="@{/admin/dashboard}" class="back-arrow"><i class="fas fa-arrow-left"></i></a>
+	        <a th:href="@{/admin/dashboard}">
+	            <img th:src="@{/immagini/Logo_Con_Scritta.png}" alt="Logo" style="height: 50px;">
+	        </a>
+	        <span>ADMIN</span>
+	        <span class="admin-badge">Admin</span>
+	    </div>
     <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
     <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
@@ -128,8 +129,8 @@
                         <div class="colonna">
                             <div class="cell header-cell">ID Azienda</div>
                             <div class="cell header-cell">Nome azienda</div>
-                            <div class="cell header-cell">Cognome</div>
-                            <div class="cell header-cell">Nome</div>
+                            <div class="cell header-cell">ID Utente</div>
+                            <div class="cell header-cell">Nome Utente</div>
                             <div class="cell header-cell">Funzionalità</div>
                         </div>
                         <form method="post" th:each="cand : ${candidature}" class="colonna">

@@ -2,16 +2,27 @@ package com.example.tirocini.config;
 
 import com.example.tirocini.model.Utente;
 import com.example.tirocini.repository.UtenteRepository;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+import java.io.IOException;
+import java.util.Collection;
 
 @Configuration
 @EnableWebSecurity
@@ -37,6 +48,30 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return new AuthenticationSuccessHandler() {
+            private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+
+            @Override
+            public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                                Authentication authentication) throws IOException, ServletException {
+                String targetUrl = determineTargetUrl(authentication);
+                redirectStrategy.sendRedirect(request, response, targetUrl);
+            }
+
+            protected String determineTargetUrl(Authentication authentication) {
+                Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+                for (GrantedAuthority grantedAuthority : authorities) {
+                    if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
+                        return "/admin/dashboard"; // Reindirizza admin a dashboard
+                    }
+                }
+                return "/home"; // Reindirizza user a home
+            }
+        };
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable());
 
@@ -49,7 +84,7 @@ public class SecurityConfig {
                 .loginPage("/accesso")
                 .loginProcessingUrl("/perform_login")
                 .usernameParameter("mail")
-                .defaultSuccessUrl("/home", true)
+                .successHandler(customAuthenticationSuccessHandler()) // Usa handler personalizzato
                 .failureUrl("/accesso?error=true")
                 .permitAll()
         )

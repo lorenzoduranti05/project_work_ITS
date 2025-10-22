@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin</title>
+    <link rel="icon" th:href="@{/immagini/Logo_Senza_Scritta.png}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav {
+            background: #FFFFF0;
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-title {
+            color: #0F4C5C;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #E9B8A6;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none; /* Aggiunto per rimuovere sottolineatura */
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            overflow: hidden; /* Assicura che l'immagine stia dentro */
+        }
+
+        .user-avatar:hover {
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            border-radius: 20%;
+            transform: scale(1.05);
+        }
+
+        /* Stile per l'immagine avatar */
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+
+        .user-avatar-icon {
+            font-size: 24px;
+            color: #0F4C5C;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            min-width: 280px;
+            display: none;
+            animation: dropdownSlide 0.3s ease;
+        }
+
+        .user-dropdown.active {
+            display: block;
+        }
+
+        @keyframes dropdownSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-header {
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 15px;
+        }
+
+        .dropdown-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #E9B8A6;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Aggiunto */
+            position: relative; /* Necessario per upload-overlay */
+        }
+
+        /* Stile per l'immagine avatar nel dropdown */
+        .dropdown-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .dropdown-avatar-icon {
+            font-size: 40px;
+            color: #0F4C5C;
+        }
+
+        .user-informactions-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #0F4C5C;
+            margin-right: 3%;
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-size: 0.5em;
+            font-weight: 700;
+            margin-top: 3px;
+        }
+
+        .user-email {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .dropdown-menu {
+            list-style: none;
+            padding: 0; /* Rimuove padding di default */
+        }
+
+        .dropdown-menu li {
+            margin-bottom: 8px;
+        }
+
+        .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #333;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(233, 184, 166, 0.2);
+            color: #0F4C5C;
+        }
+
+        .dropdown-menu .icon {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #f0f0f0;
+            margin: 10px 0;
+        }
+
+        .logout-btn-as-link { /* Stile per il bottone logout */
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 12px 15px;
+			font-size: 1em;
+			border-radius: 10px;
+			transition: all 0.3s ease;
+			background: none;
+			border: none;
+			cursor: pointer;
+			width: 100%;
+			text-align: left;
+			font-family: inherit;
+			color: #e74c3c !important;
+		}
+
+		.logout-btn-as-link:hover {
+			background: rgba(231, 76, 60, 0.1) !important;
+		}
+
+        .content-wrapper {
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #FFFFF0;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: #FFFFF0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #0F4C5C 0%, #1a6b7d 100%);
+            flex-shrink: 0;
+        }
+
+        .card-content {
+            padding: 1.5em;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            align-items: flex-start; /* Allinea a sinistra */
+        }
+
+        .card-category-container {
+             display: flex;
+             flex-wrap: wrap;
+             gap: 5px;
+             margin-bottom: 10px;
+             min-height: 28px;
+         }
+
+        .card-category {
+            display: inline-block;
+            background: #E9B8A6;
+            color: #0F4C5C;
+            border-radius: 20px;
+            font-weight: 600;
+            width: fit-content;
+            padding: 4px 12px;
+            font-size: 0.75em;
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            margin-bottom: 0.5em;
+            color: #333;
+            width: 100%; /* Occupa tutta la larghezza */
+        }
+
+        .card-excerpt {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1em;
+            flex-grow: 1;
+            width: 100%; /* Occupa tutta la larghezza */
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-height: calc(1.6em * 3);
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #999;
+            font-size: 0.9em;
+            margin-top: auto;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .delete-btn { /* Stile per il bottone elimina */
+             width: auto; /* Adatta larghezza al contenuto */
+             background: #e74c3c;
+             color: white;
+             border: none;
+             border-radius: 25px; /* Arrotondato */
+             padding: 8px 15px; /* Padding ridotto */
+             font-size: 0.8em; /* Testo più piccolo */
+             font-weight: 600;
+             cursor: pointer;
+             display: inline-flex; /* Per allineare icona e testo */
+             align-items: center;
+             gap: 4px;
+             transition: all 0.3s ease;
+             align-self: flex-end; /* Allinea a destra */
+             margin-top: 10px; /* Spazio sopra */
+         }
+
+         .delete-btn:hover {
+             background: linear-gradient(to right, #c0392b, #e41c07);
+             border-radius: 10px;
+             box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+         }
+
+        .new-post-btn {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            background-color: #0f4c5c;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(15, 76, 92, 0.3);
+            z-index: 90;
+        }
+
+        .new-post-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(15, 76, 92, 0.4);
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Stili aggiunti per modal info card */
+        .modal-image {
+             width: 100%;
+             height: 300px; /* Altezza fissa per l'immagine */
+             object-fit: cover; /* Scala l'immagine mantenendo le proporzioni */
+             background: linear-gradient(135deg, #0F4C5C 0%, #1a6b7d 100%); /* Sfondo placeholder */
+         }
+
+        .modal-body { padding: 40px; }
+        .form-group { margin-bottom: 25px; }
+        .form-label { display: block; font-weight: 600; color: #333; margin-bottom: 8px; font-size: 1em; }
+        .form-input, .form-textarea, .form-select { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1em; font-family: inherit; transition: all 0.3s ease; }
+        .form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: #0F4C5C; box-shadow: 0 0 0 3px rgba(15, 76, 92, 0.1); }
+        .form-textarea { resize: vertical; min-height: 120px; }
+        .checkbox-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; border: 2px solid #e0e0e0; border-radius: 10px; padding: 15px; transition: all 0.3s ease; }
+        .checkbox-container:focus-within { outline: none; border-color: #0F4C5C; box-shadow: 0 0 0 3px rgba(15, 76, 92, 0.1); }
+        .checkbox-item { display: flex; align-items: center; gap: 10px; }
+        .checkbox-item input[type="checkbox"] { width: 1.3em; height: 1.3em; cursor: pointer; accent-color: #0F4C5C; }
+        .checkbox-item label { font-weight: 500; color: #333; margin-bottom: 0; cursor: pointer; }
+        .form-buttons { display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px; }
+        .form-btn { padding: 12px 30px; border: none; border-radius: 25px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .form-btn-cancel { background: #e0e0e0; color: #333; }
+        .form-btn-cancel:hover { background: #d0d0d0; }
+        .form-btn-submit { background: #0F4C5C; color: white; }
+        .form-btn-submit:hover { background: linear-gradient(135deg, #0f4c5c, #e9b8a6); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(15, 76, 92, 0.3); border-radius: 10px; }
+        .modal-title-text { font-size: 2em; margin-bottom: 30px; color: #0F4C5C; text-align: center; }
+        .close-btn { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 35px; color: rgb(128, 128, 128); transition: all 0.3s ease; background: none; z-index: 10; border: none; /* Aggiunto */ }
+        .close-btn:hover { color: #e74c3c; background: none; transform: scale(1.1); border-radius: 0; }
+        .toast { position: fixed; bottom: 30px; right: 30px; background: #0F4C5C; color: white; padding: 20px 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3); display: none; animation: slideIn 0.3s ease; z-index: 2000; }
+        .toast.show { display: block; }
+        @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast-content { display: flex; align-items: center; gap: 15px; }
+        .toast-icon { font-size: 24px; }
+        .toast-text { font-size: 1em; }
+        .confirm-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 2000; animation: fadeIn 0.3s ease; }
+        .confirm-modal.active { display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .confirm-content { background: white; border-radius: 20px; padding: 40px; max-width: 500px; width: 100%; text-align: center; animation: slideUp 0.3s ease; }
+        .confirm-icon { font-size: 60px; margin-bottom: 20px; }
+        .confirm-title { font-size: 1.8em; color: #333; margin-bottom: 15px; }
+        .confirm-text { color: #666; margin-bottom: 30px; line-height: 1.6; }
+        .confirm-buttons { display: flex; gap: 15px; justify-content: center; }
+        .confirm-btn { padding: 12px 30px; border: none; border-radius: 25px; font-size: 1em; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .confirm-btn-cancel { background: #e0e0e0; color: #333; }
+        .confirm-btn-cancel:hover { background: #d0d0d0; }
+        .confirm-btn-delete { background: #e74c3c; color: white; }
+        .confirm-btn-delete:hover { background: linear-gradient(to right, #c0392b, #e41c07); border-radius: 10px; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #FFFFF0; }
+        .empty-state-icon { font-size: 80px; margin-bottom: 20px; }
+        .empty-state-title { font-size: 2em; margin-bottom: 15px; }
+        .empty-state-text { font-size: 1.2em; opacity: 0.9; }
+
+        @media (max-width: 600px) {
+            .modal-content { max-height: 95vh; }
+            .modal-body { padding: 25px; }
+            .modal-title-text { font-size: 1.8em; }
+            .new-post-btn { top: auto; bottom: 30px; right: 20px; width: 55px; height: 55px; border-radius: 50%; padding: 0; gap: 0; justify-content: center; font-size: 1.6em; }
+            .new-post-btn:hover { transform: scale(1.05); }
+            .new-post-btn .button-label { display: none; } /* Modificato selettore */
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-container">
+            <a th:href="@{/home}" class="logo"> <img th:src="@{/immagini/Logo_Senza_Scritta.png}" alt="Logo"> </a>
+            <div class="nav-title">
+                <h2>InfoTirocini.com</h2>
+            </div>
+            <div class="user-menu" th:if="${admin != null}"> <div class="user-avatar" onclick="toggleUserDropdown()">
+                     <span th:if="${admin.profileImageUrl == null or #strings.equals(admin.profileImageUrl, '/immagini/icona.png')}" class="user-avatar-icon">👤</span>
+                     <img th:unless="${admin.profileImageUrl == null or #strings.equals(admin.profileImageUrl, '/immagini/icona.png')}" th:src="${admin.profileImageUrl}" alt="Avatar Admin">
+                </div>
+                <div class="user-dropdown" id="userDropdown">
+                    <div class="dropdown-header">
+                        <div class="dropdown-avatar">
+                             <span th:if="${admin.profileImageUrl == null or #strings.equals(admin.profileImageUrl, '/immagini/icona.png')}" class="dropdown-avatar-icon">👤</span>
+                             <img th:unless="${admin.profileImageUrl == null or #strings.equals(admin.profileImageUrl, '/immagini/icona.png')}" th:src="${admin.profileImageUrl}" alt="Avatar Admin Dropdown">
+                        </div>
+                        <div class="user-informactions-container">
+                             <div class="user-name" th:text="${admin.nome} + ' ' + ${admin.cognome}">Nome Admin</div>
+                            <span class="admin-badge">ADMIN</span>
+                        </div>
+                        <div class="user-email" th:text="${admin.mail}">email@admin.com</div>
+                    </div>
+                    <ul class="dropdown-menu">
+                         <li><a th:href="@{/admin/profilo}"><span class="icon">👤</span><span>Il Mio Profilo</span></a></li>
+                       
+                    </ul>
+                    <div class="dropdown-divider"></div>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <form th:action="@{/logout}" method="POST" style="margin: 0;">
+                                <button type="submit" class="logout-btn-as-link">
+                                    <span class="icon">🚪</span>
+                                    <span>Esci</span>
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+             <div th:unless="${admin != null}">
+                <a th:href="@{/accesso}" style="color: #0F4C5C; text-decoration: none; font-weight: bold;">Accedi</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <div class="container">
+            <h1>Dashboard Admin</h1>
+            <button class="new-post-btn" onclick="openCreateModal()">
+                ➕ <span class="button-label">Nuovo Annuncio</span>
+            </button>
+            <div class="dashboard" id="dashboard">
+                 <div th:each="lavoro : ${lavori}" class="card"
+                     th:data-id="${lavoro.id}"
+                     th:data-titolo="${lavoro.nome}"
+                     th:data-azienda="${lavoro.azienda?.nome}"
+                     th:data-descrizione="${lavoro.descrizione}"
+                     th:data-durata="${lavoro.durata}"
+                     th:data-orari="${lavoro.orari}"
+                     th:data-image-url="@{'/immagini/' + ${lavoro.imageUrl}}"
+                     th:data-competenze="${lavoro.competenze != null ? #strings.arrayJoin(lavoro.competenze.![nome], '||') : ''}"
+                     th:onclick="openCardModal(this)"> <img th:src="@{'/immagini/' + ${lavoro.imageUrl}}" alt="Immagine tirocinio" class="card-image" />
+                     <div class="card-content">
+                         <div class="card-category-container">
+                             <span th:each="comp : ${lavoro.competenze}" class="card-category" th:text="${comp.nome}">Competenza</span>
+                         </div>
+                         <h3 class="card-title" th:text="${lavoro.nome}">Titolo Annuncio</h3>
+                         <p class="card-excerpt" th:text="${lavoro.descrizione != null && #strings.length(lavoro.descrizione) > 100} ? ${#strings.substring(lavoro.descrizione, 0, 100)} + '...' : ${lavoro.descrizione}">Breve descrizione...</p>
+                         <div class="card-meta">
+                             <span th:text="'🏭 ' + ${lavoro.azienda?.nome ?: 'Azienda non specificata'}">Nome Azienda</span>
+                             <span th:text="'🕐 ' + ${lavoro.durata ?: 'N/D'}">Durata</span>
+                         </div>
+                         <button class="delete-btn" th:onclick="'openConfirmModal(event, ' + ${lavoro.id} + ')'">🗑️ Elimina</button>
+                     </div>
+                 </div>
+
+                 <div th:if="${#lists.isEmpty(lavori)}" class="empty-state" style="grid-column: 1/-1;">
+                     <div class="empty-state-icon">📝</div>
+                     <h2 class="empty-state-title">Nessun Annuncio</h2>
+                     <p class="empty-state-text">Clicca su "Nuovo Annuncio" per creare il tuo primo articolo</p>
+                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeCreateModal()">×</button>
+            <div class="modal-body">
+                <h2 class="modal-title-text" id="formTitle">Crea Nuovo Annuncio</h2>
+                <form id="announcementForm" onsubmit="saveAnnouncement(event)">
+                    <input type="hidden" id="editId"> <div class="form-group">
+                         <label class="form-label">Competenze (puoi sceglierne più di una)</label>
+                         <div class="checkbox-container" id="categoryContainer">
+                             <div th:each="competenza : ${competenzeDisponibili}" class="checkbox-item">
+                                 <input type="checkbox" th:id="'comp-' + ${competenza.id}" name="competenzeSelezionate" th:value="${competenza.id}">
+                                 <label th:for="'comp-' + ${competenza.id}" th:text="${competenza.nome}">Nome Competenza</label>
+                             </div>
+                         </div>
+                     </div>
+
+                     <div class="form-group">
+                         <label for="form-title" class="form-label">Titolo</label>
+                         <input type="text" class="form-input" id="form-title" placeholder="Inserisci il titolo dell'annuncio" required>
+                     </div>
+                     <div class="form-group">
+                         <label for="form-excerpt" class="form-label">Estratto Breve</label>
+                         <textarea class="form-textarea" id="form-excerpt" placeholder="Breve descrizione (max 150 caratteri)" maxlength="150" required></textarea>
+                     </div>
+                     <div class="form-group">
+                         <label for="form-content" class="form-label">Contenuto Completo</label>
+                         <textarea class="form-textarea" id="form-content" placeholder="Descrizione dettagliata" style="min-height: 150px;" required></textarea>
+                     </div>
+                     <div class="form-group">
+                         <label for="form-author" class="form-label">Azienda</label>
+                         <select class="form-select" id="form-author" required>
+                             <option value="">Seleziona un'azienda</option>
+                              <option th:each="az : ${aziendeDisponibili}" th:value="${az.id}" th:text="${az.nome}">Nome Azienda</option>
+                         </select>
+                     </div>
+                     <div class="form-group">
+                         <label for="form-duration" class="form-label">Durata</label>
+                         <input type="text" class="form-input" id="form-duration" placeholder="Es: 6 mesi" required>
+                     </div>
+                     <div class="form-group">
+                         <label for="form-schedule" class="form-label">Orari</label>
+                         <input type="text" class="form-input" id="form-schedule" placeholder="Es: Full-time / 9:00-18:00" required>
+                     </div>
+                     <div class="form-group">
+                         <label for="form-image" class="form-label">URL Immagine (Opzionale)</label> <input type="text" class="form-input" id="form-image" placeholder="Es: nomefile.jpg"> </div>
+
+                    <div class="form-buttons">
+                        <button type="button" class="form-btn form-btn-cancel" onclick="closeCreateModal()">Annulla</button>
+                        <button type="submit" class="form-btn form-btn-submit">Salva Annuncio</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+     <div class="modal" id="infoModal">
+         <div class="modal-content">
+             <button class="close-btn" onclick="closeInfoModal()">×</button>
+             <img id="infoModalImage" src="" alt="Immagine Annuncio" class="modal-image"> <div class="modal-body">
+                 <div class="card-category-container" id="infoModalCategoryContainer">
+                     </div>
+                 <h2 class="modal-title-text" id="infoModalTitle">Titolo Annuncio</h2> <div class="card-meta" id="infoModalMeta" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                     <span id="infoModalAuthor">🏭 Nome Azienda</span>
+                     <span id="infoModalDuration">🕐 Durata</span>
+                     <span id="infoModalSchedule">📅 Orari</span>
+                 </div>
+                 <p id="infoModalContent" style="line-height: 1.7; color: #555;">Descrizione completa...</p>
+             </div>
+         </div>
+     </div>
+
+
+    <div class="confirm-modal" id="confirmModal">
+        <div class="confirm-content">
+            <div class="confirm-icon">⚠️</div>
+            <h3 class="confirm-title">Conferma Eliminazione</h3>
+            <p class="confirm-text">Sei sicuro di voler eliminare questo annuncio? L'azione non può essere annullata.</p>
+            <div class="confirm-buttons">
+                <button class="confirm-btn confirm-btn-cancel" onclick="closeConfirmModal()">Annulla</button>
+                <button class="confirm-btn confirm-btn-delete" onclick="confirmDelete()">Elimina</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <span class="toast-icon" id="toastIcon">✅</span>
+            <span class="toast-text" id="toastText">Operazione completata con successo!</span>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        let lavoriData = /*[[${lavori}]]*/ [];
+        let competenzeDisponibili = /*[[${competenzeDisponibili}]]*/ [];
+        let aziendeDisponibili = /*[[${aziendeDisponibili}]]*/ [];
+
+
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown) dropdown.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (e) => {
+            const userMenu = document.querySelector('.user-menu');
+            const dropdown = document.getElementById('userDropdown');
+            if (userMenu && dropdown && !userMenu.contains(e.target) && dropdown.classList.contains('active')) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        let articleToDelete = null;
+
+        function openCreateModal() {
+            document.getElementById('formTitle').textContent = 'Crea Nuovo Annuncio';
+            document.getElementById('announcementForm').reset();
+            document.getElementById('editId').value = ''; // Assicura che ID sia vuoto
+            document.getElementById('categoryContainer').style.borderColor = '#e0e0e0';
+            document.querySelectorAll('input[name="competenzeSelezionate"]').forEach(cb => cb.checked = false); // Deseleziona checkbox
+            document.getElementById('createModal').classList.add('active');
+            document.querySelector('.new-post-btn').style.display = 'none';
+        }
+
+        function closeCreateModal() {
+            document.getElementById('createModal').classList.remove('active');
+            document.getElementById('announcementForm').reset();
+            document.getElementById('categoryContainer').style.borderColor = '#e0e0e0';
+            document.querySelector('.new-post-btn').style.display = 'flex';
+        }
+
+       async function saveAnnouncement(event) {
+            event.preventDefault();
+
+            const editId = document.getElementById('editId').value;
+            const isEditing = editId !== '';
+
+            const selectedCompetenzeIds = [];
+            document.querySelectorAll('input[name="competenzeSelezionate"]:checked').forEach(checkbox => {
+                selectedCompetenzeIds.push(parseInt(checkbox.value));
+            });
+
+            if (selectedCompetenzeIds.length === 0) {
+                 showToast('⚠️', 'Seleziona almeno una competenza.');
+                 document.getElementById('categoryContainer').style.borderColor = '#e74c3c';
+                 setTimeout(() => { document.getElementById('categoryContainer').style.borderColor = '#e0e0e0'; }, 3000);
+                 return;
+            }
+
+            const annuncioData = {
+                id: isEditing ? parseInt(editId) : null,
+                nome: document.getElementById('form-title').value,
+                descrizione: document.getElementById('form-content').value,
+                aziendaId: parseInt(document.getElementById('form-author').value),
+                durata: document.getElementById('form-duration').value,
+                orari: document.getElementById('form-schedule').value,
+                imageUrl: document.getElementById('form-image').value || null, // Invia null se vuoto
+                competenzeIds: selectedCompetenzeIds
+            };
+
+            // Controlla se l'imageUrl è vuoto e imposta un default se necessario (opzionale)
+            if (!annuncioData.imageUrl) {
+                 annuncioData.imageUrl = 'default-image.jpg'; // O qualsiasi nome di immagine di default tu voglia
+            }
+
+			const url = isEditing ? `/admin/api/lavori/${editId}` : '/admin/api/lavori'; // Added /admin prefix
+			const method = isEditing ? 'PUT' : 'POST';
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(annuncioData)
+                });
+
+                const responseBody = await response.text();
+
+                if (response.ok) {
+                    showToast('✅', responseBody || `Annuncio ${isEditing ? 'aggiornato' : 'creato'}!`);
+                    closeCreateModal();
+                    window.location.reload();
+                } else {
+                    showToast('❌', responseBody || `Errore durante il salvataggio.`);
+                }
+            } catch (error) {
+                console.error('Errore:', error);
+                showToast('❌', 'Errore di connessione.');
+            }
+        }
+
+
+         function openCardModal(cardElement) {
+             const id = cardElement.getAttribute('data-id');
+             const title = cardElement.getAttribute('data-titolo');
+             const author = cardElement.getAttribute('data-azienda');
+             const duration = cardElement.getAttribute('data-durata');
+             const schedule = cardElement.getAttribute('data-orari');
+             const content = cardElement.getAttribute('data-descrizione');
+             let imageUrl = cardElement.getAttribute('data-image-url');
+             const competenze = cardElement.getAttribute('data-competenze');
+
+             const modal = document.getElementById('infoModal');
+             const modalCategoryContainer = document.getElementById('infoModalCategoryContainer');
+             modalCategoryContainer.innerHTML = '';
+
+             if (competenze && competenze.trim() !== '') {
+                 const competenzeArray = competenze.split('||');
+                 competenzeArray.forEach(nomeCompetenza => {
+                     const tagSpan = document.createElement('span');
+                     tagSpan.className = 'card-category';
+                     tagSpan.textContent = nomeCompetenza.trim();
+                     modalCategoryContainer.appendChild(tagSpan);
+                 });
+             }
+
+             // Usa immagine di default se non specificata
+             if (!imageUrl || imageUrl.endsWith('null') || imageUrl.endsWith('default-image.jpg')) { // Controlla anche il default
+                  imageUrl = '/immagini/Logo_Senza_Scritta.png'; // Percorso immagine di default
+             }
+
+             document.getElementById('infoModalImage').src = imageUrl;
+             document.getElementById('infoModalTitle').textContent = title;
+             document.getElementById('infoModalAuthor').textContent = `🏭 ${author || 'N/D'}`;
+             document.getElementById('infoModalDuration').textContent = `🕐 ${duration || 'N/D'}`;
+             document.getElementById('infoModalSchedule').textContent = `📅 ${schedule || 'N/D'}`;
+             document.getElementById('infoModalContent').textContent = content;
+
+             modal.classList.add('active');
+             document.body.style.overflow = 'hidden'; // Blocca scroll body
+         }
+
+         function closeInfoModal() {
+             const modal = document.getElementById('infoModal');
+             modal.classList.remove('active');
+             document.body.style.overflow = 'auto'; // Sblocca scroll body
+         }
+
+         // Chiudi info modal cliccando fuori o con ESC
+         document.getElementById('infoModal').addEventListener('click', (e) => {
+            if (e.target.id === 'infoModal') closeInfoModal();
+         });
+         document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('infoModal').classList.contains('active')) {
+                closeInfoModal();
+            }
+         });
+
+
+        function openConfirmModal(event, articleId) {
+            event.stopPropagation();
+            articleToDelete = articleId;
+            document.getElementById('confirmModal').classList.add('active');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.remove('active');
+            articleToDelete = null;
+        }
+
+       async function confirmDelete() {
+            if (articleToDelete !== null) {
+                const url = `/admin/api/lavori/${articleToDelete}`;
+                try {
+                    const response = await fetch(url, { method: 'DELETE' });
+                    const responseBody = await response.text();
+
+                    if (response.ok) {
+                        showToast('✅', responseBody || 'Annuncio eliminato!');
+                        const cardToRemove = document.querySelector(`.card[data-id="${articleToDelete}"]`);
+                        if(cardToRemove) cardToRemove.remove();
+                    } else {
+                        showToast('❌', responseBody || 'Errore eliminazione.');
+                    }
+                } catch (error) {
+                     console.error('Errore:', error);
+                     showToast('❌', 'Errore di connessione.');
+                } finally {
+                     closeConfirmModal();
+                }
+            }
+        }
+
+
+        function showToast(icon, message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastIcon').textContent = icon;
+            document.getElementById('toastText').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
+        /* Rimosso event listener per chiusura modal create cliccando fuori */
+        // document.getElementById('createModal').addEventListener('click', (e) => { if (e.target.id === 'createModal') closeCreateModal(); });
+
+        document.getElementById('confirmModal').addEventListener('click', (e) => { if (e.target.id === 'confirmModal') closeConfirmModal(); });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (document.getElementById('createModal').classList.contains('active')) closeCreateModal();
+                if (document.getElementById('confirmModal').classList.contains('active')) closeConfirmModal();
+                if (document.getElementById('infoModal').classList.contains('active')) closeInfoModal(); // Aggiunto per modal info
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+             const navAvatarImg = document.querySelector('.user-avatar img');
+             const navAvatarIcon = document.querySelector('.user-avatar .user-avatar-icon');
+             if (navAvatarImg && navAvatarImg.getAttribute('src') && navAvatarImg.getAttribute('src') !== '/immagini/icona.png') {
+                 if(navAvatarIcon) navAvatarIcon.style.display = 'none';
+                 navAvatarImg.style.display = 'block';
+             }
+
+             const dropdownAvatarImg = document.querySelector('.dropdown-avatar img');
+             const dropdownAvatarIcon = document.querySelector('.dropdown-avatar .dropdown-avatar-icon');
+              if (dropdownAvatarImg && dropdownAvatarImg.getAttribute('src') && dropdownAvatarImg.getAttribute('src') !== '/immagini/icona.png') {
+                 if(dropdownAvatarIcon) dropdownAvatarIcon.style.display = 'none';
+                 dropdownAvatarImg.style.display = 'block';
+             }
+         });
+
+        /*]]>*/
+    </script>
+</body>
+
+</html>

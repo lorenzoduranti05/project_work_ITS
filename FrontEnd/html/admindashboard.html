@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Articoli</title>
+    <title>Dashboard Admin</title>
     <style>
         * {
             margin: 0;
@@ -52,7 +52,7 @@
             gap: 15px;
         }
 
-        .logo img {
+         .logo img {
             width: 50px;
             height: 50px;
             object-fit: contain;
@@ -72,19 +72,12 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border: 2px solid transparent;
-            overflow: hidden;
         }
 
         .user-avatar:hover {
             background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
             border-radius: 20%;
             transform: scale(1.05);
-        }
-
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         .user-avatar-icon {
@@ -137,37 +130,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .dropdown-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         .dropdown-avatar-icon {
             font-size: 40px;
             color: #0F4C5C;
-        }
-
-        .upload-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(15, 76, 92, 0.9);
-            color: white;
-            padding: 5px;
-            font-size: 11px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .upload-overlay:hover {
-            background: #0F4C5C;
         }
 
         .user-informactions-container {
@@ -188,11 +155,8 @@
             background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
             color: white;
             padding: 5px 15px;
-            /* più spazio interno */
             border-radius: 25px;
-            /* più arrotondato */
             font-size: 0.5em;
-            /* dimensione del testo maggiore */
             font-weight: 700;
             margin-top: 3px;
         }
@@ -247,10 +211,6 @@
             background: rgba(231, 76, 60, 0.1) !important;
         }
 
-        #fileInput {
-            display: none;
-        }
-
         .content-wrapper {
             padding: 40px 20px;
         }
@@ -283,6 +243,9 @@
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .card:hover {
@@ -295,33 +258,41 @@
             height: 200px;
             object-fit: cover;
             background: linear-gradient(135deg, #0F4C5C 0%, #1a6b7d 100%);
+            flex-shrink: 0;
         }
 
         .card-content {
-            padding: 20px;
+            padding: 1.5em;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            /* Nuovo: Centra gli elementi lungo l'asse orizzontale (cross-axis) */
+            align-items: center;
         }
 
         .card-category {
             display: inline-block;
             background: #E9B8A6;
             color: #0F4C5C;
-            padding: 5px 15px;
+            padding: 0.4em 1.2em;
             border-radius: 20px;
             font-size: 0.8em;
-            margin-bottom: 10px;
+            margin-bottom: 0.8em;
             font-weight: 600;
+            align-self: flex-start;
         }
 
         .card-title {
             font-size: 1.5em;
-            margin-bottom: 10px;
+            margin-bottom: 0.5em;
             color: #333;
         }
 
         .card-excerpt {
             color: #666;
             line-height: 1.6;
-            margin-bottom: 15px;
+            margin-bottom: 1em;
+            flex-grow: 1;
         }
 
         .card-meta {
@@ -330,9 +301,67 @@
             align-items: center;
             color: #999;
             font-size: 0.9em;
+            margin-top: auto;
+            /* Nuovo: Aggiunge spazio sotto card-meta */
+            margin-bottom: 15px;
+            /* Importante: Se il width non è 100%, align-items non lo centra. */
+            width: 100%;
         }
 
-        /* Modal */
+        .delete-btn {
+            width: 35%;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-size: 0.7em;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: all 0.3s ease;
+            /* Rimuoviamo margin-top: auto; dato che align-items: center in card-content non lo supporta bene per centrare. */
+            /* margin-top: auto; (rimosso) */
+        }
+
+        .delete-btn:hover {
+            background: linear-gradient(to right, #c0392b, #e41c07);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .new-post-btn {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            background-color: #0f4c5c;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(15, 76, 92, 0.3);
+            z-index: 90;
+        }
+
+        .new-post-btn:hover {
+
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(15, 76, 92, 0.4);
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            color: white;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -386,79 +415,155 @@
             }
         }
 
-        .modal-image {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            background: linear-gradient(135deg, #0F4C5C 0%, #1a6b7d 100%);
-        }
-
         .modal-body {
             padding: 40px;
         }
 
-        .modal-category {
-            display: inline-block;
-            background: #E9B8A6;
-            color: #0F4C5C;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-size: 0.9em;
-            margin-bottom: 15px;
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
             font-weight: 600;
-        }
-
-        .modal-title {
-            font-size: 2.5em;
-            margin-bottom: 15px;
             color: #333;
+            margin-bottom: 8px;
+            font-size: 1em;
         }
 
-        .modal-meta {
-            color: #999;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #eee;
-        }
-
-        .modal-text {
-            color: #555;
-            line-height: 1.8;
-            font-size: 1.1em;
-        }
-
-        .apply-btn {
-            background: #E9B8A6;
-            color: #0F4C5C;
-            padding: 15px 40px;
-            border: none;
-            border-radius: 30px;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
             transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #0F4C5C;
+            box-shadow: 0 0 0 3px rgba(15, 76, 92, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* --- STILI AGGIUNTI PER I CHECKBOX --- */
+        .checkbox-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-container:focus-within {
+            outline: none;
+            border-color: #0F4C5C;
+            box-shadow: 0 0 0 3px rgba(15, 76, 92, 0.1);
+        }
+
+        .checkbox-item {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin: 0 auto;
-            margin-top: 5%;
-            box-shadow: 0 4px 15px rgba(233, 184, 166, 0.4);
         }
 
-        .apply-btn:hover {
-            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
-            ;
+        .checkbox-item input[type="checkbox"] {
+            width: 1.3em;
+            height: 1.3em;
+            cursor: pointer;
+            accent-color: #0F4C5C;
+            /* Colora il checkbox quando selezionato */
+        }
+
+        .checkbox-item label {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        /* --- FINE STILI AGGIUNTI --- */
+
+        .form-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .form-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-btn-cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .form-btn-cancel:hover {
+            background: #d0d0d0;
+        }
+
+        .form-btn-submit {
+            background: #0F4C5C;
             color: white;
-            border-radius: 20px;
-            box-shadow: 0 6px 20px rgba(15, 76, 92, 0.4);
         }
 
-        .apply-btn:active {
-            transform: translateY(0);
+        .form-btn-submit:hover {
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(15, 76, 92, 0.3);
+            border-radius: 10px;
         }
 
-        .btn-icon {
-            font-size: 1.2em;
+        .modal-title-text {
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: #0F4C5C;
+            text-align: center;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 35px;
+            color: rgb(128, 128, 128);
+            transition: all 0.3s ease;
+            background: none;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            color: #e74c3c;
+            background: none;
+            transform: scale(1.1);
+            border-radius: 0;
         }
 
         .toast {
@@ -505,69 +610,536 @@
             font-size: 1em;
         }
 
-        .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+        .confirm-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .confirm-modal.active {
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .confirm-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+
+        .confirm-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .confirm-title {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .confirm-text {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .confirm-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 35px;
-            color: white;
             transition: all 0.3s ease;
         }
 
-        .close-btn:hover {
-            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
-            ;
-            border-radius: 20%;
+        .confirm-btn-cancel {
+            background: #e0e0e0;
+            color: #333;
         }
+
+        .confirm-btn-cancel:hover {
+            background: #d0d0d0;
+        }
+
+        .confirm-btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .confirm-btn-delete:hover {
+            background: linear-gradient(to right, #c0392b, #e41c07);
+            border-radius: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #FFFFF0;
+        }
+
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-title {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .empty-state-text {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 600px) {
+            .modal-image {
+                height: 200px;
+            }
+
+            .modal-content {
+                max-height: 95vh;
+            }
+
+            .modal-body {
+                padding: 25px;
+            }
+
+            .modal-title {
+                font-size: 1.8em;
+            }
+
+            .apply-btn {
+                padding: 12px 30px;
+                font-size: 1em;
+            }
+
+/* --- CSS RESPONSIVE (DA PILLOLA IN ALTO A CERCHIO IN BASSO a 600px) --- */
+
+@media (max-width: 600px) {
+    
+    .new-post-btn {
+        /* 1. Sposta in basso a destra */
+        top: auto;
+        bottom: 30px;
+        right: 20px;
+
+        /* 2. Trasforma in cerchio */
+        width: 55px;
+        height: 55px;
+        border-radius: 50%; /* Sovrascrive il 50px */
+        
+        /* 3. Centra il '+' e rimuovi padding/gap */
+        padding: 0;
+        gap: 0;
+        justify-content: center;
+        font-size: 1.6em; /* Ingrandisci icona */
+    }
+
+    .new-post-btn:hover {
+        /* Animazione migliore per un cerchio */
+        transform: scale(1.05); 
+    }
+
+    /* 4. Nascondi il testo (grazie allo <span>) */
+    .new-post-btn-text {
+        display: none;
+    }
+    button-label {
+        display: none;
+    }
+}
+/* --- FINE CSS RESPONSIVE --- */
     </style>
 </head>
 
 <body>
     <nav>
         <div class="nav-container">
-            <div class="logo"> <img src="../immagini/Logo_Senza_Scritta.png"> </div>
+            <div class="logo"><img src="../immagini/Logo_Senza_Scritta.png"></div>
             <div class="nav-title">
-                <h2> InfoTirocini.com </h2>
+                <h2>InfoTirocini.com</h2>
             </div>
             <div class="user-menu">
-                <div class="user-avatar" onclick="toggleUserDropdown()"> <span class="user-avatar-icon"
-                        id="navAvatarIcon">👤</span> <img id="navAvatarImg" style="display: none;"> </div>
+                <div class="user-avatar" onclick="toggleUserDropdown()">
+                    <span class="user-avatar-icon">👤</span>
+                </div>
                 <div class="user-dropdown" id="userDropdown">
                     <div class="dropdown-header">
-                        <div class="dropdown-avatar"> <span class="dropdown-avatar-icon"
-                                id="dropdownAvatarIcon">👤</span> <img id="dropdownAvatarImg" style="display: none;">
+                        <div class="dropdown-avatar">
+                            <span class="dropdown-avatar-icon">👤</span>
                         </div>
                         <div class="user-informactions-container">
-                            <div class="user-name">Mario Rossi </div> <span class="admin-badge">ADMIN</span>
+                            <div class="user-name">Mario Rossi</div>
+                            <span class="admin-badge">ADMIN</span>
                         </div>
                         <div class="user-email">mario.rossi@email.com</div>
                     </div>
                     <ul class="dropdown-menu">
-                        <li> <a href="#"> <span class="icon">👤</span> <span>Il Mio Profilo</span> </a> </li>
-                        <li> <a href="#"> <span class="icon">✏️</span> <span>Modifica Profilo</span> </a> </li>
+                        <li><a href="#"><span class="icon">👤</span><span>Il Mio Profilo</span></a></li>
+                        <li><a href="#"><span class="icon">✏️</span><span>Modifica Profilo</span></a></li>
                     </ul>
                     <div class="dropdown-divider"></div>
                     <ul class="dropdown-menu">
-                        <li> <a href="#" class="logout-btn"> <span class="icon">🚪</span> <span>Esci</span> </a> </li>
+                        <li><a href="#" class="logout-btn"><span class="icon">🚪</span><span>Esci</span></a></li>
                     </ul>
                 </div>
             </div>
         </div>
     </nav>
+
     <div class="content-wrapper">
         <div class="container">
-            <h1>Annunci Tirocini</h1>
+            <h1>Dashboard Admin</h1>
+            <button class="new-post-btn" onclick="openCreateModal()">
+                ➕ <span class="button-label">Nuovo Annuncio</span>
+            </button>
             <div class="dashboard" id="dashboard"></div>
         </div>
     </div>
-    <script> function toggleUserDropdown() { const dropdown = document.getElementById('userDropdown'); dropdown.classList.toggle('active'); } // Chiudi dropdown cliccando fuori document.addEventListener('click', (e) => { const userMenu = document.querySelector('.user-menu'); const dropdown = document.getElementById('userDropdown'); if (!userMenu.contains(e.target) && dropdown.classList.contains('active')) { dropdown.classList.remove('active'); } }); </script>
+
+    <div class="modal" id="createModal">
+        <div class="modal-content">
+            <div class="close-btn" onclick="closeCreateModal()">×</div>
+            <div class="modal-body">
+                <h2 class="modal-title-text" id="formTitle">Crea Nuovo Annuncio</h2>
+                <form id="announcementForm" onsubmit="saveAnnouncement(event)">
+
+                    <div class="form-group">
+                        <label class="form-label">Categoria (puoi sceglierne più di una)</label>
+                        <div class="checkbox-container" id="categoryContainer">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-tecnologia" name="category" value="Tecnologia">
+                                <label for="cat-tecnologia">Tecnologia</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-salute" name="category" value="Salute">
+                                <label for="cat-salute">Salute</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-viaggi" name="category" value="Viaggi">
+                                <label for="cat-viaggi">Viaggi</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-business" name="category" value="Business">
+                                <label for="cat-business">Business</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-sport" name="category" value="Sport">
+                                <label for="cat-sport">Sport</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-arte" name="category" value="Arte">
+                                <label for="cat-arte">Arte</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-cucina" name="category" value="Cucina">
+                                <label for="cat-cucina">Cucina</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cat-moda" name="category" value="Moda">
+                                <label for="cat-moda">Moda</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Titolo</label>
+                        <input type="text" class="form-input" id="title" placeholder="Inserisci il titolo dell'annuncio"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Estratto Breve</label>
+                        <textarea class="form-textarea" id="excerpt"
+                            placeholder="Breve descrizione dell'annuncio (max 150 caratteri)" maxlength="150"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Contenuto Completo</label>
+                        <textarea class="form-textarea" id="content"
+                            placeholder="Scrivi qui il contenuto completo dell'annuncio" style="min-height: 200px;"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Autore</label>
+                        <select class="form-select" id="author" required>
+                            <option value="">Seleziona un autore</option>
+                            <option value="Mario Rossi">Mario Rossi (Admin)</option>
+                            <option value="Marco Rossi">Marco Rossi</option>
+                            <option value="Laura Bianchi">Laura Bianchi</option>
+                            <option value="Giuseppe Verdi">Giuseppe Verdi</option>
+                            <option value="Staff InfoTirocini">Staff InfoTirocini</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tempo di Lettura (minuti)</label>
+                        <input type="number" class="form-input" id="readTime" placeholder="Es: 5" min="1" required>
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="button" class="form-btn form-btn-cancel"
+                            onclick="closeCreateModal()">Annulla</button>
+                        <button type="submit" class="form-btn form-btn-submit">Salva Annuncio</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="confirm-modal" id="confirmModal">
+        <div class="confirm-content">
+            <div class="confirm-icon">⚠️</div>
+            <h3 class="confirm-title">Conferma Eliminazione</h3>
+            <p class="confirm-text">Sei sicuro di voler eliminare questo articolo? Questa azione non può essere
+                annullata.</p>
+            <div class="confirm-buttons">
+                <button class="confirm-btn confirm-btn-cancel" onclick="closeConfirmModal()">Annulla</button>
+                <button class="confirm-btn confirm-btn-delete" onclick="confirmDelete()">Elimina</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <span class="toast-icon" id="toastIcon">✅</span>
+            <span class="toast-text" id="toastText">Operazione completata con successo!</span>
+        </div>
+    </div>
+
+    <script>
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (e) => {
+            const userMenu = document.querySelector('.user-menu');
+            const dropdown = document.getElementById('userDropdown');
+            if (!userMenu.contains(e.target) && dropdown.classList.contains('active')) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        let articles = [
+            {
+                id: 1,
+                category: "Tecnologia",
+                title: "Il Futuro dell'Intelligenza Artificiale",
+                excerpt: "L'AI sta rivoluzionando il modo in cui lavoriamo e viviamo...",
+                content: "L'intelligenza artificiale sta trasformando radicalmente il nostro mondo. Dalle auto a guida autonoma agli assistenti virtuali, l'AI è ormai parte integrante della nostra vita quotidiana.",
+                author: "Marco Rossi",
+                date: "15 Ottobre 2025",
+                readTime: "5 min"
+            },
+            {
+                id: 2,
+                category: "Salute",
+                title: "Alimentazione e Benessere",
+                excerpt: "Scopri come una dieta equilibrata può migliorare la tua vita...",
+                content: "Una corretta alimentazione è la base per uno stile di vita sano. Gli esperti concordano sul fatto che una dieta ricca di frutta, verdura e cereali integrali possa ridurre significativamente il rischio di malattie croniche.",
+                author: "Laura Bianchi",
+                date: "14 Ottobre 2025",
+                readTime: "4 min"
+            },
+            {
+                id: 3,
+                category: "Viaggi",
+                title: "Destinazioni Esotiche da Visitare",
+                excerpt: "I luoghi più incredibili per la tua prossima avventura...",
+                content: "Il mondo è pieno di luoghi meravigliosi che aspettano solo di essere scoperti. Dalle spiagge tropicali alle montagne innevate, ogni destinazione offre esperienze uniche e indimenticabili.",
+                author: "Giuseppe Verdi",
+                date: "13 Ottobre 2025",
+                readTime: "6 min"
+            }
+        ];
+
+        let articleToDelete = null;
+        let nextId = 4;
+
+        function createCards() {
+            const dashboard = document.getElementById('dashboard');
+            dashboard.innerHTML = '';
+
+            if (articles.length === 0) {
+                dashboard.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-state-icon">📝</div>
+                        <h2 class="empty-state-title">Nessun Annuncio</h2>
+                        <p class="empty-state-text">Clicca su "Nuovo Annuncio" per creare il tuo primo articolo</p>
+                    </div>
+                `;
+                return;
+            }
+
+            articles.forEach(article => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-image"></div>
+                    <div class="card-content">
+                        <span class="card-category">${article.category}</span>
+                        <h3 class="card-title">${article.title}</h3>
+                        <p class="card-excerpt">${article.excerpt}</p>
+                        <div class="card-meta">
+                            <span>👤 ${article.author}</span>
+                            <span>🕐 ${article.readTime}</span>
+                        </div>
+                        <button class="delete-btn" onclick="openConfirmModal(event, ${article.id})">
+                            🗑️ Elimina
+                        </button>
+                    </div>
+                `;
+
+                dashboard.appendChild(card);
+            });
+        }
+
+        function openCreateModal() {
+            document.getElementById('formTitle').textContent = 'Crea Nuovo Annuncio';
+            document.getElementById('announcementForm').reset();
+            // Resetta anche il bordo del contenitore checkbox
+            document.getElementById('categoryContainer').style.borderColor = '#e0e0e0';
+            document.getElementById('createModal').classList.add('active');
+
+            // AGGIUNGI QUESTA RIGA: Nasconde il bottone
+            document.querySelector('.new-post-btn').style.display = 'none';
+        }
+        function closeCreateModal() {
+            document.getElementById('createModal').classList.remove('active');
+            document.getElementById('announcementForm').reset();
+            // Resetta anche il bordo del contenitore checkbox
+            document.getElementById('categoryContainer').style.borderColor = '#e0e0e0';
+
+            // AGGIUNGI QUESTA RIGA: Mostra di nuovo il bottone
+            // Usiamo 'flex' perché il tuo CSS originale imposta 'display: flex'
+            document.querySelector('.new-post-btn').style.display = 'flex';
+        }
+
+        // --- FUNZIONE JAVASCRIPT MODIFICATA ---
+        function saveAnnouncement(event) {
+            event.preventDefault();
+
+            // Modifica per Categoria (checkbox)
+            const selectedCategories = [];
+            document.querySelectorAll('input[name="category"]:checked').forEach(checkbox => {
+                selectedCategories.push(checkbox.value);
+            });
+
+            // Validazione: controlla che almeno una categoria sia selezionata
+            if (selectedCategories.length === 0) {
+                const categoryContainer = document.getElementById('categoryContainer');
+                categoryContainer.style.borderColor = '#e74c3c'; // Bordo rosso errore
+                showToast('⚠️', 'Per favore, seleziona almeno una categoria.');
+                // Resetta il bordo dopo 3 secondi
+                setTimeout(() => {
+                    categoryContainer.style.borderColor = '#e0e0e0';
+                }, 3000);
+                return; // Interrompi salvataggio
+            }
+            // Unisce le categorie in una stringa (es. "Tecnologia, Viaggi")
+            const category = selectedCategories.join(', ');
+
+            const title = document.getElementById('title').value;
+            const excerpt = document.getElementById('excerpt').value;
+            const content = document.getElementById('content').value;
+
+            // Modifica per Autore (select) - il codice non cambia perché l'ID è lo stesso
+            const author = document.getElementById('author').value;
+            const readTime = document.getElementById('readTime').value;
+
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('it-IT', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            const newArticle = {
+                id: nextId++,
+                category: category, // Salva la stringa con le categorie
+                title: title,
+                excerpt: excerpt,
+                content: content,
+                author: author,
+                date: dateStr,
+                readTime: readTime + ' min'
+            };
+
+            articles.unshift(newArticle);
+            createCards();
+            closeCreateModal(); // Questa funzione resetta già il form e i bordi
+            showToast('✅', 'Annuncio creato con successo!');
+        }
+        // --- FINE FUNZIONE MODIFICATA ---
+
+        function openConfirmModal(event, articleId) {
+            event.stopPropagation();
+            articleToDelete = articleId;
+            document.getElementById('confirmModal').classList.add('active');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.remove('active');
+            articleToDelete = null;
+        }
+
+        function confirmDelete() {
+            if (articleToDelete !== null) {
+                articles = articles.filter(article => article.id !== articleToDelete);
+                createCards();
+                closeConfirmModal();
+                showToast('✅', 'Articolo eliminato con successo!');
+            }
+        }
+
+        function showToast(icon, message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastIcon').textContent = icon;
+            document.getElementById('toastText').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        document.getElementById('createModal').addEventListener('click', (e) => {
+            if (e.target.id === 'createModal') {
+                closeCreateModal();
+            }
+        });
+
+        document.getElementById('confirmModal').addEventListener('click', (e) => {
+            if (e.target.id === 'confirmModal') {
+                closeConfirmModal();
+            }
+        });
+
+        createCards();
+    </script>
 </body>
 
 </html>

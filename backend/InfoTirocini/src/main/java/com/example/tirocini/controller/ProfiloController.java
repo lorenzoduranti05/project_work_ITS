@@ -1,4 +1,3 @@
-
 package com.example.tirocini.controller;
 
 import com.example.tirocini.dto.ProfiloDTO;
@@ -42,6 +41,15 @@ public class ProfiloController {
             return "redirect:/accesso?error=unauthorized";
         }
 
+        // --- Inizio Modifica ---
+        // Controlla il ruolo dell'utente
+        if ("ADMIN".equals(principal.getRuolo())) {
+            // Se è ADMIN, reindirizza al profilo admin
+            return "redirect:/admin/profilo";
+        }
+        // --- Fine Modifica ---
+
+        // Se non è ADMIN, prosegui con la logica per il profilo utente normale
         Utente utente = utenteRepository.findById(principal.getId()).orElse(principal);
         model.addAttribute("utente", utente);
 
@@ -77,7 +85,7 @@ public class ProfiloController {
              model.addAttribute("rifiutateCount", 0);
         }
 
-        return "Profilo";
+        return "Profilo"; // Restituisce il template Profilo.html per gli utenti normali
     }
 
 
@@ -95,28 +103,21 @@ public class ProfiloController {
 
         boolean vuoleCambiarePassword = dto.getPassword() != null && !dto.getPassword().isBlank();
 
-
         if (bindingResult.hasErrors()) {
-            boolean ignorePasswordErrors = false;
-            if (!vuoleCambiarePassword) {
-                long nonPasswordErrorCount = bindingResult.getFieldErrors().stream()
-                    .filter(fe -> !fe.getField().equals("password") && !fe.getField().equals("confermaPassword"))
-                    .count();
-                if (nonPasswordErrorCount == 0) {
-                    ignorePasswordErrors = true;
-                }
-            }
-
-            if (!ignorePasswordErrors) {
-                 redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.profiloDTO", bindingResult);
-                 redirectAttributes.addFlashAttribute("profiloDTO", dto);
-                 return "redirect:/profilo";
-            }
+             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.profiloDTO", bindingResult);
+             redirectAttributes.addFlashAttribute("profiloDTO", dto);
+             return "redirect:/profilo";
         }
 
         if (vuoleCambiarePassword) {
-            if (dto.getConfermaPassword() == null || !dto.getPassword().equals(dto.getConfermaPassword())) {
-                bindingResult.addError(new FieldError("profiloDTO", "confermaPassword", "Le nuove password non coincidono."));
+            if (dto.getPassword().length() < 6) {
+                 bindingResult.addError(new FieldError("profiloDTO", "password", "La nuova password deve avere almeno 6 caratteri."));
+             }
+            if (dto.getConfermaPassword() == null || dto.getConfermaPassword().isBlank() || !dto.getPassword().equals(dto.getConfermaPassword())) {
+                bindingResult.addError(new FieldError("profiloDTO", "confermaPassword", "Le nuove password non coincidono o la conferma è mancante."));
+            }
+
+            if (bindingResult.hasErrors()) {
                  redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.profiloDTO", bindingResult);
                  redirectAttributes.addFlashAttribute("profiloDTO", dto);
                  return "redirect:/profilo";

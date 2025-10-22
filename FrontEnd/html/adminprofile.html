@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilo Aggiornato</title>
+    <style>
+        :root {
+            --color-petrolio-scuro: #0F3B5C;
+            --color-arancio-chiaro: #F0B8A6;
+            --color-sfondo-card: #FAFAFA;
+            --color-bordo-card: #E0E0E0;
+            --color-testo: #333333;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f3b5cd4, #F0B8A6);
+            min-height: 100%;
+        }
+
+        .navbar {
+            background-color: #fafafa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 10px;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .navbar img {
+            height: 50px;
+            width: auto;
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, #0f4c5c, #e9b8a6);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.5em;
+            font-weight: 600;
+        }
+
+        .back-arrow {
+            position: absolute;
+            left: 20px;
+            font-size: 1.8em;
+            color: var(--color-petrolio-scuro);
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .back-arrow:hover {
+            transform: scale(1.1);
+            color: #F0B8A6;
+        }
+
+        .top-dashboard {
+            display: flex;
+            gap: 20px;
+            align-items: stretch;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            padding: 0 20px 20px 20px;
+        }
+
+        .profile-card {
+            border-radius: 8px;
+            padding: 40px 20px;
+            background-color: var(--color-petrolio-scuro);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: sticky;
+            top: 20px;
+            align-self: flex-start;
+            height: 404px;
+        }
+
+        .top-row {
+            flex: 1;
+            display: flex;
+        }
+
+        .stats-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .card {
+            background-color: #fafafa;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            position: relative;
+        }
+
+        .card.stat-card {
+            cursor: pointer;
+            overflow: hidden;
+            max-height: 100%;
+        }
+
+        .card.stat-card h3 {
+            margin: 10px;
+        }
+
+        .number {
+            color: var(--color-petrolio-scuro);
+            font-size: xx-large;
+        }
+
+        .number a {
+            text-decoration: none;
+            color: inherit;
+            display: inline-block;
+        }
+
+        .stat-dropdown {
+            margin-top: 10px;
+            position: static;
+            left: auto;
+            right: auto;
+            z-index: 10;
+            background-color: #0F3B5C;
+            border-radius: 8px;
+            max-height: 0;
+            overflow: hidden;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .card.stat-card.active .stat-dropdown {
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 15px 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) inset;
+        }
+
+        .stat-dropdown-item {
+            text-align: left;
+            margin: 0.5rem;
+            color: #fafafa;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-role-container {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-role {
+            color: #fafafa;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .role-button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .role-button img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .role-button:hover {
+            transform: scale(1.2);
+        }
+
+        .profile-icon {
+            background-color: var(--color-petrolio-scuro);
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 1.1em;
+            color: var(--color-testo);
+            text-align: left;
+        }
+
+        .contact-label {
+            font-weight: bold;
+            color: #fafafa;
+            min-width: 120px;
+            font-size: small;
+        }
+
+        .contact-item span {
+            color: #FAFAFA;
+        }
+
+        @media (max-width: 800px) {
+            .top-dashboard {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .profile-card {
+                width: 90%;
+                max-width: 400px;
+                margin-bottom: 20px;
+                height: auto;
+                position: static;
+            }
+
+            .top-row {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+
+            .stats-container {
+                width: 100%;
+                max-width: 400px;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+
+            .card.stat-card {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar"> <a href="pagina_precedente.html" class="back-arrow">←</a> <a href="home.html"><img
+                src="logo2.png" alt="logo"></a> Profilo <span class="admin-badge">ADMIN</span></div>
+    </div>
+    <div class="top-dashboard">
+        <div class="profile-card">
+            <div class="profile-role-container">
+                <h2 class="profile-role">Studente</h2> <button class="role-button" title="Modifica ruolo"> <img
+                        src="modifica12.png" alt="Modifica"> </button>
+            </div>
+            <div class="profile-icon"> <img src="icona.png" alt="Avatar"
+                    style="width: 100px; height: 100px; border-radius: 50%;"> </div>
+            <div class="contact-item"> <br>
+                <div><span class="contact-label">Nome: </span><br><span>nome prova</span></div> <br>
+                <div><span class="contact-label">Cognome: </span><br><span>cognome prova</span></div> <br>
+                <div><span class="contact-label">Email: </span><br><span>studente.esempio@dominio.it</span></div> <br>
+                <div><span class="contact-label">Password: </span><br><span>Prova</span></div>
+            </div>
+        </div>
+        <div class="top-row">
+            <div class="stats-container">
+                <div class="card stat-card">
+                    <h3>Candidature Inviate</h3>
+                    <div class="number"><a>4</a></div>
+                    <div class="stat-dropdown">
+                        <div class="stat-dropdown-item">Tirocini</div>
+                        <div class="stat-dropdown-item">Lavoro Part-Time</div>
+                        <div class="stat-dropdown-item">Borse di Studio</div>
+                        <div class="stat-dropdown-item">Tirocini</div>
+                        <div class="stat-dropdown-item">Lavoro Part-Time</div>
+                        <div class="stat-dropdown-item">Borse di Studio</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script> const statCards = document.querySelectorAll('.stat-card'); statCards.forEach((card, index) => { if (index === 0) card.classList.add('active'); card.addEventListener('click', () => { statCards.forEach(c => { if (c !== card) c.classList.remove('active') }); card.classList.toggle('active'); }); }); </script>
+</body>
+
+</html>

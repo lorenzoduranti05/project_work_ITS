@@ -824,22 +824,19 @@
 			}
 		}
 		document.addEventListener('DOMContentLoaded', () => {
-		        // Logica per mostrare l'avatar corretto nella navbar
 		        const navAvatarImg = document.getElementById('navAvatarImg');
 		        const navAvatarIcon = document.getElementById('navAvatarIcon');
-		        // Verifica se l'elemento img esiste e ha un src valido (diverso dall'icona placeholder)
+
 		        if (navAvatarImg && navAvatarImg.getAttribute('src') && navAvatarImg.getAttribute('src') !== '/immagini/icona.png') {
-		            if(navAvatarIcon) navAvatarIcon.style.display = 'none'; // Nasconde l'icona
-		            navAvatarImg.style.display = 'block'; // Mostra l'immagine
+		            if(navAvatarIcon) navAvatarIcon.style.display = 'none';
+		            navAvatarImg.style.display = 'block'; 
 		        }
 
-		        // Logica per mostrare l'avatar corretto nel dropdown
 		        const dropdownAvatarImg = document.getElementById('dropdownAvatarImg');
 		        const dropdownAvatarIcon = document.getElementById('dropdownAvatarIcon');
-		         // Verifica se l'elemento img esiste e ha un src valido
 		         if (dropdownAvatarImg && dropdownAvatarImg.getAttribute('src') && dropdownAvatarImg.getAttribute('src') !== '/immagini/icona.png') {
-		            if(dropdownAvatarIcon) dropdownAvatarIcon.style.display = 'none'; // Nasconde l'icona
-		            dropdownAvatarImg.style.display = 'block'; // Mostra l'immagine
+		            if(dropdownAvatarIcon) dropdownAvatarIcon.style.display = 'none'; 
+		            dropdownAvatarImg.style.display = 'block'; 
 		        }
 		    });
 	</script>

@@ -292,9 +292,9 @@
 		.form-group {
 			margin-bottom: 15px;
             position: relative;
-            padding-bottom: 1.5em; /* Aggiunge spazio sotto per l'errore */
+            padding-bottom: 1.5em; 
 		}
-        .form-group:last-of-type { /* Rimuove padding extra dall'ultimo gruppo prima del bottone */
+        .form-group:last-of-type { 
             padding-bottom: 0;
             margin-bottom: 10px;
         }
@@ -369,12 +369,12 @@
     		border-color: #f5c6cb;
 		}
 
-        .error-message { /* Classe comune per i messaggi di errore sotto gli input */
+        .error-message { 
             color: red;
             font-size: 0.9em;
-            display: block; /* Va a capo */
-            position: absolute; /* Posizionamento assoluto rispetto al .form-group */
-            bottom: 0; /* Allineato in basso */
+            display: block;
+            position: absolute; 
+            bottom: 0; 
             left: 0;
             width: 100%;
         }
@@ -391,7 +391,7 @@
 
         .password-toggle-icon {
             position: absolute;
-            top: calc(50% + 8px); /* Posiziona verticalmente rispetto all'input */
+            top: calc(50% + 8px); 
             right: 12px;
             transform: translateY(-50%);
             cursor: pointer;
@@ -593,20 +593,18 @@
 		        var imagePreview = document.getElementById('imagePreview');
 
 				function openEditModal() {
-		             // Resetta solo i campi input e gli elementi UI gestiti da JS
 		             newPasswordInput.value = '';
 		             confirmPasswordInput.value = '';
 		             document.getElementById('passwordAttuale').value = '';
-		             profileImageInput.value = ''; // Svuota l'input file
+		             profileImageInput.value = '';
 
-		             passwordMatchError.style.display = 'none'; // Nascondi errore JS
-		             imagePreview.style.display = 'none'; // Nascondi anteprima
+		             passwordMatchError.style.display = 'none'; 
+		             imagePreview.style.display = 'none'; 
 		             imagePreview.src = '#';
 
-		             // NON nascondere più gli errori generali o specifici qui, Thymeleaf li gestisce.
 
 		             if (modal) {
-		                  modal.style.display = "flex"; // Mostra la modale
+		                  modal.style.display = "flex"; 
 		             }
 		         }
 
@@ -633,7 +631,6 @@
 		            }
 		        }
 
-		        // Funzione per validare la corrispondenza delle password (gestita da JS)
 		        function validatePasswordMatch() {
 		            if (newPasswordInput.value !== confirmPasswordInput.value && (newPasswordInput.value !== '' || confirmPasswordInput.value !== '')) {
 		                passwordMatchError.style.display = 'block';
@@ -649,53 +646,43 @@
 			        confirmPasswordInput.addEventListener('keyup', validatePasswordMatch);
 		        }
 
-		        // Validazione alla sottomissione del form (solo per l'errore JS)
 		        if (form) {
 			        form.addEventListener('submit', function(event) {
-		                if (!validatePasswordMatch()) { // Se le password non coincidono
-			                event.preventDefault(); // Blocca l'invio
+		                if (!validatePasswordMatch()) { 
+			                event.preventDefault();
 			            }
 			        });
 		        }
 
-		        // Logica eseguita al caricamento del DOM
 				document.addEventListener("DOMContentLoaded", function() {
 					const generalErrorDiv = document.getElementById('general-error-message');
-		            // Verifica se esiste un errore generale reso dal server
 		            const hasGeneralError = generalErrorDiv && generalErrorDiv.textContent.trim() !== "";
 
 		            const fieldErrorSpans = document.querySelectorAll('.form-group .error-message');
 		            let hasFieldErrors = false;
 		            fieldErrorSpans.forEach(span => {
-		                // Controlla se Thymeleaf ha reso un errore per questo campo
 		                if (span.id !== 'passwordMatchError' && span.textContent.trim() !== '') {
 		                    hasFieldErrors = true;
-		                    span.style.display = 'block'; // Assicura che sia visibile se Thymeleaf l'ha reso
+		                    span.style.display = 'block';
 		                }
 		            });
 
-		            // Se c'erano errori dal server, apri la modale al caricamento della pagina
 					if ((hasGeneralError || hasFieldErrors) && !document.querySelector(".alert-success")) {
 		                if (modal) {
-		                     modal.style.display = "flex"; // Mostra la modale
+		                     modal.style.display = "flex";
 		                }
-		                // Assicura che l'errore generale sia visibile se esiste
 		                if(hasGeneralError) generalErrorDiv.style.display = 'block';
-		                // Riesegui la validazione JS in caso l'errore fosse la mancata corrispondenza password
 		                 validatePasswordMatch();
 					}
 
-		            // Gestione del parametro URL 'edit=true'
 					const urlParams = new URLSearchParams(window.location.search);
 			        if (urlParams.has('edit') && urlParams.get('edit') === 'true') {
-			            openEditModal(); // Apre la modale resettando i campi
-			            // Rimuove il parametro dall'URL per evitare riaperture al refresh
+			            openEditModal(); 
 			            const newUrl = window.location.pathname;
 			            window.history.replaceState({}, document.title, newUrl);
 			        }
 				});
 
-		        // Gestione anteprima immagine
 		        if (profileImageInput && imagePreview) {
 			        profileImageInput.addEventListener('change', function(event) {
 			            const file = event.target.files[0];
@@ -707,20 +694,17 @@
 			                }
 			                reader.readAsDataURL(file);
 			            } else {
-		                    // Se l'utente deseleziona il file
 			                imagePreview.src = '#';
 		                    imagePreview.style.display = 'none';
 			            }
 			        });
 		        }
 
-		        // Funzione per mostrare/nascondere la password
 		        function togglePasswordVisibility(inputId) {
 		            const input = document.getElementById(inputId);
-		            // Trova l'icona relativa a questo input specifico
 		            const iconContainer = input.parentElement.querySelector('.password-toggle-icon');
 		            const icon = iconContainer ? iconContainer.querySelector('i') : null;
-		            if (!input || !icon) return; // Se input o icona non trovati, esci
+		            if (!input || !icon) return;
 
 		            if (input.type === "password") {
 		                input.type = "text";

@@ -427,15 +427,15 @@
 	<div class="top-dashboard">
 		<div class="profile-card">
 			<div class="profile-role-container">
-				<h2 class="profile-role" th:text="${utente.ruolo == 'USER' ? 'Il Tuo Profilo' : utente.ruolo}">Il Tuo Profilo</h2>
+				<h2 class="profile-role" th:text="${utente.ruolo == 'USER' ? 'Modifica Profilo' : utente.ruolo}">Modifica Profilo</h2>
 				<button class="edit-profile-button" title="Modifica Profilo" id="openModalBtn">
 					<img th:src="@{/immagini/modifica12.png}" alt="Modifica" style="width: 24px; height: 24px;">
 				</button>
 			</div>
             <div class="profile-icon" id="profileIconContainer">
-                 <img th:src="${utente.profileImageUrl != null ? utente.profileImageUrl : '/immagini/icona.png'}"
-                      alt="Avatar" id="profileAvatar"
-                      style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
+				<img th:src="${utente.profileImageUrl != null ? utente.profileImageUrl : '/immagini-profilo/icona.png'}"
+				     alt="Avatar" id="profileAvatar"
+				     style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">
                  </div>
 			<div class="contact-item">
 				<br>

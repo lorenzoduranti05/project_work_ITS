@@ -460,8 +460,7 @@
 	<div class="top-dashboard">
 		<div class="profile-card">
 			<div class="profile-role-container">
-				<h2 class="profile-role" th:text="${utente.ruolo == 'USER' ? 'Il Tuo Profilo' : utente.ruolo}">Il Tuo
-					Profilo</h2>
+				<h2 class="profile-role" th:text="${utente.ruolo == 'USER' ? 'Modifica Profilo' : utente.ruolo}">Modifica Profilo</h2>
 				<button class="edit-profile-button" title="Modifica Profilo" id="openModalBtn">
 					<img th:src="@{/immagini/modifica12.png}" alt="Modifica" style="width: 24px; height: 24px;">
 				</button>
@@ -606,6 +605,7 @@
 	</div>
 
 	<script>
+		// statistiche card
 		const statCards = document.querySelectorAll('.stat-card');
 		statCards.forEach((card, index) => {
 			card.addEventListener('click', () => {
@@ -614,6 +614,7 @@
 			});
 		});
 
+		// elementi del modale modifica profilo
 		var modal = document.getElementById("editProfileModal");
 		var openBtn = document.getElementById("openModalBtn");
 		var closeBtn = document.getElementById("closeModalBtn");
@@ -625,17 +626,15 @@
 		var imagePreview = document.getElementById('imagePreview');
 		var imageDataUrlInput = document.getElementById('imageDataUrl');
 
+		// reset campi
 		function openEditModal() {
 			newPasswordInput.value = '';
 			confirmPasswordInput.value = '';
 			document.getElementById('passwordAttuale').value = '';
-			profileImageInput.value = '';
 			passwordMatchError.style.display = 'none';
+			profileImageInput.value = '';
 			imagePreview.style.display = 'none';
 			imagePreview.src = '#';
-			if (imageDataUrlInput) {
-				imageDataUrlInput.value = '';
-			}
 			if (modal) {
 				modal.style.display = "flex";
 			}

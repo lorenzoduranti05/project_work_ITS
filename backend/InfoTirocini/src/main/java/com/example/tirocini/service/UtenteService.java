@@ -4,11 +4,14 @@ import com.example.tirocini.dto.*;
 import com.example.tirocini.model.Utente;
 import com.example.tirocini.repository.UtenteRepository;
 
+import jakarta.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.util.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +21,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
-
+	
 
 @Service
 public class UtenteService {
@@ -28,18 +31,25 @@ public class UtenteService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
+    @Value("${my.upload-directory}")
+    private String uploadDir;
 
-    private final Path fileStorageLocation;
-
-    public UtenteService() {
-        this.fileStorageLocation = Paths.get("src/main/resources/static/immagini/profili").toAbsolutePath().normalize();
+    private Path fileStorageLocation;
+    
+    @PostConstruct
+    public void init() {
+        if (uploadDir == null || uploadDir.isBlank()) {
+            throw new RuntimeException("La proprietà 'my.upload-directory' non è configurata.");
+        }
+        
+        this.fileStorageLocation = Paths.get(this.uploadDir).toAbsolutePath().normalize();
         try {
             Files.createDirectories(this.fileStorageLocation);
         } catch (Exception ex) {
-            throw new RuntimeException("Impossibile creare la directory per l'upload delle immagini.", ex);
+            throw new RuntimeException("Impossibile creare la directory: " + this.uploadDir, ex);
         }
     }
-
 
     public RispostaLoginDTO registraUtente(RegistrazioneDTO dto) {
         if (utenteRepository.existsByMail(dto.getMail())) {
@@ -55,7 +65,7 @@ public class UtenteService {
         String passwordHash = passwordEncoder.encode(dto.getPassword());
         nuovoUtente.setPassword(passwordHash);
         nuovoUtente.setRuolo("USER");
-        nuovoUtente.setProfileImageUrl("/immagini/icona.png"); // Immagine di default
+        nuovoUtente.setProfileImageUrl("/immagini-profilo/icona.png");
         Utente salvato = utenteRepository.save(nuovoUtente);
         RispostaLoginDTO risposta = new RispostaLoginDTO();
         risposta.setId(salvato.getId());
@@ -117,7 +127,6 @@ public class UtenteService {
             modificato = true;
         }
         if (dto.getMail() != null && !dto.getMail().equals(utente.getMail())) {
-            // Verifica se l'email è già usata da *un altro* utente
             Utente utenteEsistenteConEmail = utenteRepository.findByMail(dto.getMail());
             if (utenteEsistenteConEmail != null && !utenteEsistenteConEmail.getId().equals(id)) {
                  throw new RuntimeException("Email già in uso da un altro account.");
@@ -141,19 +150,14 @@ public class UtenteService {
             modificato = true;
         }
 
-        // Gestione upload immagine
         if (profileImageFile != null && !profileImageFile.isEmpty()) {
-             try {
-                 String fileName = storeFile(profileImageFile, id);
-                 // Salva il percorso relativo accessibile dal web
-                 String fileUrl = "/immagini/profili/" + fileName;
-                 utente.setProfileImageUrl(fileUrl);
-                 modificato = true;
+        	try {
+                String fileName = storeFile(profileImageFile, id);
+                String fileUrl = "/immagini-profilo/" + fileName;
+                utente.setProfileImageUrl(fileUrl);
+                modificato = true;
              } catch (IOException ex) {
-                 // Gestisci l'errore, magari loggalo
                  System.err.println("Errore nel salvataggio dell'immagine profilo: " + ex.getMessage());
-                 // Potresti decidere di non bloccare l'aggiornamento del profilo per un errore sull'immagine
-                 // throw new RuntimeException("Impossibile salvare l'immagine del profilo.", ex);
              }
          }
 
@@ -161,20 +165,16 @@ public class UtenteService {
             utenteRepository.save(utente);
         }
 
-        return getProfilo(id); // Ritorna il DTO aggiornato (senza password)
+        return getProfilo(id);
     }
-
-     // Metodo helper per salvare il file
      private String storeFile(MultipartFile file, Integer userId) throws IOException {
          String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
          String fileExtension = "";
          try {
-             // Estrai l'estensione del file
              fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
          } catch (Exception e) {
-             fileExtension = ""; // Nessuna estensione trovata
+             fileExtension = "";
          }
-         // Crea un nome file univoco per evitare sovrascritture e problemi di cache
          String fileName = "user_" + userId + "_" + UUID.randomUUID().toString() + fileExtension;
 
          Path targetLocation = this.fileStorageLocation.resolve(fileName);
@@ -182,7 +182,7 @@ public class UtenteService {
              Files.copy(inputStream, targetLocation, StandardCopyOption.REPLACE_EXISTING);
          }
 
-         return fileName; // Ritorna solo il nome del file salvato
+         return fileName; 
      }
 
 

@@ -522,53 +522,56 @@
             <div th:if="${errorMessage != null}" class="alert alert-danger" id="general-error-message" th:text="${errorMessage}"></div>
 
 			<form th:action="@{/profilo/aggiorna}" th:object="${profiloDTO}" method="POST" id="editProfileForm" enctype="multipart/form-data">
-				<div class="form-group">
-					<label for="nome">Nome</label>
-					<input id="nome" type="text" th:field="*{nome}" required>
-				</div>
-				<div class="form-group">
-					<label for="cognome">Cognome</label>
-					<input id="cognome" type="text" th:field="*{cognome}" required>
-				</div>
-				<div class="form-group">
-					<label for="mail">Email</label>
-					<input id="mail" type="email" th:field="*{mail}" required>
-                    <span th:if="${#fields.hasErrors('mail')}" class="error-message" th:errors="*{mail}"></span>
-				</div>
+			    <div class="form-group">
+			        <label for="nome">Nome</label>
+			        <input id="nome" type="text" th:field="*{nome}" required>
+			        <span th:if="${#fields.hasErrors('nome')}" class="error-message" th:errors="*{nome}"></span>
+			    </div>
+			    <div class="form-group">
+			        <label for="cognome">Cognome</label>
+			        <input id="cognome" type="text" th:field="*{cognome}" required>
+			        <span th:if="${#fields.hasErrors('cognome')}" class="error-message" th:errors="*{cognome}"></span>
+			    </div>
+			    <div class="form-group">
+			        <label for="mail">Email</label>
+			        <input id="mail" type="email" th:field="*{mail}" required>
+			        <span th:if="${#fields.hasErrors('mail')}" class="error-message" th:errors="*{mail}"></span>
+			         <span th:if="${errorMessage != null and #strings.contains(errorMessage, 'Email già in uso')}" class="error-message">Email già in uso da un altro account.</span>
+			    </div>
 
-                 <div class="form-group">
-                    <label for="profileImageInput">Immagine Profilo (opzionale)</label>
-                    <input type="file" id="profileImageInput" name="profileImageFile" accept="image/*">
-                    <img id="imagePreview" src="#" alt="Anteprima immagine"/>
-                 </div>
+			    <div class="form-group">
+			        <label for="profileImageInput">Immagine Profilo (opzionale)</label>
+			        <input type="file" id="profileImageInput" name="profileImageFile" accept="image/*">
+			        <img id="imagePreview" src="#" alt="Anteprima immagine"/>
+			        </div>
 
-				<hr style="margin: 20px 0; border: 1px solid #eee;">
+			    <hr style="margin: 20px 0; border: 1px solid #eee;">
 
-				<div class="form-group">
-					<label for="password">Nuova Password</label>
-					<input id="password" type="password" th:field="*{password}" placeholder="Lascia vuoto per non modificare">
-                    <span class="password-toggle-icon" onclick="togglePasswordVisibility('password')"><i class="fa-solid fa-eye"></i></span>
-                    <span th:if="${#fields.hasErrors('password')}" class="error-message" th:errors="*{password}"></span>
-				</div>
-				<div class="form-group">
-					<label for="confermaPassword">Conferma Nuova Password</label>
-					<input id="confermaPassword" type="password" th:field="*{confermaPassword}" placeholder="Ripeti la nuova password">
-                    <span class="password-toggle-icon" onclick="togglePasswordVisibility('confermaPassword')"><i class="fa-solid fa-eye"></i></span>
-					<span id="passwordMatchError" class="error-message" style="display: none;">Le nuove password non coincidono.</span>
-                    <span th:if="${#fields.hasErrors('confermaPassword')}" class="error-message" th:errors="*{confermaPassword}"></span>
-				</div>
+			    <div class="form-group">
+			        <label for="password">Nuova Password</label>
+			        <input id="password" type="password" th:field="*{password}" placeholder="Lascia vuoto per non modificare">
+			        <span class="password-toggle-icon" onclick="togglePasswordVisibility('password')"><i class="fa-solid fa-eye"></i></span>
+			        <span th:if="${#fields.hasErrors('password')}" class="error-message" th:errors="*{password}"></span>
+			    </div>
+			    <div class="form-group">
+			        <label for="confermaPassword">Conferma Nuova Password</label>
+			        <input id="confermaPassword" type="password" th:field="*{confermaPassword}" placeholder="Ripeti la nuova password">
+			        <span class="password-toggle-icon" onclick="togglePasswordVisibility('confermaPassword')"><i class="fa-solid fa-eye"></i></span>
+			        <span id="passwordMatchError" class="error-message" style="display: none;">Le nuove password non coincidono.</span>
+			        <span th:if="${#fields.hasErrors('confermaPassword')}" class="error-message" th:errors="*{confermaPassword}"></span>
+			    </div>
 
-				<hr style="margin: 20px 0; border: 1px solid #eee;">
+			    <hr style="margin: 20px 0; border: 1px solid #eee;">
 
-				<div class="form-group">
-					<label for="passwordAttuale">Password Attuale (Obbligatoria)</label>
-					<input id="passwordAttuale" type="password" th:field="*{passwordAttuale}" required placeholder="Inserisci la tua password attuale">
-                    <span class="password-toggle-icon" onclick="togglePasswordVisibility('passwordAttuale')"><i class="fa-solid fa-eye"></i></span>
-					<span th:if="${#fields.hasErrors('passwordAttuale')}" class="error-message" th:errors="*{passwordAttuale}"></span>
-                    <span th:if="${errorMessage != null and errorMessage == 'Password attuale non corretta.'}" class="error-message">Password attuale non corretta.</span>
-				</div>
+			    <div class="form-group">
+			        <label for="passwordAttuale">Password Attuale (Obbligatoria)</label>
+			        <input id="passwordAttuale" type="password" th:field="*{passwordAttuale}" required placeholder="Inserisci la tua password attuale">
+			        <span class="password-toggle-icon" onclick="togglePasswordVisibility('passwordAttuale')"><i class="fa-solid fa-eye"></i></span>
+			        <span th:if="${#fields.hasErrors('passwordAttuale')}" class="error-message" th:errors="*{passwordAttuale}"></span>
+			        <span th:if="${errorMessage != null and #strings.contains(errorMessage, 'Password attuale non corretta')}" class="error-message">Password attuale non corretta.</span>
+			    </div>
 
-				<button type="submit" class="modal-button">Salva Modifiche</button>
+			    <button type="submit" class="modal-button">Salva Modifiche</button>
 			</form>
 		</div>
 	</div>

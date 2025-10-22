@@ -5,7 +5,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-	<title>Profilo Aggiornato</title>
+	<title>Info Tirocini - Profilo</title>
+	<link rel="icon" th:href="@{/immagini/Logo_Senza_Scritta.png}">
 	<style>
 		:root {
 			--color-petrolio-scuro: #0F3B5C;
@@ -575,14 +576,12 @@
         var imagePreview = document.getElementById('imagePreview');
 
 		function openEditModal() {
-             // Resetta campi password e errori
              newPasswordInput.value = '';
              confirmPasswordInput.value = '';
              document.getElementById('passwordAttuale').value = '';
              passwordMatchError.style.display = 'none';
 
-             // Resetta input file e anteprima
-             profileImageInput.value = ''; // Cancella selezione file precedente
+             profileImageInput.value = ''; 
              imagePreview.style.display = 'none';
              imagePreview.src = '#';
 
@@ -636,33 +635,28 @@
 	                event.preventDefault();
 	                alert("Le nuove password inserite non coincidono. Controlla e riprova.");
 	            }
-	             // Non serve FormData qui perché usiamo il submit standard del form HTML
 	        });
         }
 
 
 		document.addEventListener("DOMContentLoaded", function() {
 			var errorMessage = document.querySelector(".alert-danger");
-			// Se c'è un messaggio di errore (es. da redirectAttributes), apri il modale
 			if (errorMessage && errorMessage.textContent.trim() !== "") {
-				// Assicurati che non ci sia anche un messaggio di successo (che avrebbe priorità)
 				if (!document.querySelector(".alert-success")) {
 					 openEditModal();
 				}
 			}
 
-			// Gestione parametro URL per aprire modale (es. da link nel menu)
 			const urlParams = new URLSearchParams(window.location.search);
 	        if (urlParams.has('edit') && urlParams.get('edit') === 'true') {
 	            openEditModal();
-	            // Rimuovi il parametro dall'URL per non riaprire al refresh
 	            const newUrl = window.location.pathname;
 	            window.history.replaceState({}, document.title, newUrl);
 	        }
 		});
 
 
-        // Script per l'anteprima dell'immagine nel modale
+
         if (profileImageInput && imagePreview) {
 	        profileImageInput.addEventListener('change', function(event) {
 	            const file = event.target.files[0];
@@ -670,12 +664,10 @@
 	                const reader = new FileReader();
 	                reader.onload = function(e) {
 	                    imagePreview.src = e.target.result;
-	                    imagePreview.style.display = 'block'; // Mostra l'anteprima
+	                    imagePreview.style.display = 'block';
 	                }
 	                reader.readAsDataURL(file);
 	            } else {
-	                // Se l'utente annulla la selezione
-	                imagePreview.style.display = 'none';
 	                imagePreview.src = '#';
 	            }
 	        });

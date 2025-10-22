@@ -38,21 +38,19 @@ public class ProfiloController {
             return "redirect:/accesso?error=unauthorized";
         }
 
-        // Ricarica l'utente dal DB per avere l'URL immagine aggiornato
+        
         Utente utente = utenteRepository.findById(principal.getId())
-                .orElse(principal); // Usa principal come fallback
+                .orElse(principal); 
 
-        // Se non c'è un DTO flash (da un errore precedente), crea uno nuovo
         if (!model.containsAttribute("profiloDTO")) {
             ProfiloDTO dto = new ProfiloDTO();
             dto.setNome(utente.getNome());
             dto.setCognome(utente.getCognome());
             dto.setMail(utente.getMail());
-            // Non pre-popolare campi password
             model.addAttribute("profiloDTO", dto);
         }
 
-        model.addAttribute("utente", utente); // Passa l'utente completo (con URL immagine)
+        model.addAttribute("utente", utente); 
 
         try {
             List<Candidatura> tutteCandidature = candidaturaRepository.findByUtenteId(utente.getId());
@@ -82,7 +80,7 @@ public class ProfiloController {
     @PostMapping("/profilo/aggiorna")
     public String aggiornaProfilo(
             @ModelAttribute("profiloDTO") ProfiloDTO dto,
-            @RequestParam(value = "profileImageFile", required = false) MultipartFile profileImageFile, // Aggiunto parametro per il file
+            @RequestParam(value = "profileImageFile", required = false) MultipartFile profileImageFile,
             @AuthenticationPrincipal Utente utente,
             RedirectAttributes redirectAttributes) {
 
@@ -91,15 +89,15 @@ public class ProfiloController {
         }
 
         try {
-            // Passa il file al service
+          
             utenteService.aggiornaProfilo(utente.getId(), dto, profileImageFile);
             redirectAttributes.addFlashAttribute("successMessage", "Profilo aggiornato con successo!");
         } catch (RuntimeException ex) {
-            // Se c'è un errore, rimanda indietro il DTO compilato e il messaggio d'errore
+        
             redirectAttributes.addFlashAttribute("profiloDTO", dto);
             redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
         }
 
-        return "redirect:/profilo"; // Ricarica la pagina del profilo
+        return "redirect:/profilo"; 
     }
 }

@@ -1,4 +1,3 @@
-
 package com.example.tirocini.dto;
 
 import jakarta.validation.constraints.*;
@@ -18,16 +17,14 @@ public class ProfiloDTO {
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Formato email non valido (es. utente@dominio.com)")
     private String mail;
 
-    // La nuova password è opzionale, ma se inserita deve avere almeno 6 caratteri
-    @Size(min = 6, message = "La nuova password deve avere almeno 6 caratteri")
     private String password;
 
-    // La conferma è opzionale (necessaria solo se la nuova password è inserita)
     private String confermaPassword;
 
     @NotBlank(message = "Password attuale obbligatoria per salvare le modifiche")
     private String passwordAttuale;
 
+    private String imageDataUrl;
 
     public ProfiloDTO() {}
 
@@ -40,7 +37,6 @@ public class ProfiloDTO {
         this.passwordAttuale = passwordAttuale;
     }
 
-    // Getters e Setters
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 
@@ -58,4 +54,7 @@ public class ProfiloDTO {
 
     public String getPasswordAttuale() { return passwordAttuale; }
     public void setPasswordAttuale(String passwordAttuale) { this.passwordAttuale = passwordAttuale; }
+
+    public String getImageDataUrl() { return imageDataUrl; }
+    public void setImageDataUrl(String imageDataUrl) { this.imageDataUrl = imageDataUrl; }
 }
